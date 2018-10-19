@@ -31,6 +31,14 @@ class Gui(QMainWindow):
         label = QLabel('SIG Blockchain Project', self)
         gridLayout.addWidget(label, 0, 0, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
 
+        #set up various gui components 
+        self.IPLabel = QLabel("IP: ", self) 
+        gridLayout.addWidget(self.IPLabel, 0, 1, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
+        self.StatusLabel = QLabel("Status: ", self) 
+        gridLayout.addWidget(self.StatusLabel, 1, 1, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
+        self.PeersLabel = QLabel("Peers: ", self) 
+        gridLayout.addWidget(self.PeersLabel, 2, 1, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
+
         centralWidget.setLayout(gridLayout)
         self.show()
 
