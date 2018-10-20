@@ -209,7 +209,7 @@ class TestBlock(unittest.TestCase):
         bytestring = mine(prev_hash, data, 10**20)
         print("Target Length: " + str(len(log_target_bytes(10**20))))
         print("Time Length: " + str(len(int_to_bytes(time_now()))))
-        print("Nonce Length: " + str(len(long_to_bytes(0))))
+        print("Nonce Length: " + str(len(int_to_bytes(0))))
         print("String Length: " + str(len(bytestring)))
         self.assertEqual(74, len(bytestring))
         
