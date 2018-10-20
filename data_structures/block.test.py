@@ -158,7 +158,7 @@ class TestBlock(unittest.TestCase):
         test_bs = hexlify(bytes([20]))
         print("Target: " + str(target))
         print("From Byte: " + str(toInt(test_bs)))
-        self.assertTrue(less_than_target(unhexlify(test_bs), target))
+        self.assertTrue(less_than_target(test_bs, target))
 
     # Converts a known value to a byte string, manually converts it back into an
     # integer, compares this integer to the output of bytes_to_int()
@@ -189,6 +189,17 @@ class TestBlock(unittest.TestCase):
         print("Expected Result: " + str(convert))
         print("Result: " + str(bytes_to_long(byte_s)))
         self.assertEqual(convert, bytes_to_long(byte_s))
+
+    # Gets the log of a given whole number of base 10 and converts it into bytes
+    # Uses short_to_bytes function for byte conversion
+    def test_log_target_bytes(self):
+        convert = 10000             #10^4
+        byte_form = log_target_bytes(convert)
+        print("Converting: ", convert, " Written as: 10^4")
+        print("Bytes using function: ", byte_form)
+        print("Reverting to get log: ", int.from_bytes(byte_form,byteorder = 'little'))
+        self.assertEqual(convert, pow(10,int.from_bytes(byte_form,byteorder = 'little')))
+
         
 if __name__ == '__main__':
     unittest.main()
