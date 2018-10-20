@@ -200,6 +200,23 @@ class TestBlock(unittest.TestCase):
         print("Reverting to get log: ", int.from_bytes(byte_form,byteorder = 'little'))
         self.assertEqual(convert, pow(10,int.from_bytes(byte_form,byteorder = 'little')))
 
+    # Generates a block with predetermined values, checks the length of the output, expecting 74
+    def test_mine(self):
+        prev_hash = hash_SHA(b'000000')
+        data = hash_SHA(b'000001')
+        bytestring = mine(prev_hash, data, 200)
+        print("String Length: " + str(len(bytestring)))
+        self.assertEqual(74, len(bytestring))
         
+    # Generates a block based on an incredibly large target, so the nonce will be zero
+    # Compares the result of splice_nonce converted to an integer to zero
+    def test_slice_nonce(self):
+        block_hash = hash_SHA(b'000000')
+        bytestring = mine(block_hash, block_hash, 200)
+        print("Full Byte String: " + str(bytestring))
+        print("String Length: " + str(len(bytestring)))
+        print("Nonce String: " + str(slice_nonce(bytestring)))
+        self.assertEqual(0, bytes_to_int(slice_nonce(bytestring)))
+
 if __name__ == '__main__':
     unittest.main()

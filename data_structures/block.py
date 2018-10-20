@@ -296,3 +296,34 @@ def log_target_bytes(base10_number):
     :return: The log base 10 of the unputed number as bytes
     """
     return short_to_bytes(int(math.log10(base10_number)))
+
+def mine(previous_hash, data, target):
+    """
+    This function creates blocks using the proof of work algorithm, currently only generates
+    block header.
+    
+    :param1 previous_hash: This is a 32 hexlified byte string representing the hash of a previous block
+    :param2 data: This is a 32 hexlified byte string
+    :param3 target: This is a short integer representing the power of the target value, ie) 10^target
+    :returns: A 74 byte string containing the previous block hash, data, time of block creation, target power, and noce
+    in that order
+    """
+    nonce = 0
+    timestamp = time_now()
+    block_header = unhexlify(previous_hash) + unhexlify(data) + int_to_bytes(timestamp) + short_to_bytes(target) + int_to_bytes(nonce)
+    while not int.from_bytes(block_header, byteorder='big') < math.pow(10, target):
+        nonce += 1
+        timestamp = time_now()
+        block_header = previous_hash + data + int_to_bytes(timestamp) + short_to_bytes(target) + int_to_bytes(nonce)
+
+    block_hash = hash_SHA(block_header)
+    return block_header
+
+def slice_nonce(block_header):
+    """
+    Takes a concatenated 74 byte string and returns the last 4 bytes
+
+    :param1 block_header: a 74 byte string containing the information of a block
+    :returns: a 4 byte byte string containing the nonce of a block
+    """
+    return block_header[70:74]
