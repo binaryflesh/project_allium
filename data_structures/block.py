@@ -304,18 +304,14 @@ def mine(previous_hash, data, target):
     
     :param1 previous_hash: This is a 32 hexlified byte string representing the hash of a previous block
     :param2 data: This is a 32 hexlified byte string
-    :param3 target: This is a short integer representing the power of the target value, ie) 10^target
+    :param3 target: This is a usigned integer representing the target number which the hash of the new block has to meet
     :returns: A 74 byte string containing the previous block hash, data, time of block creation, target power, and noce
     in that order
     """
     nonce = 0
     timestamp = time_now()
-    block_header = unhexlify(previous_hash) + unhexlify(data) + int_to_bytes(timestamp) + short_to_bytes(target) + int_to_bytes(nonce)
-    while not int.from_bytes(block_header, byteorder='big') < math.pow(10, target):
-        nonce += 1
-        timestamp = time_now()
-        block_header = previous_hash + data + int_to_bytes(timestamp) + short_to_bytes(target) + int_to_bytes(nonce)
-
+    target_exp = log_target_bytes(target)
+    block_header = previous_hash + data + int_to_bytes(timestamp) + log_target_bytes(target) + int_to_bytes(nonce)
     block_hash = hash_SHA(block_header)
     return block_header
 

@@ -202,17 +202,22 @@ class TestBlock(unittest.TestCase):
 
     # Generates a block with predetermined values, checks the length of the output, expecting 74
     def test_mine(self):
-        prev_hash = hash_SHA(b'000000')
-        data = hash_SHA(b'000001')
-        bytestring = mine(prev_hash, data, 200)
+        prev_hash = hexlify("0123456789ABCDEF".encode())
+        print("Prev_Hash Length: " + str(len(prev_hash)))
+        data = hexlify("0123456789ABCDEF".encode())
+        print("Data Length: " + str(len(data)))
+        bytestring = mine(prev_hash, data, 10**20)
+        print("Target Length: " + str(len(log_target_bytes(10**20))))
+        print("Time Length: " + str(len(int_to_bytes(time_now()))))
+        print("Nonce Length: " + str(len(long_to_bytes(0))))
         print("String Length: " + str(len(bytestring)))
         self.assertEqual(74, len(bytestring))
         
     # Generates a block based on an incredibly large target, so the nonce will be zero
     # Compares the result of splice_nonce converted to an integer to zero
     def test_slice_nonce(self):
-        block_hash = hash_SHA(b'000000')
-        bytestring = mine(block_hash, block_hash, 200)
+        block_hash = hexlify("0123456789ABCDEF".encode())
+        bytestring = mine(block_hash, block_hash, 10**200)
         print("Full Byte String: " + str(bytestring))
         print("String Length: " + str(len(bytestring)))
         print("Nonce String: " + str(slice_nonce(bytestring)))
