@@ -197,7 +197,7 @@ class TestBlock(unittest.TestCase):
     # Compares the result of splice_nonce converted to an integer to zero
     def test_slice_nonce(self):
         # Creates an arbritrary 32 byte string and creates a block with it
-        block_hash = hexlify("0123456789ABCDEF".encode())
+        bytestring = hexlify("0123456789ABCDEF".encode())
         header = mine(block_hash, block_hash, 10*200)
         # The nonce of mine() is currently always zero, output of slice_nonce() is zero
         self.assertEqual(0, bytes_to_long(slice_nonce(bytestring)))
