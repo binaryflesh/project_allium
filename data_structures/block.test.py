@@ -146,9 +146,7 @@ class TestBlock(unittest.TestCase):
     # to an int manually, and comparing it to the output of time_now
     def test_time_now(self):
         curr_time = time.time()
-        print("Float Time: " + str(curr_time))
         int_time = int(curr_time)
-        print("Integer Time:  " + str(time_now()))
         self.assertEqual(int_time, time_now())
 
     # Converts a known value to a bytestring and manually converts to string
@@ -156,8 +154,6 @@ class TestBlock(unittest.TestCase):
     def test_less_than_target(self):
         target = 30
         test_bs = hexlify(bytes([20]))
-        print("Target: " + str(target))
-        print("From Byte: " + str(toInt(test_bs)))
         self.assertTrue(less_than_target(test_bs, target))
 
     # Converts a known value to a byte string, manually converts it back into an
@@ -165,9 +161,6 @@ class TestBlock(unittest.TestCase):
     def test_bytes_to_int(self):
         convert = 20
         byte_s = pack('I', convert)
-        print("Byte String: " + str(convert))
-        print("Expected Result: " + str(convert))
-        print("Result: " + str(bytes_to_int(byte_s)))
         self.assertEqual(convert, bytes_to_int(byte_s))
 
     # Converts a known value to a byte string, manually converts it back into an
@@ -175,9 +168,6 @@ class TestBlock(unittest.TestCase):
     def test_bytes_to_short(self):
         convert = 30
         byte_s = pack('H', convert)
-        print("Byte String: " + str(convert))
-        print("Expected Result: " + str(convert))
-        print("Result: " + str(bytes_to_short(byte_s)))
         self.assertEqual(convert, bytes_to_short(byte_s))
 
     # Converts a known value to a byte string, manually converts it back into an
@@ -185,9 +175,6 @@ class TestBlock(unittest.TestCase):
     def test_bytes_to_long(self):
         convert = 40
         byte_s = pack('L', convert)
-        print("Byte String: " + str(convert))
-        print("Expected Result: " + str(convert))
-        print("Result: " + str(bytes_to_long(byte_s)))
         self.assertEqual(convert, bytes_to_long(byte_s))
 
     # Gets the log of a given whole number of base 10 and converts it into bytes
@@ -195,11 +182,28 @@ class TestBlock(unittest.TestCase):
     def test_log_target_bytes(self):
         convert = 10000             #10^4
         byte_form = log_target_bytes(convert)
-        print("Converting: ", convert, " Written as: 10^4")
-        print("Bytes using function: ", byte_form)
-        print("Reverting to get log: ", int.from_bytes(byte_form,byteorder = 'little'))
         self.assertEqual(convert, pow(10,int.from_bytes(byte_form,byteorder = 'little')))
 
+    # Generates a block with predetermined values, checks the length of the output, expecting 74
+    def test_mine(self):
+        # Creates 2 arbritrary 32 byte strings
+        prev_hash = hash_SHA("0".encode())
+        self.assertEqual(32, len(prev_hash))
+        data = hash_SHA("0".encode())
+        self.assertEqual(32, len(data))
+        #Creates a block header by mining with these strings and a target of 10^200
+        bytestring = mine(prev_hash, data, 10**200)
+        self.assertEqual(74, len(bytestring))
         
+    # Generates a block based on an incredibly large target, so the nonce will be zero
+    # Compares the result of splice_nonce converted to an integer to zero
+    def test_slice_nonce(self):
+        # Creates an arbritrary 32 byte string and creates a block with it
+        prev_hash = hash_SHA("0123456789ABCDEF".encode())
+        data = hash_SHA("0123456789ABCDEF".encode())
+        header = mine(prev_hash, data, 10*200)
+        # The nonce of mine() is currently always zero, output of slice_nonce() is zero
+        self.assertEqual(0, bytes_to_long(slice_nonce(header)))
+
 if __name__ == '__main__':
     unittest.main()
