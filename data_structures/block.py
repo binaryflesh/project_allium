@@ -202,7 +202,7 @@ def hash_SHA(byte_string):
     :return: The hash of the inputed byte string
     """
 
-    return hexlify(sha(byte_string).digest())
+    return sha(byte_string).digest()
     
 
 
