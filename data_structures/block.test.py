@@ -168,9 +168,6 @@ class TestBlock(unittest.TestCase):
     def test_bytes_to_short(self):
         convert = 30
         byte_s = pack('H', convert)
-        print("Byte String: " + str(convert))
-        print("Expected Result: " + str(convert))
-        print("Result: " + str(bytes_to_short(byte_s)))
         self.assertEqual(convert, bytes_to_short(byte_s))
 
     # Converts a known value to a byte string, manually converts it back into an
@@ -189,17 +186,21 @@ class TestBlock(unittest.TestCase):
 
     # Generates a block with predetermined values, checks the length of the output, expecting 74
     def test_mine(self):
+        # Creates 2 arbritrary 32 byte strings
         prev_hash = hexlify("0123456789ABCDEF".encode())
         data = hexlify("0123456789ABCDEF".encode())
+        #Creates a block header by mining with these strings and a target of 10^200
         bytestring = mine(prev_hash, data, 10**200)
         self.assertEqual(74, len(bytestring))
         
     # Generates a block based on an incredibly large target, so the nonce will be zero
     # Compares the result of splice_nonce converted to an integer to zero
     def test_slice_nonce(self):
+        # Creates an arbritrary 32 byte string and creates a block with it
         block_hash = hexlify("0123456789ABCDEF".encode())
-        #self.assertEqual(0, bytes_to_int(slice_nonce(bytestring)))
-        self.assertEqual(4, len(long_to_bytes(0)))
+        header = mine(block_hash, block_hash, 10*200)
+        # The nonce of mine() is currently always zero, output of slice_nonce() is zero
+        self.assertEqual(0, bytes_to_long(slice_nonce(bytestring)))
 
 if __name__ == '__main__':
     unittest.main()

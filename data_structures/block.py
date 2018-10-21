@@ -311,6 +311,7 @@ def mine(previous_hash, data, target):
     nonce = 0
     timestamp = time_now()
     target_exp = log_target_bytes(target)
+    # Concatonates the previous hash, data, timestamp, exponent of target, and nonce into a byte string
     block_header = previous_hash + data + int_to_bytes(timestamp) + log_target_bytes(target) + long_to_bytes(nonce)
     block_hash = hash_SHA(block_header)
     return block_header
