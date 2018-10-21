@@ -1,8 +1,6 @@
 # imports
 import unittest
 from block import *
-import time
-from struct import unpack
 
 # unit test class
 
@@ -187,8 +185,10 @@ class TestBlock(unittest.TestCase):
     # Generates a block with predetermined values, checks the length of the output, expecting 74
     def test_mine(self):
         # Creates 2 arbritrary 32 byte strings
-        prev_hash = hexlify("0123456789ABCDEF".encode())
-        data = hexlify("0123456789ABCDEF".encode())
+        prev_hash = hash_SHA("0".encode())
+        self.assertEqual(32, len(prev_hash))
+        data = hash_SHA("0".encode())
+        self.assertEqual(32, len(data))
         #Creates a block header by mining with these strings and a target of 10^200
         bytestring = mine(prev_hash, data, 10**200)
         self.assertEqual(74, len(bytestring))
@@ -197,10 +197,10 @@ class TestBlock(unittest.TestCase):
     # Compares the result of splice_nonce converted to an integer to zero
     def test_slice_nonce(self):
         # Creates an arbritrary 32 byte string and creates a block with it
-        bytestring = hexlify("0123456789ABCDEF".encode())
+        block_hash = hash_SHA("0123456789ABCDEF".encode())
         header = mine(block_hash, block_hash, 10*200)
         # The nonce of mine() is currently always zero, output of slice_nonce() is zero
-        self.assertEqual(0, bytes_to_long(slice_nonce(bytestring)))
+        self.assertEqual(0, bytes_to_long(slice_nonce(header)))
 
 if __name__ == '__main__':
     unittest.main()
