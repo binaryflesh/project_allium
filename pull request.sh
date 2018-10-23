@@ -1,3 +1,4 @@
 #!/bin/bash
-git push origin master
+hub pull-request
+
 read -p "Press Return to Close..."
