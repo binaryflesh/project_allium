@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Asks user if they want to commit files before pushing
+# Asks user if they want to commit files
 read -p "Do you want to commit (y/n)?:" commit_statement
 
 # If user wants to commit files, commit files
@@ -18,8 +18,16 @@ then
     # Commits changes to repository
     git commit -m "$summary"
 fi
-#Pushes changes to remote repository
-git push origin master
+
+# Asks user if they want to push commits
+read -p "Do you want to push (y/n)?:" push_statement
+
+# If user wants to push commits, push commits
+if [ "$push_statement" == "y" ]
+then
+    #Pushes changes to remote repository
+    git push origin master
+fi
 
 # Prompts for user input when done 
 # (this is so that the console stays open so that user can read any error messages)
