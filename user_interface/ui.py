@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QGridLayout
-from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QGridLayout, QFrame
+from PyQt5.QtGui import QIcon, QFont
 from PyQt5 import QtCore
 import socket
 
@@ -20,6 +20,9 @@ class Gui(QMainWindow):
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
+        
+        #set up fonts to be used 
+        self.bigFont = QFont("Times", 18,QFont.Bold)
 
         #create a QWidget and set it as a central widget
         #we need the QWidget becasue you cannot set a QLayout directly on QMainWindow
@@ -30,6 +33,15 @@ class Gui(QMainWindow):
         gridLayout = QGridLayout()
 
         label = QLabel('SIG Blockchain Project', self)
+        #Set up the style of the main Label
+        label.setStyleSheet("""
+                          QWidget {
+                                border: 2px solid black;
+                                border-radius:13px;
+                                padding: 6px;
+                                background-color: rgb(255, 255, 255);
+                        }""")
+        label.setFont(self.bigFont)
         gridLayout.addWidget(label, 0, 0, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
 
         #set up various gui components
