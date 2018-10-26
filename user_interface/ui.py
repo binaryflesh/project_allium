@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QGridLayout, QFrame
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QGridLayout, QFrame, QHBoxLayout
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5 import QtCore
 import socket
@@ -13,7 +13,7 @@ class Gui(QMainWindow):
         self.title = ''
         self.left = 10
         self.top = 10
-        self.width = 440
+        self.width = 1000
         self.height = 280
         self.initUI()
 
@@ -23,6 +23,7 @@ class Gui(QMainWindow):
         
         #set up fonts to be used 
         self.bigFont = QFont("Times", 18,QFont.Bold)
+        self.normalFont = QFont("Time", 12)
 
         #create a QWidget and set it as a central widget
         #we need the QWidget becasue you cannot set a QLayout directly on QMainWindow
@@ -46,17 +47,65 @@ class Gui(QMainWindow):
 
         #set up various gui components
 
-        self.IPLabel = QLabel(get_ip(), self)
-        gridLayout.addWidget(QLabel("IP: ", self), 0, 1, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
-        gridLayout.addWidget(self.IPLabel, 0,2 , QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
+        #set up the IP label
+        IPFrame = QFrame(self)
+        IPFrame.setObjectName("IPFrame")
+        IPFrame.setStyleSheet("""
+                            QWidget#IPFrame{
+                                border: 2px solid black;
+                                padding: 3px;
+                                background-color: rgb(255, 255, 255);
+                        }""")
+        IPLayout = QHBoxLayout()
+        lblIp = QLabel("IP: ", IPFrame)
+        lblIp.setFont(self.normalFont)
+        IPLayout.addWidget(lblIp)
+        self.IPLabel = QLabel(get_ip(), IPFrame)
+        self.IPLabel.setFont(self.normalFont)
+        IPLayout.addWidget(self.IPLabel)
+        IPFrame.setLayout(IPLayout)
+        gridLayout.addWidget(IPFrame, 0, 1)
 
-        self.StatusLabel = QLabel("Your status ", self)
-        gridLayout.addWidget(QLabel("Status: ", self), 1, 1, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
-        gridLayout.addWidget(self.StatusLabel, 1, 2, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
+        #set up status lables
+        StatusFrame = QFrame(self)
+        StatusFrame.setObjectName("StatusFrame")
+        StatusFrame.setStyleSheet("""
+                            QWidget#StatusFrame{
+                                border: 2px solid black;
+                                padding: 3px;
+                                background-color: rgb(255, 255, 255);
+                        }    
+        """)
+        StatusLayout = QHBoxLayout()
+        lblStatus = QLabel("Status: ", StatusFrame)
+        lblStatus.setFont(self.normalFont)
+        self.StatusLabel = QLabel("Your status ", StatusFrame)
+        self.StatusLabel.setFont(self.normalFont)
+        StatusLayout.addWidget(lblStatus)
+        StatusLayout.addWidget(self.StatusLabel)
+        StatusFrame.setLayout(StatusLayout)
+        gridLayout.addWidget(StatusFrame, 1, 1)
 
-        self.PeersLabel = QLabel("You have no peers", self)
-        gridLayout.addWidget(QLabel("Peers: ", self), 2, 1, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
-        gridLayout.addWidget(self.PeersLabel, 2, 2, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
+
+        #set up Peers lables
+        PeersFrame = QFrame(self)
+        PeersFrame.setObjectName("PeersFrame")
+        PeersFrame.setStyleSheet("""
+                            QWidget#PeersFrame{
+                                border: 2px solid black;
+                                padding: 3px;
+                                background-color: rgb(255, 255, 255);
+                        }    
+        """)
+        PeersLayout = QHBoxLayout()
+        lblPeers = QLabel("Peers: ", PeersFrame)
+        lblPeers.setFont(self.normalFont)
+        self.PeersLabel = QLabel("You have no peers: ", PeersFrame)
+        self.PeersLabel.setFont(self.normalFont)
+        PeersLayout.addWidget(lblPeers)
+        PeersLayout.addWidget(self.PeersLabel)
+        PeersFrame.setLayout(PeersLayout)
+        gridLayout.addWidget(PeersFrame, 2, 1)
 
         centralWidget.setLayout(gridLayout)
         self.show()
