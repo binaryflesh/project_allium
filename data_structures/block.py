@@ -323,3 +323,12 @@ def slice_nonce(block_header):
     :returns: a 4 byte byte string containing the nonce of a block
     """
     return block_header[70:74]
+
+def slice_data(block_header):
+    """
+    Takes a concatonated 74 byte string and returns bytes 33 through 64
+
+    :param1 block_header: a 74 byte string containing the information of a block
+    :returns: a 32 byte string containing the block's data
+    """ 
+    return block_header[32:64]
