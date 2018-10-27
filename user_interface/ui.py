@@ -47,7 +47,16 @@ class Gui(QMainWindow):
 
         #set up various gui components
 
-        #set up the IP label
+        gridLayout.addWidget(self.createIPFrame(), 0, 1)
+
+        gridLayout.addWidget(self.createStatusFrame(), 1, 1)
+
+        gridLayout.addWidget(self.createPeersFrame(), 2, 1)
+
+        centralWidget.setLayout(gridLayout)
+        self.show()
+
+    def createIPFrame(self):
         IPFrame = QFrame(self)
         IPFrame.setObjectName("IPFrame")
         IPFrame.setStyleSheet("""
@@ -64,9 +73,9 @@ class Gui(QMainWindow):
         self.IPLabel.setFont(self.normalFont)
         IPLayout.addWidget(self.IPLabel)
         IPFrame.setLayout(IPLayout)
-        gridLayout.addWidget(IPFrame, 0, 1)
+        return IPFrame
 
-        #set up status lables
+    def createStatusFrame(self):
         StatusFrame = QFrame(self)
         StatusFrame.setObjectName("StatusFrame")
         StatusFrame.setStyleSheet("""
@@ -84,10 +93,9 @@ class Gui(QMainWindow):
         StatusLayout.addWidget(lblStatus)
         StatusLayout.addWidget(self.StatusLabel)
         StatusFrame.setLayout(StatusLayout)
-        gridLayout.addWidget(StatusFrame, 1, 1)
+        return StatusFrame
 
-
-        #set up Peers lables
+    def createPeersFrame(self):
         PeersFrame = QFrame(self)
         PeersFrame.setObjectName("PeersFrame")
         PeersFrame.setStyleSheet("""
@@ -105,10 +113,7 @@ class Gui(QMainWindow):
         PeersLayout.addWidget(lblPeers)
         PeersLayout.addWidget(self.PeersLabel)
         PeersFrame.setLayout(PeersLayout)
-        gridLayout.addWidget(PeersFrame, 2, 1)
-
-        centralWidget.setLayout(gridLayout)
-        self.show()
+        return PeersFrame
 
 def get_ip() :
 
