@@ -11,8 +11,8 @@ class Gui(QMainWindow):
     def __init__(self):
         super().__init__()
         self.title = ''
-        self.left = 10
-        self.top = 10
+        self.left = 100
+        self.top = 100
         self.width = 1000
         self.height = 280
         self.initUI()
