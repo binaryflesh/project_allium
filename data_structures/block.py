@@ -324,14 +324,11 @@ def slice_nonce(block_header):
     """
     return block_header[70:74]
 
-def slice_timestamp(block_header):
+def slice_data(block_header):
     """
-    Slices the timestamp section of the header
+    Takes a concatonated 74 byte string and returns bytes 33 through 64
 
-    :param block_header: A block header of length 74 bytes
-    :return: The portion of the header that contains the timestamp
-    """
-    #range from 64- 67
-    #endpoint in slicing is exclusive so need to add one more
-    return block_header[64:68]
-    
+    :param1 block_header: a 74 byte string containing the information of a block
+    :returns: a 32 byte string containing the block's data
+    """ 
+    return block_header[32:64]
