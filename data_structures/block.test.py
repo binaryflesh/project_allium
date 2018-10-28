@@ -205,16 +205,5 @@ class TestBlock(unittest.TestCase):
         # The nonce of mine() is currently always zero, output of slice_nonce() is zero
         self.assertEqual(0, bytes_to_long(slice_nonce(header)))
 
-    # Tests if the time stamp is correctly sliced out from the header
-    def test_slice_timestamp(self):
-        # test 32 byte strings
-        prevHash = hash_SHA("0123456789ABCDEF".encode())
-        data = hash_SHA("0123456789ABCDEF".encode())
-        testHeader = mine(prevHash, data, 10*200)
-        self.assertIsInstance(testHeader, bytes)   #checks if whats being tested is in of types bytes
-
-        timeStamp = time_now()      # gets the current time to compare it to what is in the block
-        self.assertEqual(int_to_bytes(timeStamp), slice_timestamp(testHeader))
-
 if __name__ == '__main__':
     unittest.main()
