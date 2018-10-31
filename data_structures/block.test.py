@@ -205,5 +205,18 @@ class TestBlock(unittest.TestCase):
         # The nonce of mine() is currently always zero, output of slice_nonce() is zero
         self.assertEqual(0, bytes_to_long(slice_nonce(header)))
 
+    # Generates a block based on a specific data and tests the results of
+    # splice_data to the defined data
+    def test_slice_data(self):
+        # Creates an arbritrary 32 byte string and creates a block with it
+        prev_hash = hash_SHA("0123456789ABCDEF".encode())
+        data = hash_SHA("BeepBeepLettuce".encode())
+        header = mine(prev_hash, data, 10*200)
+        sliced_data = slice_data(header)
+        # Tests the length of the data byte string, expeting 32
+        self.assertEqual(32, len(sliced_data))
+        # Tests the result of splice_data with the inputted data
+        self.assertEqual(data, sliced_data)
+
 if __name__ == '__main__':
     unittest.main()
