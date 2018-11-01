@@ -332,3 +332,6 @@ def slice_data(block_header):
     :returns: a 32 byte string containing the block's data
     """ 
     return block_header[32:64]
+
+def slice_prev_hash(block_header):
+    return block_header[0:32]
