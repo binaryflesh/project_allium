@@ -326,7 +326,7 @@ def slice_nonce(block_header):
 
 def slice_data(block_header):
     """
-    Takes a concatonated 74 byte string and returns bytes 33 through 64
+    Takes a concatonated 74 byte string and returns bytes 32 through 63
 
     :param1 block_header: a 74 byte string containing the information of a block
     :returns: a 32 byte string containing the block's data
@@ -335,10 +335,14 @@ def slice_data(block_header):
 
 def slice_prev_hash(block_header):
     """
-    Takes a concatonated 74 byte string and returns bytes 0 through 32
+    Takes a concatonated 74 byte string and returns bytes 0 through 31
     Those bytes represent the hash of the previous block
 
     :param1 block_header: a 74 byte string containing the information of a block
     :returns: a 32 byte string containing the hash of the previous block
     """ 
     return block_header[0:32]
+
+def slice_timestamp(block_header):
+	return block_header[64:68]
+
