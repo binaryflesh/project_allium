@@ -218,5 +218,16 @@ class TestBlock(unittest.TestCase):
         # Tests the result of splice_data with the inputted data
         self.assertEqual(data, sliced_data)
 
+    def test_prev_hash(self):
+        # Creates an arbritrary 32 byte string and creates a block with it
+        prev_hash = hash_SHA("0123456789ABCDEF".encode())
+        data = hash_SHA("BeepBeepLettuce".encode())
+        header = mine(prev_hash, data, 10*200)
+        sliced_prev_hash = slice_prev_hash(header)
+        # Tests the length of the data byte string, expeting 32
+        self.assertEqual(32, len(sliced_prev_hash))
+        # Tests the result of splice_data with the inputted data
+        self.assertEqual(prev_hash, sliced_prev_hash)
+
 if __name__ == '__main__':
     unittest.main()
