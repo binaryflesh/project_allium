@@ -218,7 +218,7 @@ class TestBlock(unittest.TestCase):
         # Tests the result of splice_data with the inputted data
         self.assertEqual(data, sliced_data)
 
-    def test_prev_hash(self):
+    def test_slice_prev_hash(self):
         # Creates an arbritrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
@@ -229,7 +229,7 @@ class TestBlock(unittest.TestCase):
         # Tests the result of splice_data with the inputted data
         self.assertEqual(prev_hash, sliced_prev_hash)
 
-    def test_timestamp(self):
+    def test_slice_timestamp(self):
         # Creates an arbritrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
@@ -237,6 +237,20 @@ class TestBlock(unittest.TestCase):
         sliced_timestamp = slice_timestamp(header)
         # Tests the length of the data byte string, expeting 32
         self.assertEqual(4, len(sliced_timestamp))
+
+    def test_slice_target(self):
+        # Creates an arbritrary 32 byte string and creates a block with it
+        prev_hash = hash_SHA("0123456789ABCDEF".encode())
+        data = hash_SHA("BeepBeepLettuce".encode())
+        target = 10*200
+        header = mine(prev_hash, data, target)
+        sliced_target = slice_target(header)
+        # Tests the length of the data byte string, expeting 32
+        self.assertEqual(2, len(sliced_target))
+        self.assertEqual(log_target_bytes(target), sliced_target)
+
+
+        
 
     
 if __name__ == '__main__':

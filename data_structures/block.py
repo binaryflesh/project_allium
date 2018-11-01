@@ -344,5 +344,22 @@ def slice_prev_hash(block_header):
     return block_header[0:32]
 
 def slice_timestamp(block_header):
-	return block_header[64:68]
+    """
+    Takes a concatonated 74 byte string and returns bytes 64 through 67
+    Those bytes represent the timestamp of the block (time when the header was created)
+
+    :param1 block_header: a 74 byte string containing the information of a block
+    :returns: a 4 byte string containing the timestamp of the block
+    """
+    return block_header[64:68]
+
+def slice_target(block_header):
+    """
+    Takes a concatonated 74 byte string and returns bytes 68 through 70
+    Those bytes represent the target of the block
+
+    :param1 block_header: a 74 byte string containing the information of a block
+    :returns: a 2 byte string containing the target of the blokc
+    """
+    return block_header[68:70]
 
