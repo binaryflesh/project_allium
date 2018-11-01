@@ -4,7 +4,7 @@
 read -p "Do you want to commit (y/n)?:" commit_statement
 
 # If user wants to commit files, commit files
-if [ "$commit_statement" == "y" ]
+if [ "$commit_statement" == "y" ] || [ "$commit_statement" == "Y" ] || [ "$commit_statement" ==  "yes" ] || [ "$commit_statement" ==  "Yes" ]
 then
     # Displays file changes and prompts user on whether or not they want to commith them
     git add -p
@@ -23,7 +23,7 @@ fi
 read -p "Do you want to push (y/n)?:" push_statement
 
 # If user wants to push commits, push commits
-if [ "$push_statement" == "y" ]
+if [ "$push_statement" == "y" ] || [ "$push_statement" == "Y" ] || [ "$push_statement" ==  "yes" ] || [ "$push_statement" ==  "Yes" ]
 then
     #Pushes changes to remote repository
     git push origin master
