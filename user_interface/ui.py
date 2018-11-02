@@ -8,20 +8,21 @@ import socket
 class Gui(QMainWindow):
     '''Create a window and display the title of the project in the center'''
 
-    def __init__(self):
+    def __init__(self, port = 9001):
         super().__init__()
         self.title = ''
         self.left = 100
         self.top = 100
         self.width = 1000
         self.height = 280
+        self.port = port;
         self.initUI()
 
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
-        
-        #set up fonts to be used 
+
+        #set up fonts to be used
         self.bigFont = QFont("Times", 18,QFont.Bold)
         self.normalFont = QFont("Time", 12)
 
@@ -62,14 +63,15 @@ class Gui(QMainWindow):
         IPFrame.setStyleSheet("""
                             QWidget#IPFrame{
                                 border: 2px solid black;
+                                border-radius: 15px;
                                 padding: 3px;
                                 background-color: rgb(255, 255, 255);
                         }""")
         IPLayout = QHBoxLayout()
-        lblIp = QLabel("IP: ", IPFrame)
+        lblIp = QLabel("IP : Port ", IPFrame)
         lblIp.setFont(self.normalFont)
         IPLayout.addWidget(lblIp)
-        self.IPLabel = QLabel(get_ip(), IPFrame)
+        self.IPLabel = QLabel(concat_ip_port(self.port), IPFrame)
         self.IPLabel.setFont(self.normalFont)
         IPLayout.addWidget(self.IPLabel)
         IPFrame.setLayout(IPLayout)
@@ -81,9 +83,10 @@ class Gui(QMainWindow):
         StatusFrame.setStyleSheet("""
                             QWidget#StatusFrame{
                                 border: 2px solid black;
+                                border-radius: 15px;
                                 padding: 3px;
                                 background-color: rgb(255, 255, 255);
-                        }    
+                        }
         """)
         StatusLayout = QHBoxLayout()
         lblStatus = QLabel("Status: ", StatusFrame)
@@ -101,9 +104,10 @@ class Gui(QMainWindow):
         PeersFrame.setStyleSheet("""
                             QWidget#PeersFrame{
                                 border: 2px solid black;
+                                border-radius: 15px;
                                 padding: 3px;
                                 background-color: rgb(255, 255, 255);
-                        }    
+                        }
         """)
         PeersLayout = QHBoxLayout()
         lblPeers = QLabel("Peers: ", PeersFrame)
@@ -119,12 +123,19 @@ def get_ip() :
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect(('www.google.com', 80))
+
     ip = s.getsockname()[0]
+
+
     s.close()
 
     return ip
 
+def concat_ip_port(port) :
+    return str(get_ip()) + " : " + str(port)
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = Gui()
+    port = 9001
+    ex = Gui(port)
     sys.exit(app.exec_())
