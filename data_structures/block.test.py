@@ -84,12 +84,12 @@ class TestBlock(unittest.TestCase):
         prevHash = '000000'
         # play around with this exponent (stick to the 60-100 range)
         target = 10**75
-        print("Mining...")
+        # print("Mining...")
         a = int(time.time())
         b = createBlockPoW(data, prevHash, target)
-        print("Block found!")
+        # print("Block found!")
         c = int(time.time())
-        print("Time it took: {} seconds".format((c-a)))
+        # print("Time it took: {} seconds".format((c-a)))
         self.assertLessEqual(toInt(b['blockHash']), target)
 
     def test_Hash_SHA(self):
@@ -153,7 +153,7 @@ class TestBlock(unittest.TestCase):
     # Compares to output of less_than_target with known greater value
     def test_less_than_target(self):
         target = 30
-        test_bs = hexlify(bytes([20]))
+        test_bs = bytes([20])
         self.assertTrue(less_than_target(test_bs, target))
 
     # Converts a known value to a byte string, manually converts it back into an

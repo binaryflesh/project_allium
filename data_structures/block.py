@@ -258,7 +258,7 @@ def less_than_target(byte_string, target):
     :param2 targer: an integer, a target to which byte_string is compared  
     :returns: a boolean, true if the byte_string integer is less than target. false otherwise
     """
-    return toInt(byte_string) < target
+    return hash_to_int(byte_string) < target
 
 def bytes_to_int(byte_string):
     """
@@ -362,4 +362,7 @@ def slice_target(block_header):
     :returns: a 2 byte string containing the target of the blokc
     """
     return block_header[68:70]
+
+def hash_to_int(_hash):
+    return int.from_bytes(_hash, byteorder='big')
 
