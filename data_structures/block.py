@@ -313,6 +313,13 @@ def mine(previous_hash, data, target):
     # Concatonates the previous hash, data, timestamp, exponent of target, and nonce into a byte string
     block_header = previous_hash + data + int_to_bytes(timestamp) + log_target_bytes(target) + long_to_bytes(nonce)
     block_hash = hash_SHA(block_header)
+
+    while not (less_than_target(block_hash, target)):
+        nonce += 1
+        timestamp = time_now()
+        block_header = previous_hash + data + int_to_bytes(timestamp) + log_target_bytes(target) + long_to_bytes(nonce)
+        block_hash = hash_SHA(block_header)
+        
     return block_header
 
 def slice_nonce(block_header):
