@@ -101,44 +101,44 @@ class TestBlock(unittest.TestCase):
         """
         Tests out values for the int_to_bytes function. Tests out max values as well
         """
-        byte1 = int_to_bytes(1) 
+        byte1 = int_to_bytes(1)
         #if we unpack the bytes as a unsigned integer, we should get the same value
         self.assertEqual(unpack('I', byte1)[0], 1)
         #test out 0
-        byte0 = int_to_bytes(0) 
+        byte0 = int_to_bytes(0)
         self.assertEqual(unpack('I', byte0)[0], 0)
         #test out max signed 32 bit int
         byte_max_32 = int_to_bytes(2**31 -1)
         self.assertEqual(unpack('I', byte_max_32)[0], 2**31 -1)
-        #test out max unsigned 32 bit int 
+        #test out max unsigned 32 bit int
         byte_max_u32 = int_to_bytes(2**32 -1)
         self.assertEqual(unpack('I', byte_max_u32)[0], 2**32 -1)
-     
+
     def test_short_to_bytes(self):
         """
         Tests out values for the short_to_bytes function. Tests out max values as well
         """
-        byte1 = short_to_bytes(1) 
+        byte1 = short_to_bytes(1)
         #if we unpack the bytes as a unsigned integer, we should get the same value
         self.assertEqual(unpack('H', byte1)[0], 1)
         #test out 0
-        byte0 = short_to_bytes(0) 
+        byte0 = short_to_bytes(0)
         self.assertEqual(unpack('H', byte0)[0], 0)
-        #test out max unsigned 32 bit int 
+        #test out max unsigned 32 bit int
         byte_max_short = short_to_bytes(2**8 -1)
         self.assertEqual(unpack('H', byte_max_short)[0], 2**8 -1)
-       
+
     def test_long_to_bytes(self):
         """
         Tests out values for the long_to_bytes function. Tests out max values as well
         """
-        byte1 = long_to_bytes(1) 
+        byte1 = long_to_bytes(1)
         #if we unpack the bytes as a unsigned integer, we should get the same value
         self.assertEqual(unpack('L', byte1)[0], 1)
         #test out 0
-        byte0 = long_to_bytes(0) 
+        byte0 = long_to_bytes(0)
         self.assertEqual(unpack('L', byte0)[0], 0)
-        #test out max unsigned 32 bit int 
+        #test out max unsigned 32 bit int
         byte_max_long = long_to_bytes(2**32 -1)
         self.assertEqual(unpack('L', byte_max_long)[0], 2**32 -1)
 
@@ -196,7 +196,7 @@ class TestBlock(unittest.TestCase):
         self.assertEqual(74, len(bytestring))   #NOTE: This fails on Linux Mint
         #Tests if result block header is less than target
         self.assertTrue(less_than_target(hash_SHA(bytestring)), 10**77)
-        
+
     # Generates a block based on an incredibly large target, so the nonce will be zero
     # Compares the result of splice_nonce converted to an integer to zero
     def test_slice_nonce(self):
@@ -218,7 +218,7 @@ class TestBlock(unittest.TestCase):
         # Tests the length of the data byte string, expeting 32
         self.assertEqual(32, len(sliced_data))
         # Tests the result of splice_data with the inputted data
-        self.assertEqual(data, sliced_data) 
+        self.assertEqual(data, sliced_data)
 
     def test_slice_prev_hash(self):
         # Creates an arbritrary 32 byte string and creates a block with it
@@ -255,7 +255,7 @@ class TestBlock(unittest.TestCase):
        # Creates an arbritrary 32 byte string and creates a block with it
        prev_hash = hash_SHA("0123456789ABCDEF".encode())
        data = hash_SHA("0123456789ABCDEF".encode())
-       target = 10*200
+       target = 10**200
        header = mine(prev_hash, data, target)
        parsed_block = parse_block(header)
        # Tests if the values that are in the dictionary are the same as the inputted values
@@ -265,8 +265,8 @@ class TestBlock(unittest.TestCase):
        # Tests if the values in the dictionary are equal to the ones found by the related slice functions
        self.assertEqual(slice_nonce(header), parsed_block["nonce"])
        self.assertEqual(slice_timestamp(header), parsed_block["timestamp"])
-        
 
-    
+
+
 if __name__ == '__main__':
     unittest.main()
