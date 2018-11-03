@@ -192,17 +192,19 @@ class TestBlock(unittest.TestCase):
         data = hash_SHA("0".encode())
         self.assertEqual(32, len(data))
         #Creates a block header by mining with these strings and a target of 10^200
-        bytestring = mine(prev_hash, data, 10**200)
-        self.assertEqual(74, len(bytestring))
+        bytestring = mine(prev_hash, data, 10**77)
+        self.assertEqual(74, len(bytestring))   #NOTE: This fails on Linux Mint
+        #Tests if result block header is less than target
+        self.assertTrue(less_than_target(hash_SHA(bytestring)), 10**77)
         
     # Generates a block based on an incredibly large target, so the nonce will be zero
     # Compares the result of splice_nonce converted to an integer to zero
     def test_slice_nonce(self):
         # Creates an arbritrary 32 byte string and creates a block with it
-        prev_hash = hash_SHA("0123456789ABCDEF".encode())
-        data = hash_SHA("0123456789ABCDEF".encode())
-        header = mine(prev_hash, data, 10*200)
-        # The nonce of mine() is currently always zero, output of slice_nonce() is zero
+        prev_hash = hash_SHA("0".encode())
+        data = hash_SHA("BeepBeepLettuce".encode())
+        header = mine(prev_hash, data, 10**200)
+        # The nonce of mine() should be always zero, due to large target, output of slice_nonce() is zero
         self.assertEqual(0, bytes_to_long(slice_nonce(header)))
 
     # Generates a block based on a specific data and tests the results of
@@ -211,18 +213,18 @@ class TestBlock(unittest.TestCase):
         # Creates an arbritrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
-        header = mine(prev_hash, data, 10*200)
+        header = mine(prev_hash, data, 10**100)
         sliced_data = slice_data(header)
         # Tests the length of the data byte string, expeting 32
         self.assertEqual(32, len(sliced_data))
         # Tests the result of splice_data with the inputted data
-        self.assertEqual(data, sliced_data)
+        self.assertEqual(data, sliced_data) 
 
     def test_slice_prev_hash(self):
         # Creates an arbritrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
-        header = mine(prev_hash, data, 10*200)
+        header = mine(prev_hash, data, 10**200)
         sliced_prev_hash = slice_prev_hash(header)
         # Tests the length of the data byte string, expeting 32
         self.assertEqual(32, len(sliced_prev_hash))
@@ -233,7 +235,7 @@ class TestBlock(unittest.TestCase):
         # Creates an arbritrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
-        header = mine(prev_hash, data, 10*200)
+        header = mine(prev_hash, data, 10**200)
         sliced_timestamp = slice_timestamp(header)
         # Tests the length of the data byte string, expeting 32
         self.assertEqual(4, len(sliced_timestamp))
@@ -242,14 +244,27 @@ class TestBlock(unittest.TestCase):
         # Creates an arbritrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
-        target = 10*200
+        target = 10**200
         header = mine(prev_hash, data, target)
         sliced_target = slice_target(header)
         # Tests the length of the data byte string, expeting 32
         self.assertEqual(2, len(sliced_target))
         self.assertEqual(log_target_bytes(target), sliced_target)
 
-
+    def test_parse_block(self):
+       # Creates an arbritrary 32 byte string and creates a block with it
+       prev_hash = hash_SHA("0123456789ABCDEF".encode())
+       data = hash_SHA("0123456789ABCDEF".encode())
+       target = 10*200
+       header = mine(prev_hash, data, target)
+       parsed_block = parse_block(header)
+       # Tests if the values that are in the dictionary are the same as the inputted values
+       self.assertEqual(prev_hash, parsed_block["prev_hash"])
+       self.assertEqual(data, parsed_block["data"])
+       self.assertEqual(log_target_bytes(target), parsed_block["target"])
+       # Tests if the values in the dictionary are equal to the ones found by the related slice functions
+       self.assertEqual(slice_nonce(header), parsed_block["nonce"])
+       self.assertEqual(slice_timestamp(header), parsed_block["timestamp"])
         
 
     
