@@ -15,7 +15,7 @@ class Gui(QMainWindow):
         self.top = 100
         self.width = 1000
         self.height = 280
-        self.port = port;
+        self.port = port
         self.initUI()
 
     def initUI(self):
