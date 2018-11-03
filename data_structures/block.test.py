@@ -195,7 +195,7 @@ class TestBlock(unittest.TestCase):
         bytestring = mine(prev_hash, data, 10**77)
         self.assertEqual(74, len(bytestring))   #NOTE: This fails on Linux Mint
         #Tests if result block header is less than target
-        self.assertTrue(less_than_target(hash_SHA(bytestring)), 10**77)
+        self.assertTrue(less_than_target(hash_SHA(bytestring), 10**77))
 
     # Generates a block based on an incredibly large target, so the nonce will be zero
     # Compares the result of splice_nonce converted to an integer to zero
