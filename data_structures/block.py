@@ -373,3 +373,19 @@ def slice_target(block_header):
 def hash_to_int(_hash):
     return int.from_bytes(_hash, byteorder='big')
 
+
+def parse_block(block_header):
+    """
+    Takes a concatonated 74 byte string and runs it through the the previously defined slice functions
+    Those functions outputs are added to a dictionary
+
+    :param1 block_header: a 74 byte string containing the information of a block
+    :returns: a dictionary cotaining the previous hash, data, timestamp, target and nonce of the block
+    """
+    parsed_block = {}
+    parsed_block["prev_hash"] = slice_prev_hash(block_header)
+    parsed_block["data"] = slice_data(block_header)
+    parsed_block["timestamp"] = slice_timestamp(block_header)
+    parsed_block["target"] = slice_target(block_header)
+    parsed_block["nonce"] = slice_nonce(block_header)
+    return parsed_block
