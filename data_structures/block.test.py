@@ -266,7 +266,29 @@ class TestBlock(unittest.TestCase):
        self.assertEqual(slice_nonce(header), parsed_block["nonce"])
        self.assertEqual(slice_timestamp(header), parsed_block["timestamp"])
 
-
+    def test_is_valid_block(self):
+        # Creates a block and prev_block
+        prev_target = 10**150
+        target = 10**151
+        inv_target = 10**149
+        inv_prev_hash = hash_SHA("BEEPBEEPLETTUCE".encode())
+        #Creates an invalid block
+        inv_block_1 = mine(inv_prev_hash, hash_SHA("INVALID".encode()), target)
+        #Creates a valid previous block
+        prev_block = mine(hash_SHA("0".encode()), hash_SHA("1".encode()), prev_target)
+        prev_hash = hash_SHA(prev_block)
+        #Creates a valid block
+        block = mine(prev_hash, hash_SHA("2".encode()), target)
+        #Creates an invalid block with invalid prev_hash
+        inv_block_2 = mine(inv_prev_hash, hash_SHA("INVALID".encode()), target)
+        #Creates an invalid block with invalid target
+        inv_block_3 = mine(prev_hash, hash_SHA("INVALID".encode()), inv_target)
+        #Tests if block is a valid block, it should be
+        self.assertTrue(is_valid_block(block, prev_block))
+        #Confirms invalidity of invalid blocks
+        self.assertFalse(is_valid_block(inv_block_1, prev_block))
+        self.assertFalse(is_valid_block(inv_block_2, prev_block))
+        self.assertFalse(is_valid_block(inv_block_3, prev_block))
 
 if __name__ == '__main__':
     unittest.main()
