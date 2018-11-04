@@ -265,6 +265,7 @@ class TestBlock(unittest.TestCase):
        # Tests if the values in the dictionary are equal to the ones found by the related slice functions
        self.assertEqual(slice_nonce(header), parsed_block["nonce"])
        self.assertEqual(slice_timestamp(header), parsed_block["timestamp"])
+       self.assertEqual(hash_SHA(header), parsed_block["block_hash"])
 
 
 
