@@ -265,13 +265,13 @@ class TestBlock(unittest.TestCase):
        # Tests if the values in the dictionary are equal to the ones found by the related slice functions
        self.assertEqual(slice_nonce(header), parsed_block["nonce"])
        self.assertEqual(slice_timestamp(header), parsed_block["timestamp"])
-    
+       self.assertEqual(hash_SHA(header), parsed_block["block_hash"])
+      
     # This test ensures that a block with a timestamp less than the timestamp of its previous block, will not be added to the blockchain
     def test_01_is_valid_block(self):
         target = 10**72     # Target for which all block hashes must be under
         data = hash_SHA("1".encode())   # valid block data to be used for block constructoin
         prev_hash = hash_SHA("0".encode())  # This previous hash is invalid, though the timestamp of the block will be checked first
-
         #Creates an invalid block, this is invalid due to having a timestamp less than the candidate block
         invalid_candidate_block = mine(prev_hash, hash_SHA("INVALID".encode()), target)
 

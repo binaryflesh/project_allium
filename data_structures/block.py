@@ -388,6 +388,7 @@ def parse_block(block_header):
     parsed_block["timestamp"] = slice_timestamp(block_header)
     parsed_block["target"] = slice_target(block_header)
     parsed_block["nonce"] = slice_nonce(block_header)
+    parsed_block["block_hash"] = hash_SHA(block_header)
     return parsed_block
 
 def is_valid_block(block, prev_block):
