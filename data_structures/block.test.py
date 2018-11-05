@@ -270,14 +270,13 @@ class TestBlock(unittest.TestCase):
     # This test ensures that a block with a timestamp less than the timestamp of its previous block, will not be added to the blockchain
     def test_01_is_valid_block(self):
         target = 10**72     # Target for which all block hashes must be under
-        data = hash_SHA("1".encode())   # valid block data to be used for block constructoin
+        data = hash_SHA("1".encode())   # valid block data to be used for block construction
         prev_hash = hash_SHA("0".encode())  # This previous hash is invalid, though the timestamp of the block will be checked first
         #Creates an invalid block, this is invalid due to having a timestamp less than the candidate block
         invalid_candidate_block = mine(prev_hash, hash_SHA("INVALID".encode()), target)
 
         #Creates a valid previous block
         prev_block = mine(hash_SHA("0".encode()), data, target)
-        prev_hash = hash_SHA(prev_block)
 
         # Confirms that block with timestamp lesser than prev_block is invalid
         self.assertFalse(is_valid_block(invalid_candidate_block, prev_block))
@@ -286,7 +285,7 @@ class TestBlock(unittest.TestCase):
     # This test ensures that a block with an invalid previous hash will not be added to the blockchain
     def test_02_is_valid_block(self):
         target = 10**72     # Target for which all block hashes must be under
-        data = hash_SHA("1".encode())   # valid block data to be used for block constructoin
+        data = hash_SHA("1".encode())   # valid block data to be used for block construction
 
         #This previous hash would be invalid if used to create a new block, as it does not match hash_SHA(prev_block)
         invalid_prev_hash = hash_SHA("BEEPBEEPLETTUCE".encode())
@@ -294,7 +293,7 @@ class TestBlock(unittest.TestCase):
         #Creates a valid previous block
         prev_block = mine(hash_SHA("0".encode()), data, target)
 
-        time.sleep(2) # Ensures prev_block and candidate block will not have identical timestamps
+        time.sleep(1) # Ensures prev_block and candidate block will not have identical timestamps
         #Creates an invalid block with invalid prev_hash that does not match hash_SHA(prev_block)
         invalid_candidate_block = mine(invalid_prev_hash, hash_SHA("INVALID".encode()), target)
 
@@ -306,13 +305,13 @@ class TestBlock(unittest.TestCase):
     def test_03_is_valid_block(self):
         previous_target = 10**75     # Target for which all block hashes must be under
         candidate_target = 1        # A low target like this will create a block with an invalid hash
-        data = hash_SHA("1".encode())   # valid block data to be used for block constructoin
+        data = hash_SHA("1".encode())   # valid block data to be used for block construction
 
         #Creates a valid previous block
         prev_block = mine(hash_SHA("0".encode()), data, previous_target)
         prev_hash = hash_SHA(prev_block)
 
-        time.sleep(2) # Ensures prev_block and candidate block will not have identical timestamps
+        time.sleep(1) # Ensures prev_block and candidate block will not have identical timestamps
         #Creates an invalid block with block hash less than its target
         #NOTE: This cannot be done with mine() function, as it checks for this
         nonce = 0
@@ -327,12 +326,12 @@ class TestBlock(unittest.TestCase):
     # This tests shows that a valid block, a block that meets none of the above three failure states, will be added to the blockchain
     def test_04_is_valid_block(self):
         target = 10**72     # Target for which all block hashes must be under
-        data = hash_SHA("1".encode())   # valid block data to be used for block constructoin
+        data = hash_SHA("1".encode())   # valid block data to be used for block construction
         #Creates a valid previous block
         prev_block = mine(hash_SHA("0".encode()), data, target)
         prev_hash = hash_SHA(prev_block)
 
-        time.sleep(2)   # Ensures prev_block and candidate block will not have identical timestamps
+        time.sleep(1)   # Ensures prev_block and candidate block will not have identical timestamps
         #Creates a valid block
         candidate_block = mine(prev_hash, data, target)
 
