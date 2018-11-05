@@ -394,18 +394,21 @@ def is_valid_block(block, prev_block):
     """
     Compares a block and its previous block to determine if block is allowed to be added to blockchain
     Confirms that the timestamp of block is larger than that of prev_block
-    Confirms that prevHash member of block is equal to hash of prev_block
-    Confirms that target of block is greater than target of prev_block
+    Confirms that prev_hash member of block is equal to hash of prev_block
+    Confirms that the target of block is greater than the hash of block
     :param1 block: 74 byte string representing a block, output of mine()
     :param block: 74 byte string representing the previous block in the blockchain. output of mine()
     :returns: boolean True if all the above conditions are met, False otherwise
     """
     block_info = parse_block(block)
     prev_block_info = parse_block(prev_block)
+    # Ensures that time timestamp of block is greater than the timestamp of prev_block
     if (block_info["timestamp"] <= prev_block_info["timestamp"]):
         return False
+    # Ensures that the prev_hash element of block matches the hash of prev_block
     if (block_info["prev_hash"] != hash_SHA(prev_block)):
         return False
-    if (block_info["target"] <= hash_SHA(block)):
+    # Ensures that the block was mined correctly, and the target element of block is less than the hash of block
+    if (hash_SHA(block) > block_info["target"]):
         return False
     return True 

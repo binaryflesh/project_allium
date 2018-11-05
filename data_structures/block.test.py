@@ -265,48 +265,76 @@ class TestBlock(unittest.TestCase):
        # Tests if the values in the dictionary are equal to the ones found by the related slice functions
        self.assertEqual(slice_nonce(header), parsed_block["nonce"])
        self.assertEqual(slice_timestamp(header), parsed_block["timestamp"])
-
-    def test_is_valid_block(self):
-        # Creates a block and prev_block
     
+    # This test ensures that a block with a timestamp less than the timestamp of its previous block, will not be added to the blockchain
+    def test_01_is_valid_block(self):
         target = 10**72     # Target for which all block hashes must be under
         data = hash_SHA("1".encode())   # valid block data to be used for block constructoin
-        #This previous hash would be invalid if used to create a new block
-        inv_prev_hash = hash_SHA("BEEPBEEPLETTUCE".encode())
+        prev_hash = hash_SHA("0".encode())  # This previous hash is invalid, though the timestamp of the block will be checked first
 
         #Creates an invalid block, this is invalid due to having a timestamp less than the candidate block
-        inv_block_1 = mine(inv_prev_hash, hash_SHA("INVALID".encode()), target)
+        invalid_candidate_block = mine(prev_hash, hash_SHA("INVALID".encode()), target)
 
         #Creates a valid previous block
         prev_block = mine(hash_SHA("0".encode()), data, target)
         prev_hash = hash_SHA(prev_block)
-        #Creates a valid block
-        block = mine(prev_hash, hash_SHA("2".encode()), target)
 
-        #Creates an invalid block with invalid prev_hash
-        inv_block_2 = mine(inv_prev_hash, hash_SHA("INVALID".encode()), target)
-        
+        # Confirms that block with timestamp lesser than prev_block is invalid
+        self.assertFalse(is_valid_block(invalid_candidate_block, prev_block))
+
+
+    # This test ensures that a block with an invalid previous hash will not be added to the blockchain
+    def test_02_is_valid_block(self):
+        target = 10**72     # Target for which all block hashes must be under
+        data = hash_SHA("1".encode())   # valid block data to be used for block constructoin
+
+        #This previous hash would be invalid if used to create a new block, as it does not match hash_SHA(prev_block)
+        invalid_prev_hash = hash_SHA("BEEPBEEPLETTUCE".encode())
+
+        #Creates a valid previous block
+        prev_block = mine(hash_SHA("0".encode()), data, target)
+
+        #Creates an invalid block with invalid prev_hash that does not match hash_SHA(prev_block)
+        invalid_candidate_block = mine(invalid_prev_hash, hash_SHA("INVALID".encode()), target)
+
+        # Confirms that block with prev_hash not equal to hash of prev_block is invalid
+        self.assertFalse(is_valid_block(invalid_candidate_block, prev_block))
+
+
+    # This test ensures that a block with an invalid block hash, a block hash that is greater than its target, is not added to the blockchain
+    def test_03_is_valid_block(self):
+        previous_target = 10**75     # Target for which all block hashes must be under
+        candidate_target = 1        # A low target like this will create a block with an invalid hash
+        data = hash_SHA("1".encode())   # valid block data to be used for block constructoin
+
+        #Creates a valid previous block
+        prev_block = mine(hash_SHA("0".encode()), data, previous_target)
+        prev_hash = hash_SHA(prev_block)
+
         #Creates an invalid block with block hash less than its target
         #NOTE: This cannot be done with mine() function, as it checks for this
         nonce = 0
         timestamp = time_now()
         # Concatonates the previous hash, data, timestamp, exponent of target, and nonce into a byte string
-        inv_block_3 = prev_hash + data + int_to_bytes(timestamp) + log_target_bytes(target) + long_to_bytes(nonce)
-        inv_block_hash = hash_SHA(inv_block_3)
-        while (less_than_target(inv_block_hash, target)):
-            nonce += 1
-            timestamp = time_now()
-            inv_block_3 = prev_hash + data + int_to_bytes(timestamp) + log_target_bytes(target) + long_to_bytes(nonce)
-            inv_block_hash = hash_SHA(inv_block_3)
+        invalid_candidate_block = prev_hash + data + int_to_bytes(timestamp) + log_target_bytes(candidate_target) + long_to_bytes(nonce)
+
+        # Confirms that block where block hash is lesser than target is invalid block
+        self.assertFalse(is_valid_block(invalid_candidate_block, prev_block))
+
+
+    # This tests shows that a valid block, a block that meets none of the above three failure states, will be added to the blockchain
+    def test_04_is_valid_block(self):
+        target = 10**72     # Target for which all block hashes must be under
+        data = hash_SHA("1".encode())   # valid block data to be used for block constructoin
+
+        #Creates a valid previous block
+        prev_block = mine(hash_SHA("0".encode()), data, target)
+        prev_hash = hash_SHA(prev_block)
+        #Creates a valid block
+        candidate_block = mine(prev_hash, hash_SHA("2".encode()), target)
 
         #Tests if block is a valid block, it should be
-        self.assertTrue(is_valid_block(block, prev_block))
-        # Confirms that block with timestamp lesser than prev_block is invalid
-        self.assertFalse(is_valid_block(inv_block_1, prev_block))
-        # Confirms that block with prev_hash not equal to hash of prev_block is invalid
-        self.assertFalse(is_valid_block(inv_block_2, prev_block))
-        # Confirms that block where block hash is lesser than target is invalid block
-        self.assertFalse(is_valid_block(inv_block_3, prev_block))
+        self.assertTrue(is_valid_block(candidate_block, prev_block))
 
 if __name__ == '__main__':
     unittest.main()
