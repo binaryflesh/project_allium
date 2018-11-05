@@ -403,12 +403,12 @@ def is_valid_block(block, prev_block):
     block_info = parse_block(block)
     prev_block_info = parse_block(prev_block)
     # Ensures that time timestamp of block is greater than the timestamp of prev_block
-    if (block_info["timestamp"] <= prev_block_info["timestamp"]):
+    if (bytes_to_int(block_info["timestamp"]) <= bytes_to_int(prev_block_info["timestamp"])):
         return False
     # Ensures that the prev_hash element of block matches the hash of prev_block
     if (block_info["prev_hash"] != hash_SHA(prev_block)):
         return False
     # Ensures that the block was mined correctly, and the target element of block is less than the hash of block
-    if (hash_SHA(block) > block_info["target"]):
+    if not (less_than_target(hash_SHA(block), 10**(bytes_to_short(block_info["target"])))):
         return False
     return True 

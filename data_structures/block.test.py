@@ -294,6 +294,7 @@ class TestBlock(unittest.TestCase):
         #Creates a valid previous block
         prev_block = mine(hash_SHA("0".encode()), data, target)
 
+        time.sleep(2) # Ensures prev_block and candidate block will not have identical timestamps
         #Creates an invalid block with invalid prev_hash that does not match hash_SHA(prev_block)
         invalid_candidate_block = mine(invalid_prev_hash, hash_SHA("INVALID".encode()), target)
 
@@ -311,6 +312,7 @@ class TestBlock(unittest.TestCase):
         prev_block = mine(hash_SHA("0".encode()), data, previous_target)
         prev_hash = hash_SHA(prev_block)
 
+        time.sleep(2) # Ensures prev_block and candidate block will not have identical timestamps
         #Creates an invalid block with block hash less than its target
         #NOTE: This cannot be done with mine() function, as it checks for this
         nonce = 0
@@ -326,12 +328,13 @@ class TestBlock(unittest.TestCase):
     def test_04_is_valid_block(self):
         target = 10**72     # Target for which all block hashes must be under
         data = hash_SHA("1".encode())   # valid block data to be used for block constructoin
-
         #Creates a valid previous block
         prev_block = mine(hash_SHA("0".encode()), data, target)
         prev_hash = hash_SHA(prev_block)
+
+        time.sleep(2)   # Ensures prev_block and candidate block will not have identical timestamps
         #Creates a valid block
-        candidate_block = mine(prev_hash, hash_SHA("2".encode()), target)
+        candidate_block = mine(prev_hash, data, target)
 
         #Tests if block is a valid block, it should be
         self.assertTrue(is_valid_block(candidate_block, prev_block))
