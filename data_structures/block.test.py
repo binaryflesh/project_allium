@@ -268,26 +268,44 @@ class TestBlock(unittest.TestCase):
 
     def test_is_valid_block(self):
         # Creates a block and prev_block
-        prev_target = 10**150
-        target = 10**151
-        inv_target = 10**149
+    
+        target = 10**72     # Target for which all block hashes must be under
+        data = hash_SHA("1".encode())   # valid block data to be used for block constructoin
+        #This previous hash would be invalid if used to create a new block
         inv_prev_hash = hash_SHA("BEEPBEEPLETTUCE".encode())
-        #Creates an invalid block
+
+        #Creates an invalid block, this is invalid due to having a timestamp less than the candidate block
         inv_block_1 = mine(inv_prev_hash, hash_SHA("INVALID".encode()), target)
+
         #Creates a valid previous block
-        prev_block = mine(hash_SHA("0".encode()), hash_SHA("1".encode()), prev_target)
+        prev_block = mine(hash_SHA("0".encode()), data, target)
         prev_hash = hash_SHA(prev_block)
         #Creates a valid block
         block = mine(prev_hash, hash_SHA("2".encode()), target)
+
         #Creates an invalid block with invalid prev_hash
         inv_block_2 = mine(inv_prev_hash, hash_SHA("INVALID".encode()), target)
-        #Creates an invalid block with invalid target
-        inv_block_3 = mine(prev_hash, hash_SHA("INVALID".encode()), inv_target)
+        
+        #Creates an invalid block with block hash less than its target
+        #NOTE: This cannot be done with mine() function, as it checks for this
+        nonce = 0
+        timestamp = time_now()
+        # Concatonates the previous hash, data, timestamp, exponent of target, and nonce into a byte string
+        inv_block_3 = prev_hash + data + int_to_bytes(timestamp) + log_target_bytes(target) + long_to_bytes(nonce)
+        inv_block_hash = hash_SHA(inv_block_3)
+        while (less_than_target(inv_block_hash, target)):
+            nonce += 1
+            timestamp = time_now()
+            inv_block_3 = prev_hash + data + int_to_bytes(timestamp) + log_target_bytes(target) + long_to_bytes(nonce)
+            inv_block_hash = hash_SHA(inv_block_3)
+
         #Tests if block is a valid block, it should be
         self.assertTrue(is_valid_block(block, prev_block))
-        #Confirms invalidity of invalid blocks
+        # Confirms that block with timestamp lesser than prev_block is invalid
         self.assertFalse(is_valid_block(inv_block_1, prev_block))
+        # Confirms that block with prev_hash not equal to hash of prev_block is invalid
         self.assertFalse(is_valid_block(inv_block_2, prev_block))
+        # Confirms that block where block hash is lesser than target is invalid block
         self.assertFalse(is_valid_block(inv_block_3, prev_block))
 
 if __name__ == '__main__':

@@ -389,7 +389,7 @@ def parse_block(block_header):
     parsed_block["target"] = slice_target(block_header)
     parsed_block["nonce"] = slice_nonce(block_header)
     return parsed_block
-    
+
 def is_valid_block(block, prev_block):
     """
     Compares a block and its previous block to determine if block is allowed to be added to blockchain
@@ -402,10 +402,10 @@ def is_valid_block(block, prev_block):
     """
     block_info = parse_block(block)
     prev_block_info = parse_block(prev_block)
-    if (block_info["timestamp"] < prev_block_info["timestamp"]):
+    if (block_info["timestamp"] <= prev_block_info["timestamp"]):
         return False
-    if (hash_SHA(prev_block) != block_info["prev_hash"]):
+    if (block_info["prev_hash"] != hash_SHA(prev_block)):
         return False
-    if (block_info["target"] < prev_block_info["target"]):
+    if (block_info["target"] <= hash_SHA(block)):
         return False
     return True 
