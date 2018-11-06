@@ -409,7 +409,7 @@ def is_valid_block(block, prev_block):
     # Ensures that the prev_hash element of block matches the hash of prev_block
     if (block_info["prev_hash"] != hash_SHA(prev_block)):
         return False
-    # Ensures that the block was mined correctly, and the target element of block is greater than the hash of block
+    # Ensures that the block was mined correctly, and the block hash is less than the target
     if not (less_than_target(hash_SHA(block), 10**(bytes_to_short(block_info["target"])))):
         return False
     return True 
