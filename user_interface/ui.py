@@ -55,6 +55,10 @@ class Gui(QMainWindow):
         gridLayout.addWidget(self.createPeersFrame(), 2, 1)
 
         centralWidget.setLayout(gridLayout)
+
+        # Set window background color
+        self.setStyleSheet("QMainWindow {background: 'black';}");
+
         self.show()
 
     def createIPFrame(self):
