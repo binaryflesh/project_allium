@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Fetches any changes that have been made to upstream repository
-git pull upstream master
+git pull upstream dev
 
 # Push changes to remote repo
 git push origin master

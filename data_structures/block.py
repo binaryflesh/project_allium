@@ -388,4 +388,28 @@ def parse_block(block_header):
     parsed_block["timestamp"] = slice_timestamp(block_header)
     parsed_block["target"] = slice_target(block_header)
     parsed_block["nonce"] = slice_nonce(block_header)
+    parsed_block["block_hash"] = hash_SHA(block_header)
     return parsed_block
+
+def is_valid_block(block, prev_block):
+    """
+    Compares a block and its previous block to determine if block is allowed to be added to blockchain
+    Confirms that the timestamp of block is larger than that of prev_block
+    Confirms that prev_hash member of block is equal to hash of prev_block
+    Confirms that the target of block is greater than the hash of block
+    :param1 block: 74 byte string representing a block, output of mine()
+    :param block: 74 byte string representing the previous block in the blockchain. output of mine()
+    :returns: boolean True if all the above conditions are met, False otherwise
+    """
+    block_info = parse_block(block)
+    prev_block_info = parse_block(prev_block)
+    # Ensures that time timestamp of block is greater than the timestamp of prev_block
+    if (bytes_to_int(block_info["timestamp"]) <= bytes_to_int(prev_block_info["timestamp"])):
+        return False
+    # Ensures that the prev_hash element of block matches the hash of prev_block
+    if (block_info["prev_hash"] != hash_SHA(prev_block)):
+        return False
+    # Ensures that the block was mined correctly, and the block hash is less than the target
+    if not (less_than_target(hash_SHA(block), 10**(bytes_to_short(block_info["target"])))):
+        return False
+    return True 
