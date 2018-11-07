@@ -1,3 +1,4 @@
+import os.path
 class Blockchain:
     
     def __init__(self,filename):
@@ -10,3 +11,7 @@ class Blockchain:
         :no return:
         """
         self.blockfile = filename
+        # If the file does not already exist, create the file and close it
+        if not (os.path.isfile(filename)):
+            fileobj = open(filename, "wb")
+            fileobj.close()
