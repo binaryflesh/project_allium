@@ -13,7 +13,7 @@ class Gui(QMainWindow):
         self.title = ''
         self.left = 100
         self.top = 100
-        self.width = 700
+        self.width = 1000
         self.height = 280
         self.port = port
         self.initUI()
