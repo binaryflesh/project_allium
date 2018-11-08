@@ -13,7 +13,7 @@ class Gui(QMainWindow):
         self.title = ''
         self.left = 100
         self.top = 100
-        self.width = 1000
+        self.width = 700
         self.height = 280
         self.port = port
         self.initUI()
@@ -72,7 +72,7 @@ class Gui(QMainWindow):
                                 background-color: rgb(255, 255, 255);
                         }""")
         IPLayout = QHBoxLayout()
-        lblIp = QLabel("IP : Port ", IPFrame)
+        lblIp = QLabel("IP:Port ", IPFrame)
         lblIp.setFont(self.normalFont)
         IPLayout.addWidget(lblIp)
         self.IPLabel = QLabel(concat_ip_port(self.port), IPFrame)
@@ -95,7 +95,7 @@ class Gui(QMainWindow):
         StatusLayout = QHBoxLayout()
         lblStatus = QLabel("Status: ", StatusFrame)
         lblStatus.setFont(self.normalFont)
-        self.StatusLabel = QLabel("Your status ", StatusFrame)
+        self.StatusLabel = QLabel("Offline", StatusFrame)
         self.StatusLabel.setFont(self.normalFont)
         StatusLayout.addWidget(lblStatus)
         StatusLayout.addWidget(self.StatusLabel)
@@ -116,7 +116,7 @@ class Gui(QMainWindow):
         PeersLayout = QHBoxLayout()
         lblPeers = QLabel("Peers: ", PeersFrame)
         lblPeers.setFont(self.normalFont)
-        self.PeersLabel = QLabel("You have no peers: ", PeersFrame)
+        self.PeersLabel = QLabel("0", PeersFrame)
         self.PeersLabel.setFont(self.normalFont)
         PeersLayout.addWidget(lblPeers)
         PeersLayout.addWidget(self.PeersLabel)
@@ -136,7 +136,7 @@ def get_ip() :
     return ip
 
 def concat_ip_port(port) :
-    return str(get_ip()) + " : " + str(port)
+    return str(get_ip()) + ":" + str(port)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
