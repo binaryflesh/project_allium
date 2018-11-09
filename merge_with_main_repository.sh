@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Pulls any changes that have been made to dev branch
-git pull dev
+#Fetches any changes that have been made to upstream repository
+git pull upstream master
 
 # Push changes to remote repo
-git push
+git push origin master
 
 # Prompts for user input when done 
 # (this is so that the console stays open so that user can read any error messages)
