@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Pulls any changes that have been made to dev branch
-git pull origin dev
+git pull dev
 
 # Push changes to remote repo
 git push
