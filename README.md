@@ -1,4 +1,4 @@
-# Project
+# Project Allium
 SIG Blockchain Fall 2018 Project
 
 Requirements: Python 3.x
