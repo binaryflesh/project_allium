@@ -12,6 +12,7 @@ class Test(unittest.TestCase):
         key = generate_private_key()
         # checks if the size of the generated key is of length 32 bytes
         self.assertEqual(32,len(key))
+        self.assertIsInstance(key, bytes)
 
 
 if __name__ == '__main__':
