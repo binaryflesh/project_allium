@@ -15,9 +15,12 @@ class Test(unittest.TestCase):
         self.assertIsInstance(key, bytes)
 
     def test_generate_public_key(self):
+        # Use generated private key to generate a public key
         key = generate_private_key()
         public_key = generate_public_key(key)
+        # Checking the right data type
         self.assertIsInstance(public_key, bytes)
+        # Generate random string so we can sign it using private key
         signing_key = ecdsa.SigningKey.from_string(key, curve = ecdsa.SECP256k1)
         some_random_hash_string = hash_SHA("some_random_string".encode())
         # Creating a signature that can only be created by the private key holder

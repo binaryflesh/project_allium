@@ -13,15 +13,15 @@ def generate_private_key():
     return os.urandom(32)
 
 def generate_public_key(private_key):
-    # Takes private key and puts it through the ellipical curve for public key encryption
+    """
+    Takes private key and puts it through the ellipical curve for public key encryption
+    
+    :param: private key is the randomly generated 32 byte string 
+    :return:  verifying key, which effectively is the public key  
+    """
     signing_key = ecdsa.SigningKey.from_string(private_key, curve = ecdsa.SECP256k1)
-    # Return verifying key, which effectively is the public key
     verifying_key = signing_key.get_verifying_key()
-
     return verifying_key.to_string()
-
-
-
 
 
  
