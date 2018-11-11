@@ -1,6 +1,6 @@
 import os, ecdsa, hashlib
 
-from block import hashSHA, hash_SHA
+from block import hash_SHA
 
 
 def generate_private_key():
