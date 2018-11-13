@@ -24,5 +24,14 @@ class TestBlock(unittest.TestCase):
 		    char = fileobj.read(1)
 		self.assertEqual(b'0', char)
 
+	def test_get_size_bytes(self):
+		# Testing with integer 4, length should be 4
+		testint = 4
+		testbytes = pack('I', testint)
+		testlen = len(testbytes)
+		# Compares result of get_size_bytes() to known size
+		size_bytes = get_size_bytes(testbytes)
+		self.assertEqual(pack('I', testlen), size_bytes)
+
 if __name__ == '__main__':
     unittest.main()
