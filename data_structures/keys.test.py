@@ -51,14 +51,14 @@ class Test(unittest.TestCase):
         with self.assertRaises(ecdsa.BadSignatureError):
             verifying_key.verify(signature, some_random_hash_string)
 
-        def test_generate_pk_hash(self):
-            # Use generated private key to generate a public key
-            key = generate_private_key()
-            public_key = generate_public_key(key)
-            # Generate pk hash from public key
-            pk_hash = generate_pk_hash(public_key)
-            # Checks if pk hash is a bite string
-            self.assertIsInstance(pk_hash, bytes)
+    def test_generate_pk_hash(self):
+        # Use generated private key to generate a public key
+        key = generate_private_key()
+        public_key = generate_public_key(key)
+        # Generate pk hash from public key
+        pk_hash = generate_pk_hash(public_key)
+        # Checks if pk hash is a bite string
+        self.assertIsInstance(pk_hash, bytes)
 
 if __name__ == '__main__':
     unittest.main()
