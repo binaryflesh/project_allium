@@ -23,5 +23,14 @@ def generate_public_key(private_key):
     verifying_key = signing_key.get_verifying_key()
     return verifying_key.to_string()
 
-
- 
+def generate_pk_hash(public_key):
+    """
+    Takes public key
+    
+    :param: public key
+    :return:  ripemd160 object  
+    """
+    sha_public_key = hashlib.sha256(public_key)
+    ripemd160_obj = hashlib.new('ripemd160')
+    ripemd160_obj.update(sha_public_key.digest())
+    return ripemd160_obj.digest()
