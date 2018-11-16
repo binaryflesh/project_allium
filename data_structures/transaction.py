@@ -4,12 +4,31 @@ from collections import deque
 
 
 def get_merkle_root(hashed_tx_list):
+    """
+    Calls the recursive helper function if the length
+    of the hashed tx list is greater than 0.
+
+    :param hashed_tx_list: a collections.deque object
+    containining SHA-256 hashed byte strings
+    :return: a single SHA-256 hashed byte string 
+    """
     if len(hashed_tx_list) < 1:
         return None
     else:
         return _get_merkle_root(hashed_tx_list)
 
 def _get_merkle_root(merkle_list):
+    """
+    Recursive helper function that pairs up
+    adjacent elements and hashes them, then repeats
+    until a single hash is left.
+
+    :param merkle_list: a collections.deque object
+    containing SHA-256 hashed byte strings
+    :return: base case is a single hash otherwise
+    a deque containing an even length deque
+    of hashed byte strings
+    """
     if len(merkle_list) == 1:
         return merkle_list.pop()
     else:
