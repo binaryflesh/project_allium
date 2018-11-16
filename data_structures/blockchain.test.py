@@ -39,7 +39,7 @@ class TestBlock(unittest.TestCase):
 		bytes_3 = bytes("There is no escape. Don't make me destroy you. Luke. You do not yet realize... your importance. You've only become to... discover your power.", 'utf-8')
 		bytes_4 = bytes("Join me... and I will complete your training. With our combined strength... we can end this... destructive conflict... and bring order... to the galaxy.", 'utf-8')
 		# Writes byte strings to file
-		with open(self.bc.blockfile, 'w+b') as file:			
+		with open(self.bc.blockfile, 'ab') as file:			
 			file.write(bytes_1)
 			file.write(bytes_2)
 			file.write(bytes_3)

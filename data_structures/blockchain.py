@@ -36,7 +36,7 @@ def extract(filename, index, num_bytes, offset=0):
   :returns: Bytestring, representing bytes from index+offspring to index+offspring+num_bytes in filename
   """
   # Opens file for reading bytes
-  with open(filename, 'r+b') as file:
+  with open(filename, 'rb') as file:
       # Moves file pointer to correct position at index + offset
       file.seek(index + offset, 0)
       # Reads num_bytes after file pointer
