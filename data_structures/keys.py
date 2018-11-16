@@ -34,3 +34,16 @@ def generate_pk_hash(public_key):
     ripemd160_obj = hashlib.new('ripemd160')
     ripemd160_obj.update(sha_public_key.digest())
     return ripemd160_obj.digest()
+
+def generate_key_set():
+    """
+    Generates all 3 keys and stores them in a dictionary
+    
+    :no param:
+    :return: dictionary containing all 3 keys  
+    """
+    key_set = {}
+    key_set["private_key"] = generate_private_key()
+    key_set["public_key"] = generate_public_key(key_set["private_key"])
+    key_set["pk_hash"] = generate_pk_hash(key_set["public_key"])
+    return key_set
