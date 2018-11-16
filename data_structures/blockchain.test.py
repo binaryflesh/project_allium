@@ -2,6 +2,7 @@
 import unittest
 import os
 from blockchain import *
+from block import *
 
 class TestBlock(unittest.TestCase):
 	def setUp(self):
@@ -32,7 +33,8 @@ class TestBlock(unittest.TestCase):
 		# Compares result of get_size_bytes() to known size
 		size_bytes = get_size_bytes(testbytes)
 		self.assertEqual(pack('I', testlen), size_bytes)
-		def test_extract(self):
+		
+	def test_extract(self):
 		# Generates byte strings
 		bytes_1 = bytes("VADER: The Force is with you, Young Skywalker. But your not a Jedi yet. (BREATHING CONTINUES)", 'utf-8')
 		bytes_2 = bytes("Your destiny... lies with me, Skywalker. Obi-Wan knew is to be true.", 'utf-8')
@@ -47,13 +49,11 @@ class TestBlock(unittest.TestCase):
 		# Goal is to pick out third byte string
 		expected = bytes("There is no escape. Don't make me destroy you. Luke. You do not yet realize... your importance. You've only become to... discover your power.", 'utf-8')
 		# Index of first actual character from bytes_3, minus character name
-		index = len(bytes_1) + len(bytes_2) - 7
+		index = len(bytes_1) + len(bytes_2)
 		# Number of bytes to read is equal to length of bytes_3
 		num_bytes = len(bytes_3)
-		# 7 Byte offset, due to 7 unecessary bytes at beginning of file
-		offset = 7
 		# Attempts to extract bytes_3 from written file
-		actual = extract(self.bc.blockfile, index, num_bytes, offset)
+		actual = extract(self.bc.blockfile, index, num_bytes)
 		# Tests manually written bytestring, and extracted bytestring
 		self.assertEqual(expected, actual)
 
