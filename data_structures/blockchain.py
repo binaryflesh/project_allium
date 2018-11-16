@@ -16,19 +16,6 @@ class Blockchain:
         if not (os.path.isfile(filename)):
             with open(filename, 'wb') as f: pass
 
-    def add_block(self, block):
-        """
-        Adds a block to the blockfile by concatonating the magic_bytes, block size, and block byte string
-        and appending to the blockfile.
-        :param block: A 74 Byte string representing a block
-        """
-        size = get_size_bytes(self, block)
-        payload = magic_bytes+size+block
-        
-        with open(self.blockfile, 'ab') as fileobj:
-            fileobj.write(payload)
-
-
 def get_size_bytes(byte_string):
     """
     Determines the integer size of a byte string and returns it in byte form
