@@ -1,4 +1,4 @@
-from block import hash_SHA
+from block import hash_SHA, bytes_to_long
 import ecdsa
 from collections import deque
 
@@ -40,3 +40,14 @@ def _get_merkle_root(merkle_list):
             p2 = merkle_list.popleft()
             merkle_list.append(hash_SHA(p1 + p2))
         return _get_merkle_root(merkle_list)
+
+def create_output(value, recipient):
+    """
+    Convert the value to a long and concatenate it with the recepiant
+
+    :param value: value of transaction
+    :param recipient: recipient of transaction
+    :return: concatenation of the value converted to a long and the recipient 
+    """
+    value_long = bytes_to_long(value)
+    return bytes(value_long) + bytes(recipient)
