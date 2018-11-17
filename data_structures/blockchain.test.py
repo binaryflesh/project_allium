@@ -2,17 +2,17 @@
 import unittest
 import os
 from blockchain import *
-from block import *
+from block import mine
 
 class TestBlock(unittest.TestCase):
 	def setUp(self):
-		self.bc = Blockchain("testfile")
+		self.bc = Blockchain("testfile.db")
 
 	def tearDown(self):
-		os.remove("testfile")
+		os.remove("testfile.db")
 
 	def test_constructor(self):
-		filename = "testfile"
+		filename = "testfile.db"
 		self.assertEqual(self.bc.blockfile,filename)
 		self.assertTrue(os.path.isfile(filename))
 		# Opens the blockchain file and writes '0' to it
