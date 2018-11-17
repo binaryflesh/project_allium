@@ -1,4 +1,4 @@
-from block import hash_SHA, bytes_to_long
+from block import hash_SHA, long_to_bytes
 import ecdsa
 from collections import deque
 
@@ -49,5 +49,4 @@ def create_output(value, recipient):
     :param recipient: recipient of transaction
     :return: concatenation of the value converted to a long and the recipient 
     """
-    value_long = bytes_to_long(value)
-    return bytes(value_long) + bytes(recipient)
+    return long_to_bytes(value) + recipient

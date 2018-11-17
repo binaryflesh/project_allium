@@ -1,6 +1,6 @@
 import unittest
 from transaction import *
-from struct import pack
+from block import long_to_bytes
 
 class Test(unittest.TestCase):
 
@@ -46,13 +46,13 @@ class Test(unittest.TestCase):
 		
 	# test create_output
 	def test_create_output(self):
-		convert = 50000000
-		value = pack('L', convert)
+		value = 50000000
 		recipient= hash_SHA('recipient'.encode())
 		# Put value and recipient into create_output function
-		output = create_output(value, recipient)
-		value_long = bytes_to_long(value)
+		actual = create_output(value, recipient)
+		expected = long_to_bytes(value) + recipient
 		# Check if the putput from the function is the same as the concatenation of the two
-		self.assertEqual(output, bytes(value_long) + bytes(recipient))
+		self.assertEqual(expected, actual)
+
 if __name__ == '__main__':
     unittest.main()
