@@ -51,7 +51,7 @@ class Test(unittest.TestCase):
 		# Put value and recipient into create_output function
 		actual = create_output(value, recipient)
 		expected = long_to_bytes(value) + recipient
-		# Check if the putput from the function is the same as the concatenation of the two
+		# Check if the output from the function is the same as the concatenation of the two
 		self.assertEqual(expected, actual)
 
 if __name__ == '__main__':
