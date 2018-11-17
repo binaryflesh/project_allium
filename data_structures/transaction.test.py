@@ -1,5 +1,6 @@
 import unittest
 from transaction import *
+from block import long_to_bytes
 
 class Test(unittest.TestCase):
 
@@ -43,5 +44,15 @@ class Test(unittest.TestCase):
 		actual = get_merkle_root(deque([s1, s2, s3]))
 		self.assertEqual(expected, actual)
 		
+	# test create_output
+	def test_create_output(self):
+		value = 50000000
+		recipient= hash_SHA('recipient'.encode())
+		# Put value and recipient into create_output function
+		actual = create_output(value, recipient)
+		expected = long_to_bytes(value) + recipient
+		# Check if the output from the function is the same as the concatenation of the two
+		self.assertEqual(expected, actual)
+
 if __name__ == '__main__':
     unittest.main()
