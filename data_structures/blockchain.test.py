@@ -90,9 +90,9 @@ class TestBlock(unittest.TestCase):
 		# Creates expected with preceding magic_bytes and size values
 		# Split into multiple lines for readability
 		expected = magic_bytes + get_size_bytes(b1) + b1
-		expected = expected + magic_bytes + get_size_bytes(b2) + b2
-		expected = expected + magic_bytes + get_size_bytes(b3) + b3
-		expected = expected + magic_bytes + get_size_bytes(b4) + b4
+		expected += magic_bytes + get_size_bytes(b2) + b2
+		expected += magic_bytes + get_size_bytes(b3) + b3
+		expected += magic_bytes + get_size_bytes(b4) + b4
 		#Get size of block
 		size = bytes_to_int(get_size_bytes(expected))
 		# Extracts blocks from blockchain
