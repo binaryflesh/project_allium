@@ -3,7 +3,6 @@ import unittest
 import os
 from blockchain import *
 from block import mine, hash_SHA, bytes_to_int
-from block import mine
 
 class TestBlock(unittest.TestCase):
 	def setUp(self):
