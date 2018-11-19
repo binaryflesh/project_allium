@@ -3,6 +3,7 @@ import unittest
 import os
 from blockchain import *
 from block import mine, hash_SHA, bytes_to_int
+from block import mine
 
 class TestBlock(unittest.TestCase):
 	def setUp(self):
@@ -10,7 +11,7 @@ class TestBlock(unittest.TestCase):
 
 	def tearDown(self):
 		os.remove("testfile.db")
-	
+
 	def test_constructor(self):
 		filename = "testfile.db"
 		self.assertEqual(self.bc.blockfile,filename)
@@ -33,7 +34,7 @@ class TestBlock(unittest.TestCase):
 		# Compares result of get_size_bytes() to known size
 		size_bytes = get_size_bytes(testbytes)
 		self.assertEqual(pack('I', testlen), size_bytes)
-	
+
 	def test_extract(self):
 		# Generates byte strings
 		bytes_1 = bytes("VADER: The Force is with you, Young Skywalker. But your not a Jedi yet. (BREATHING CONTINUES)", 'utf-8')

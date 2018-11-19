@@ -26,7 +26,7 @@ read -p "Do you want to push (y/n)?:" push_statement
 if [ "$push_statement" == "y" ] || [ "$push_statement" == "Y" ] || [ "$push_statement" ==  "yes" ] || [ "$push_statement" ==  "Yes" ]
 then
     #Pushes changes to remote repository
-    git push origin master
+    git push
 fi
 
 # Prompts for user input when done 
