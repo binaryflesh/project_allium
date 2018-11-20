@@ -60,8 +60,6 @@ def key_set_to_json_format(key_set):
     encoded_set["private_key"] = binascii.hexlify(key_set["private_key"]).decode()
     encoded_set["public_key"] = binascii.hexlify(key_set["public_key"]).decode()
     encoded_set["pk_hash"] = binascii.hexlify(key_set["pk_hash"]).decode()
-    
-    print(type(encoded_set["private_key"]))
     return encoded_set 
 
 def json_format_to_key_set(key_set):

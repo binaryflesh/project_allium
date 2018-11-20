@@ -68,17 +68,16 @@ class Test(unittest.TestCase):
         self.assertNotEqual(key_set, key_set_to_json_format)
         self.assertEqual(key_set, json_format_to_key_set(encoded_set))
 
-
     def test_store_keys(self):
         store_keys()
         #open the file 
         with open('keys.json', 'r') as json_file: 
             key_set = json.load(json_file)
-        
         #check for the existence of keys
         self.assertTrue('public_key' in key_set) 
         self.assertTrue('private_key' in key_set)
         self.assertTrue('pk_hash' in key_set)
+        os.remove('keys.json')
 
 if __name__ == '__main__':
     unittest.main()
