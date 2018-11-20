@@ -48,9 +48,9 @@ def generate_key_set():
     key_set["pk_hash"] = generate_pk_hash(key_set["public_key"])
     return key_set 
 
-def encode_key_set(key_set):
+def key_set_to_json_format(key_set):
     """
-    Given a key_set, it converts every byte type to a string using the hexlify module
+    Given a key_set, it returns a equivalent set, one that can be stored in a json file
 
 
     :param: key_set: A dictionary with a private_key, pubic_key, pk_hash. All three values should just be bytes
@@ -64,9 +64,9 @@ def encode_key_set(key_set):
     print(type(encoded_set["private_key"]))
     return encoded_set 
 
-def decode_key_set(key_set):
+def json_format_to_key_set(key_set):
     """
-    Decodes a key_set by using binascii.unhexlify() 
+    Given a key straight from a json file, converts it to a normal key_set
     
     :param: key_set: A dictionary with a private_key, pubic_key, pk_hash. All three values should just be byteshex decimal representation of bytes
     :return: key_set with all values converted into bytes
@@ -86,7 +86,7 @@ def store_keys():
     """
     key_set = generate_key_set() #get the keys
     #encode the key_set
-    encoded_keys = encode_key_set(key_set)
+    encoded_keys = key_set_to_json_format(key_set)
     with open('keys.json', 'w+') as output_file:
              json.dump(encoded_keys, output_file)
             

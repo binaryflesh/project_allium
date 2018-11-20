@@ -60,13 +60,13 @@ class Test(unittest.TestCase):
         # Checks if pk hash is a bite string
         self.assertIsInstance(pk_hash, bytes)
 
-    def test_encode_key_set(self):
+    def test_key_set_to_json_format(self):
         #test encoding and decoding at the smae time
         #generate key set 
         key_set = generate_key_set()
-        encoded_set = encode_key_set(key_set)   
-        self.assertNotEqual(key_set, encode_key_set)
-        self.assertEqual(key_set, decode_key_set(encoded_set))
+        encoded_set = key_set_to_json_format(key_set)   
+        self.assertNotEqual(key_set, key_set_to_json_format)
+        self.assertEqual(key_set, json_format_to_key_set(encoded_set))
 
 
     def test_store_keys(self):
