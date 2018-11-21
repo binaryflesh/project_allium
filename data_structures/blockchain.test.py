@@ -2,7 +2,7 @@
 import unittest
 import os
 from blockchain import *
-from block import mine
+from block import mine, hash_SHA, bytes_to_int
 
 class TestBlock(unittest.TestCase):
 	def setUp(self):
@@ -33,7 +33,7 @@ class TestBlock(unittest.TestCase):
 		# Compares result of get_size_bytes() to known size
 		size_bytes = get_size_bytes(testbytes)
 		self.assertEqual(pack('I', testlen), size_bytes)
-		
+
 	def test_extract(self):
 		# Generates byte strings
 		bytes_1 = bytes("VADER: The Force is with you, Young Skywalker. But your not a Jedi yet. (BREATHING CONTINUES)", 'utf-8')
@@ -57,5 +57,48 @@ class TestBlock(unittest.TestCase):
 		# Tests manually written bytestring, and extracted bytestring
 		self.assertEqual(expected, actual)
 
+	def test_add_block1(self):
+		target = 10**72     
+		data = hash_SHA("Testing block".encode())   
+		prev_hash = hash_SHA("0123456789ABCDEF".encode())
+		
+		#Create a block using .mine()
+		block = mine(prev_hash, data, target)
+		# Creates expected with preceding magic_bytes and size values and block
+		expected = magic_bytes + get_size_bytes(block) + block
+		#Get size of block
+		size = bytes_to_int(get_size_bytes(expected))
+		# Add block to blockchain
+		self.bc.add_block(block)
+		# Extracts block from blockchain
+		actual = extract(self.bc.blockfile, 0, size)
+		# Confirms that extracted block is identical to actual block
+		self.assertEqual(expected, actual)
+
+	def test_add_block2(self):
+		target = 10**72     
+		
+		# Creates 4 blocks and add to file
+		b1 = mine(hash_SHA("Root".encode()), "Block1".encode(), target)
+		self.bc.add_block(b1)
+		b2 = mine(hash_SHA("Block1".encode()), "Block2".encode(), target)
+		self.bc.add_block(b2)
+		b3 = mine(hash_SHA("Block2".encode()), "Block3".encode(), target)
+		self.bc.add_block(b3)
+		b4 = mine(hash_SHA("Block3".encode()), "Block4".encode(), target)
+		self.bc.add_block(b4)
+		# Creates expected with preceding magic_bytes and size values
+		# Split into multiple lines for readability
+		expected = magic_bytes + get_size_bytes(b1) + b1
+		expected += magic_bytes + get_size_bytes(b2) + b2
+		expected += magic_bytes + get_size_bytes(b3) + b3
+		expected += magic_bytes + get_size_bytes(b4) + b4
+		#Get size of block
+		size = bytes_to_int(get_size_bytes(expected))
+		# Extracts blocks from blockchain
+		actual = extract(self.bc.blockfile, 0, size)
+		# Confirms that extracted blocks is identical to actual blocks
+		self.assertEqual(expected, actual)
+
 if __name__ == '__main__':
-    unittest.main()
+	unittest.main()
