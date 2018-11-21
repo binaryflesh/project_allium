@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QGridLayout, QFrame, QHBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QGridLayout, QFrame, QHBoxLayout, QPushButton
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5 import QtCore
 import socket
@@ -44,15 +44,19 @@ class Gui(QMainWindow):
                                 background-color: rgb(255, 255, 255);
                         }""")
         label.setFont(self.bigFont)
-        gridLayout.addWidget(label, 0, 0, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
-
+        gridLayout.addWidget(label, 0, 1, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
+        
         #set up various gui components
+        self.mineButton = QPushButton("Mine", self)
+        self.mineButton.setFont(self.normalFont)
+        self.mineButton.clicked.connect(self.mine)
+        gridLayout.addWidget(self.mineButton, 0, 0)
 
-        gridLayout.addWidget(self.createIPFrame(), 0, 1)
+        gridLayout.addWidget(self.createIPFrame(), 0, 2)
 
-        gridLayout.addWidget(self.createStatusFrame(), 1, 1)
+        gridLayout.addWidget(self.createStatusFrame(), 1, 2)
 
-        gridLayout.addWidget(self.createPeersFrame(), 2, 1)
+        gridLayout.addWidget(self.createPeersFrame(), 2, 2)
 
         centralWidget.setLayout(gridLayout)
 
@@ -122,6 +126,9 @@ class Gui(QMainWindow):
         PeersLayout.addWidget(self.PeersLabel)
         PeersFrame.setLayout(PeersLayout)
         return PeersFrame
+        
+    def mine(self):
+        print("Mine was called")	
 
 def get_ip() :
 
