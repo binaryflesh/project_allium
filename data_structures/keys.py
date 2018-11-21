@@ -69,11 +69,11 @@ def json_format_to_key_set(key_set):
     :param: key_set: A dictionary with a private_key, pubic_key, pk_hash. All three values should just be byteshex decimal representation of bytes
     :return: key_set with all values converted into bytes
     """
-    deocoded_set = {}
-    deocoded_set["private_key"] = binascii.unhexlify(key_set["private_key"].encode())
-    deocoded_set["public_key"] = binascii.unhexlify(key_set["public_key"].encode())
-    deocoded_set["pk_hash"] = binascii.unhexlify(key_set["pk_hash"].encode())
-    return deocoded_set     
+    decoded_set = {}
+    decoded_set["private_key"] = binascii.unhexlify(key_set["private_key"].encode())
+    decoded_set["public_key"] = binascii.unhexlify(key_set["public_key"].encode())
+    decoded_set["pk_hash"] = binascii.unhexlify(key_set["pk_hash"].encode())
+    return decoded_set     
 
 def store_keys():
     """

@@ -61,7 +61,7 @@ class Test(unittest.TestCase):
         self.assertIsInstance(pk_hash, bytes)
 
     def test_key_set_to_json_format(self):
-        #test encoding and decoding at the smae time
+        #test encoding and decoding at the same time
         #generate key set 
         key_set = generate_key_set()
         encoded_set = key_set_to_json_format(key_set)   
