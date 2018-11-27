@@ -50,3 +50,22 @@ def create_output(value, recipient):
     :return: concatenation of the value converted to a long and the recipient 
     """
     return long_to_bytes(value) + recipient
+
+def sign_transaction(private_key, prev_tx_hash, prev_tx_locking_script, new_tx_output):
+    """
+    Signs a transaction hash
+
+    :param private_key: users private key
+    :param prev_tx_hash: hash to the previous transaction
+    :param prev_tx_locking_script: locking script to the previous transaction
+    :param new_tx_hash: the hash of the current transaction
+    :return: signature of the unsigned transaction hash
+    """
+    # concatenation of all keys except private key
+    concat = prev_tx_hash + prev_tx_locking_script + new_tx_output
+    # hashes the concatenated keys
+    unsigned_tx_hash = hash_SHA(concat)
+    # creates signing key
+    signing_key = ecdsa.SigningKey.from_string(private_key,curve=ecdsa.SECP256k1)
+    # signs the hashed transaction
+    return signing_key.sign(unsigned_tx_hash)
