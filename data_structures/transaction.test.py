@@ -70,7 +70,7 @@ class Test(unittest.TestCase):
 		pub_key = key_dict["public_key"]
 		# creating a verification key
 		verifying_key = ecdsa.VerifyingKey.from_string(pub_key, ecdsa.SECP256k1)
-		# creating a singed transaction using the sign transaction function
+		# creating a signed transaction using the sign transaction function
 		signed_tx = sign_transaction(priv_key,prev_hash,prev_tx_locking_script,new_tx_output)
 		# Verifying the verification key works
 		self.assertTrue(verifying_key.verify(signed_tx, unsigned_tx_hash))
