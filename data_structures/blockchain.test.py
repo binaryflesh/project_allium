@@ -68,8 +68,12 @@ class TestBlock(unittest.TestCase):
 		expected = magic_bytes + get_size_bytes(block) + block
 		#Get size of block
 		size = bytes_to_int(get_size_bytes(expected))
+		# Ensures that block_count is being initializes correctly
+		self.assertEqual(0, self.bc.block_count)
 		# Add block to blockchain
 		self.bc.add_block(block)
+		# Ensures that block count is being updated correctly
+		self.assertEqual(1, self.bc.block_count)
 		# Extracts block from blockchain
 		actual = extract(self.bc.blockfile, 0, size)
 		# Confirms that extracted block is identical to actual block
@@ -78,15 +82,32 @@ class TestBlock(unittest.TestCase):
 	def test_add_block2(self):
 		target = 10**72     
 		
+		# Ensures that block_count is being initializes correctly
+		self.assertEqual(0, self.bc.block_count)
+
+
 		# Creates 4 blocks and add to file
 		b1 = mine(hash_SHA("Root".encode()), "Block1".encode(), target)
 		self.bc.add_block(b1)
+		# Ensures that block count is being updated correctly
+		self.assertEqual(1, self.bc.block_count)
+		
 		b2 = mine(hash_SHA("Block1".encode()), "Block2".encode(), target)
 		self.bc.add_block(b2)
+		# Ensures that block count is being updated correctly
+		self.assertEqual(2, self.bc.block_count)
+
 		b3 = mine(hash_SHA("Block2".encode()), "Block3".encode(), target)
 		self.bc.add_block(b3)
+		# Ensures that block count is being updated correctly
+		self.assertEqual(3, self.bc.block_count)
+
 		b4 = mine(hash_SHA("Block3".encode()), "Block4".encode(), target)
 		self.bc.add_block(b4)
+		# Ensures that block count is being updated correctly
+		self.assertEqual(4, self.bc.block_count)
+
+		
 		# Creates expected with preceding magic_bytes and size values
 		# Split into multiple lines for readability
 		expected = magic_bytes + get_size_bytes(b1) + b1
