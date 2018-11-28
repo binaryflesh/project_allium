@@ -88,6 +88,12 @@ def store_keys():
     with open('keys.json', 'w+') as output_file:
              json.dump(encoded_keys, output_file)
             
-    
+def load_keys():
+    """
+    Loads keys from a json file.
 
-
+    :returns: a set of keys
+    """
+    with open("keys.json", "r") as read_file:
+        keys = json.load(read_file)
+    return keys

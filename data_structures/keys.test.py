@@ -78,6 +78,14 @@ class Test(unittest.TestCase):
         self.assertTrue('private_key' in key_set)
         self.assertTrue('pk_hash' in key_set)
         os.remove('keys.json')
+        
+    def test_load_keys(self):
+        store_keys()
+        key_set = load_keys()
+        self.assertTrue('public_key' in key_set) 
+        self.assertTrue('private_key' in key_set)
+        self.assertTrue('pk_hash' in key_set)
+        os.remove('keys.json')
 
 if __name__ == '__main__':
     unittest.main()
