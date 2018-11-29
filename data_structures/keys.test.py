@@ -103,4 +103,4 @@ class Test(unittest.TestCase):
         os.remove('keys.json')
 
 if __name__ == '__main__':
-unittest.main()
+    unittest.main()
