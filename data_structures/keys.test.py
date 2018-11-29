@@ -87,5 +87,20 @@ class Test(unittest.TestCase):
         self.assertTrue('pk_hash' in key_set)
         os.remove('keys.json')
 
+    def test_startup_keys(self):
+        # Tests if startup_keys() works with a keys.json file
+        store_keys()
+        key_set = startup_keys()
+        self.assertTrue('public_key' in key_set) 
+        self.assertTrue('private_key' in key_set)
+        self.assertTrue('pk_hash' in key_set)
+        # Tests if startup_keys() works without a keys.json file
+        os.remove('keys.json')
+        key_set = startup_keys()
+        self.assertTrue('public_key' in key_set) 
+        self.assertTrue('private_key' in key_set)
+        self.assertTrue('pk_hash' in key_set)
+        os.remove('keys.json')
+
 if __name__ == '__main__':
     unittest.main()
