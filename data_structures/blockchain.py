@@ -19,6 +19,7 @@ class Blockchain:
         if not (os.path.isfile(filename)):
             with open(filename, 'wb') as f: pass
         self.block_count = 0
+        self.last_block = b''
 
     def add_block(self, block):
         """
@@ -32,6 +33,7 @@ class Blockchain:
         with open(self.blockfile, 'ab') as fileobj:
             fileobj.write(payload)
         self.block_count += 1
+        self.last_block = block
 
 def get_size_bytes(byte_string):
     """
