@@ -97,12 +97,3 @@ def load_keys():
     with open("keys.json", "r") as read_file:
         keys = json.load(read_file)
     return keys
-
-def startup_keys():
-    """
-    If there is not a keys.json file, run store_keys. Return keys in keys.json
-    :returns: a set of keys
-    """
-    if not (os.path.isfile("keys.json")):
-        store_keys()
-    return load_keys() 
