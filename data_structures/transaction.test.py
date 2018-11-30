@@ -75,5 +75,26 @@ class Test(unittest.TestCase):
 		# Verifying the verification key works
 		self.assertTrue(verifying_key.verify(signed_tx, unsigned_tx_hash))
 
+	def test_create_input(self):
+		# Create key set
+		key_dict = generate_key_set()
+		priv_key = key_dict["private_key"]
+		public_key = key_dict["public_key"]
+		# Create transaction signature
+		previous_tx_hash = hash_SHA('previous'.encode())
+		prev_tx_locking_script = create_output(30000000, hash_SHA('recipient'.encode()))
+		new_tx_output = hash_SHA('new_output'.encode())
+		signature = sign_transaction(priv_key, previous_tx_hash, prev_tx_locking_script, new_tx_output)
+		# Create inxex value
+		index = 2
+		# Concatenate values together
+		unlocking_script = signature + public_key
+		index_short = short_to_bytes(index)
+		expected = previous_tx_hash + index_short + unlocking_script
+		# Run same values through function
+		actual = create_input(previous_tx_hash, index, signature, public_key)
+		# Check if function equals the concatetation of the values
+		self.assertEqual(expected, actual)
+
 if __name__ == '__main__':
     unittest.main()

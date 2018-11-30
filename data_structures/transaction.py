@@ -1,4 +1,4 @@
-from block import hash_SHA, long_to_bytes
+from block import hash_SHA, long_to_bytes, short_to_bytes
 import ecdsa
 from collections import deque
 
@@ -69,3 +69,18 @@ def sign_transaction(private_key, prev_tx_hash, prev_tx_locking_script, new_tx_o
     signing_key = ecdsa.SigningKey.from_string(private_key,curve=ecdsa.SECP256k1)
     # signs the hashed transaction
     return signing_key.sign(unsigned_tx_hash)
+
+
+def create_input(previous_tx_hash, index, signature, public_key):
+    """
+    Creates transation input
+
+    :param previous_tx_hash: hash of the previous transaction
+    :param index: Index of output
+    :param signature: signature of the transaction hash
+    :param public_key: users public key
+    :return: concatenation of parameters with the index changed to a short
+    """
+    unlocking_script = signature + public_key
+    index_short = short_to_bytes(index)
+    return previous_tx_hash + index_short + unlocking_script
