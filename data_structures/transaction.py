@@ -1,4 +1,4 @@
-from block import hash_SHA, long_to_bytes, short_to_bytes
+from block import hash_SHA, long_to_bytes, short_to_bytes, bytes_to_short
 import ecdsa
 from collections import deque
 
@@ -84,3 +84,20 @@ def create_input(previous_tx_hash, index, signature, public_key):
     unlocking_script = signature + public_key
     index_short = short_to_bytes(index)
     return previous_tx_hash + index_short + unlocking_script
+
+def parse_input(input):
+    """
+    Parses transaction input into dictionary
+
+    :param input: Transaction input
+    :return: dictionary containing transaction input parameters
+    """
+    # Create empty dictionary
+    parsed_input = {}
+    # Parse out sections of inout into dictionary values
+    parsed_input["previous_tx_hash"] = input[0:32]
+    parsed_input["index"] = bytes_to_short(input[32:34])
+    parsed_input["signature"] = input[34:98]
+    parsed_input["public_key"] = input[98:162]
+    # Return the dictionary
+    return parsed_input
