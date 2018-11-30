@@ -75,11 +75,11 @@ def create_input(previous_tx_hash, index, signature, public_key):
     """
     Creates transation input
 
-    :param previous_tx_hash: hash to the previous transaction
-    :param index: Index of transaction
+    :param previous_tx_hash: hash of the previous transaction
+    :param index: Index of output
     :param signature: signature of the transaction hash
     :param public_key: users public key
-    :return: concatetation fo inputs with the index changed to a short
+    :return: concatenation of parameters with the index changed to a short
     """
     unlocking_script = signature + public_key
     index_short = short_to_bytes(index)
