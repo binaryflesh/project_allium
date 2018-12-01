@@ -13,11 +13,13 @@ def get_ip():
     return ip
 
 def make_server(port=9001):
-    """return a socket object that includes a localhost IP and
-        and provided port number (or default of 9001)"""
+    """Return a new socket using the given address family, socket type and protocol number. 
+       The address family should be AF_INET (the default), AF_INET6 or AF_UNIX. 
+       The socket type should be SOCK_STREAM (the default), SOCK_DGRAM or perhaps 
+       one of the other SOCK_ constants. The protocol number is usually zero and may be 
+       omitted in that case.
+       The port number will be assigned to 9001 if not specified."""
     server = socket.socket()
     server.bind(('', port))
 
     return server
-
-make_server()
