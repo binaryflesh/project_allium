@@ -85,7 +85,7 @@ class Test(unittest.TestCase):
 		prev_tx_locking_script = create_output(30000000, hash_SHA('recipient'.encode()))
 		new_tx_output = hash_SHA('new_output'.encode())
 		signature = sign_transaction(priv_key, previous_tx_hash, prev_tx_locking_script, new_tx_output)
-		# Create inxex value
+		# Create index value
 		index = 2
 		# Concatenate values together
 		unlocking_script = signature + public_key
@@ -93,7 +93,7 @@ class Test(unittest.TestCase):
 		expected = previous_tx_hash + index_short + unlocking_script
 		# Run same values through function
 		actual = create_input(previous_tx_hash, index, signature, public_key)
-		# Check if function equals the concatetation of the values
+		# Check if function equals the concatenation of the values
 		self.assertEqual(expected, actual)
 
 	def test_parse_input(self):

@@ -9,7 +9,7 @@ def get_merkle_root(hashed_tx_list):
     of the hashed tx list is greater than 0.
 
     :param hashed_tx_list: a collections.deque object
-    containining SHA-256 hashed byte strings
+    containing SHA-256 hashed byte strings
     :return: a single SHA-256 hashed byte string 
     """
     if len(hashed_tx_list) < 1:
@@ -43,7 +43,7 @@ def _get_merkle_root(merkle_list):
 
 def create_output(value, recipient):
     """
-    Convert the value to a long and concatenate it with the recepiant
+    Convert the value to a long and concatenate it with the recipient
 
     :param value: value of transaction
     :param recipient: recipient of transaction
@@ -94,7 +94,7 @@ def parse_input(input):
     """
     # Create empty dictionary
     parsed_input = {}
-    # Parse out sections of inout into dictionary values
+    # Parse out sections of input into dictionary values
     parsed_input["previous_tx_hash"] = input[0:32]
     parsed_input["index"] = bytes_to_short(input[32:34])
     parsed_input["signature"] = input[34:98]

@@ -186,7 +186,7 @@ class TestBlock(unittest.TestCase):
 
     # Generates a block with predetermined values, checks the length of the output, expecting 74
     def test_mine(self):
-        # Creates 2 arbritrary 32 byte strings
+        # Creates 2 arbitrary 32 byte strings
         prev_hash = hash_SHA("0".encode())
         self.assertEqual(32, len(prev_hash))
         data = hash_SHA("0".encode())
@@ -200,7 +200,7 @@ class TestBlock(unittest.TestCase):
     # Generates a block based on an incredibly large target, so the nonce will be zero
     # Compares the result of splice_nonce converted to an integer to zero
     def test_slice_nonce(self):
-        # Creates an arbritrary 32 byte string and creates a block with it
+        # Creates an arbitrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
         header = mine(prev_hash, data, 10**200)
@@ -210,49 +210,49 @@ class TestBlock(unittest.TestCase):
     # Generates a block based on a specific data and tests the results of
     # splice_data to the defined data
     def test_slice_data(self):
-        # Creates an arbritrary 32 byte string and creates a block with it
+        # Creates an arbitrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
         header = mine(prev_hash, data, 10**100)
         sliced_data = slice_data(header)
-        # Tests the length of the data byte string, expeting 32
+        # Tests the length of the data byte string, expecting 32
         self.assertEqual(32, len(sliced_data))
         # Tests the result of splice_data with the inputted data
         self.assertEqual(data, sliced_data)
 
     def test_slice_prev_hash(self):
-        # Creates an arbritrary 32 byte string and creates a block with it
+        # Creates an arbitrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
         header = mine(prev_hash, data, 10**200)
         sliced_prev_hash = slice_prev_hash(header)
-        # Tests the length of the data byte string, expeting 32
+        # Tests the length of the data byte string, expecting 32
         self.assertEqual(32, len(sliced_prev_hash))
         # Tests the result of splice_data with the inputted data
         self.assertEqual(prev_hash, sliced_prev_hash)
 
     def test_slice_timestamp(self):
-        # Creates an arbritrary 32 byte string and creates a block with it
+        # Creates an arbitrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
         header = mine(prev_hash, data, 10**200)
         sliced_timestamp = slice_timestamp(header)
-        # Tests the length of the data byte string, expeting 32
+        # Tests the length of the data byte string, expecting 32
         self.assertEqual(4, len(sliced_timestamp))
 
     def test_slice_target(self):
-        # Creates an arbritrary 32 byte string and creates a block with it
+        # Creates an arbitrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
         target = 10**200
         header = mine(prev_hash, data, target)
         sliced_target = slice_target(header)
-        # Tests the length of the data byte string, expeting 32
+        # Tests the length of the data byte string, expecting 32
         self.assertEqual(2, len(sliced_target))
         self.assertEqual(log_target_bytes(target), sliced_target)
 
     def test_parse_block(self):
-       # Creates an arbritrary 32 byte string and creates a block with it
+       # Creates an arbitrary 32 byte string and creates a block with it
        prev_hash = hash_SHA("0123456789ABCDEF".encode())
        data = hash_SHA("0123456789ABCDEF".encode())
        target = 10**200

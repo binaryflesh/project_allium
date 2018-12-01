@@ -12,10 +12,10 @@ import math
 
 def hashSHA(string):
     """
-    Hashes the inputed string using SHA256 from the hash Library
+    Hashes the inputted string using SHA256 from the hash Library
 
     :param string: The string that is going to be hashed
-    :return: The inputed string as a hash
+    :return: The inputted string as a hash
     """
 
     return hexlify(sha(string.encode()).digest()).decode()
@@ -51,7 +51,7 @@ def createBlock(data, prevHash):
 
 def isValid(blockA, blockB):
     """
-    Takes in two given blocks and checks if they are consequtive blocks in the chain
+    Takes in two given blocks and checks if they are consecutive blocks in the chain
 
     :param blockA: Block that comes first in the chain so to say.
                     Block closet to the Genesis block.
@@ -140,10 +140,10 @@ def genesis():
 
 def toInt(bytestring):
     """
-    Converts the inputed byte string in big endian to an integer
+    Converts the inputted byte string in big endian to an integer
 
     :param bytestring: A byte string in big endian byte order
-    :return: Integer format of inputed byte string
+    :return: Integer format of inputted byte string
     """
 
     return int.from_bytes(unhexlify(bytestring), byteorder='big')
@@ -159,7 +159,7 @@ def toInt(bytestring):
 
 def createBlockPoW(data, prevHash, target):
     """
-    The nounce, timestamp, and target hash are converted into strings, they are then
+    The nonce, timestamp, and target hash are converted into strings, they are then
     added with the previous hash and the data then hashed together creating a unique hash.
     A blocks proof of work is made through hashing until the created hash is less than
     (close enough) to the target hash.
@@ -208,7 +208,7 @@ def hash_SHA(byte_string):
 
 def int_to_bytes(val):
     """
-    Given an integer i, return it in byte form, as an unsiged int 
+    Given an integer i, return it in byte form, as an unsigned int 
     Will only work for positive ints. 
     Max value accepted is 2^32 - 1 or 4,294,967,295
     Basically any valid positive 32 bit int will work 
@@ -220,7 +220,7 @@ def int_to_bytes(val):
 
 def short_to_bytes(val):
     """
-    Given an short i, return it in byte form, as an unsiged short 
+    Given an short i, return it in byte form, as an unsigned short 
     Will only work for positive shorts. 
     Max value accepted is 2^8 - 1 or 65535
     Basically any valid positive 8 bit int will work 
@@ -232,7 +232,7 @@ def short_to_bytes(val):
 
 def long_to_bytes(val):
     """
-    Given an long i, return it in byte form, as an unsiged long 
+    Given an long i, return it in byte form, as an unsigned long 
     Will only work for positive longs. 
     Max value accepted is 2^32 - 1 or 4,294,967,295
     Basically any valid positive 8 bit int will work 
@@ -252,7 +252,7 @@ def time_now():
 
 def less_than_target(byte_string, target):
     """
-    This funciton determines which of a byte string holding an integer, or a target integer is lesser.
+    This function determines which of a byte string holding an integer, or a target integer is lesser.
 
     :param1 byte_string: a byte string intended to hold an integer
     :param2 targer: an integer, a target to which byte_string is compared  
@@ -262,10 +262,10 @@ def less_than_target(byte_string, target):
 
 def bytes_to_int(byte_string):
     """
-    This function intends to convert a four byte string into an unsinged integer
+    This function intends to convert a four byte string into an unsigned integer
 
     :param1 byte_string: a byte string, assumed to be four bytes, holding an integer
-    :returns: an unsinged integer, drawn from byte_string
+    :returns: an unsigned integer, drawn from byte_string
     """
     return unpack('I', byte_string)[0]
 
@@ -274,7 +274,7 @@ def bytes_to_short(byte_string):
     This function intends to convert a four byte string into an unsigned short integer
 
     :param1 byte_string: a byte string, assumed to be four bytes, holding an integer
-    :returns: an unsinged short integer, drawn from byte_string
+    :returns: an unsigned short integer, drawn from byte_string
     """
     return unpack('H', byte_string)[0]
 
@@ -283,7 +283,7 @@ def bytes_to_long(byte_string):
     This function intends to convert a four byte string into an unsigned long integer
 
     :param1 byte_string: a byte string, assumed to be four bytes, holding an integer
-    :returns: an unigned long integer, drawn from byte_string
+    :returns: an unsigned long integer, drawn from byte_string
     """
     return unpack('L', byte_string)[0]
 
@@ -293,7 +293,7 @@ def log_target_bytes(base10_number):
     Converts the unsigned log base 10 of the inputed number into bytes
 
     :param base10_number: A number of base 10
-    :return: The log base 10 of the unputed number as bytes
+    :return: The log base 10 of the inputed number as bytes
     """
     return short_to_bytes(int(math.log10(base10_number)))
 
@@ -304,8 +304,8 @@ def mine(previous_hash, data, target):
     
     :param1 previous_hash: This is a 32 byte string representing the hash of a previous block
     :param2 data: This is a 32 byte string
-    :param3 target: This is a usigned integer representing the target number which the hash of the new block has to meet
-    :returns: A 74 byte string containing the previous block hash, data, time of block creation, target power, and noce
+    :param3 target: This is a unsigned integer representing the target number which the hash of the new block has to meet
+    :returns: A 74 byte string containing the previous block hash, data, time of block creation, target power, and nonce
     in that order
     """
     nonce = 0
@@ -333,7 +333,7 @@ def slice_nonce(block_header):
 
 def slice_data(block_header):
     """
-    Takes a concatonated 74 byte string and returns bytes 32 through 63
+    Takes a concatenated 74 byte string and returns bytes 32 through 63
 
     :param1 block_header: a 74 byte string containing the information of a block
     :returns: a 32 byte string containing the block's data
@@ -342,7 +342,7 @@ def slice_data(block_header):
 
 def slice_prev_hash(block_header):
     """
-    Takes a concatonated 74 byte string and returns bytes 0 through 31
+    Takes a concatenated 74 byte string and returns bytes 0 through 31
     Those bytes represent the hash of the previous block
 
     :param1 block_header: a 74 byte string containing the information of a block
@@ -352,7 +352,7 @@ def slice_prev_hash(block_header):
 
 def slice_timestamp(block_header):
     """
-    Takes a concatonated 74 byte string and returns bytes 64 through 67
+    Takes a concatenated 74 byte string and returns bytes 64 through 67
     Those bytes represent the timestamp of the block (time when the header was created)
 
     :param1 block_header: a 74 byte string containing the information of a block
@@ -362,11 +362,11 @@ def slice_timestamp(block_header):
 
 def slice_target(block_header):
     """
-    Takes a concatonated 74 byte string and returns bytes 68 through 70
+    Takes a concatenated 74 byte string and returns bytes 68 through 70
     Those bytes represent the target of the block
 
     :param1 block_header: a 74 byte string containing the information of a block
-    :returns: a 2 byte string containing the target of the blokc
+    :returns: a 2 byte string containing the target of the block
     """
     return block_header[68:70]
 
@@ -376,11 +376,11 @@ def hash_to_int(_hash):
 
 def parse_block(block_header):
     """
-    Takes a concatonated 74 byte string and runs it through the the previously defined slice functions
+    Takes a concatenated 74 byte string and runs it through the the previously defined slice functions
     Those functions outputs are added to a dictionary
 
     :param1 block_header: a 74 byte string containing the information of a block
-    :returns: a dictionary cotaining the previous hash, data, timestamp, target and nonce of the block
+    :returns: a dictionary containing the previous hash, data, timestamp, target and nonce of the block
     """
     parsed_block = {}
     parsed_block["prev_hash"] = slice_prev_hash(block_header)

@@ -14,7 +14,7 @@ def generate_private_key():
 
 def generate_public_key(private_key):
     """
-    Takes private key and puts it through the ellipical curve for public key encryption
+    Takes private key and puts it through the elliptical curve for public key encryption
     
     :param: private key is the randomly generated 32 byte string 
     :return:  verifying key, which effectively is the public key  

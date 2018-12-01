@@ -27,7 +27,7 @@ class Gui(QMainWindow):
         self.normalFont = QFont("Time", 12)
 
         #create a QWidget and set it as a central widget
-        #we need the QWidget becasue you cannot set a QLayout directly on QMainWindow
+        #we need the QWidget because you cannot set a QLayout directly on QMainWindow
         centralWidget = QWidget(self)
         self.setCentralWidget(centralWidget)
 
