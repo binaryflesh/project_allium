@@ -25,7 +25,7 @@ class Test(unittest.TestCase):
         some_random_hash_string = hash_SHA("some_random_string".encode())
         # Creating a signature that can only be created by the private key holder
         signature = signing_key.sign(some_random_hash_string)
-        # Using the public key to varifying the signature
+        # Using the public key to verifying the signature
         verifying_key = ecdsa.VerifyingKey.from_string(public_key, ecdsa.SECP256k1)
         # Return if validity is true
         self.assertTrue(verifying_key.verify(signature, some_random_hash_string))
@@ -47,7 +47,7 @@ class Test(unittest.TestCase):
         signature = signing_key.sign(some_random_hash_string)
         # Using the second public key to verifying the signature
         verifying_key = ecdsa.VerifyingKey.from_string(public_key_2, ecdsa.SECP256k1)
-        # Return if verify raises BadSiginatureError
+        # Return if verify raises BadSignatureError
         with self.assertRaises(ecdsa.BadSignatureError):
             verifying_key.verify(signature, some_random_hash_string)
 
