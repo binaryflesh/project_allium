@@ -13,12 +13,16 @@ def get_ip():
     return ip
 
 def make_server(port=9001):
-    """Return a new socket using the given address family, socket type and protocol number. 
-       The address family should be AF_INET (the default), AF_INET6 or AF_UNIX. 
-       The socket type should be SOCK_STREAM (the default), SOCK_DGRAM or perhaps 
-       one of the other SOCK_ constants. The protocol number is usually zero and may be 
-       omitted in that case.
-       The port number will be assigned to 9001 if not specified."""
+    """
+    Return a new socket using the given address family, socket type and protocol number. 
+    The address family should be AF_INET (the default), AF_INET6 or AF_UNIX. 
+    The socket type should be SOCK_STREAM (the default), SOCK_DGRAM or perhaps 
+    one of the other SOCK_ constants. The protocol number is usually zero and may be 
+    omitted in that case.
+       
+    :param int: The int will represent the desired port number (default is 9001)   
+    :return: A socket that represents the server    
+    """
     server = socket.socket()
     server.bind(('', port))
 
