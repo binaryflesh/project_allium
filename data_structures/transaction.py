@@ -1,4 +1,4 @@
-from block import hash_SHA, long_to_bytes, short_to_bytes, bytes_to_short
+from block import hash_SHA, long_to_bytes, short_to_bytes, bytes_to_short, bytes_to_long
 import ecdsa
 from collections import deque
 
@@ -101,3 +101,18 @@ def parse_input(input):
     parsed_input["public_key"] = input[98:162]
     # Return the dictionary
     return parsed_input
+
+def parse_output(output):
+    """
+    Parses transaction output into dictionary
+
+    :param output: Transaction output
+    :return: dictionary containing transaction output parameters
+    """
+    # Create empty dictionary
+    parsed_output = {}
+    # Parse out sections of output into dictionary values
+    parsed_output["value"] = bytes_to_long(output[0:4])
+    parsed_output["recipient"] = output[4:36]
+    # Return the dictionary
+    return parsed_output

@@ -116,5 +116,12 @@ class Test(unittest.TestCase):
 		self.assertEqual(parsed_input["signature"], signature)
 		self.assertEqual(parsed_input["public_key"], public_key)
 
+	def test_parse_output(self):
+		value = 50000000
+		recipient = hash_SHA('recipient'.encode())
+		# Create output and parse
+		parsed_output = parse_output(create_output(value, recipient))
+		self.assertEqual(parsed_output["value"], value)
+		self.assertEqual(parsed_output["recipient"], recipient)
 if __name__ == '__main__':
     unittest.main()
