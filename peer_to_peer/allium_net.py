@@ -20,8 +20,8 @@ def make_server(port=9001):
     one of the other SOCK_ constants. The protocol number is usually zero and may be 
     omitted in that case.
        
-    :param int: The int will represent the desired port number (default is 9001)   
-    :return: A socket that represents the server    
+    :param port: The int will represent the desired port number (default is 9001)   
+    :returns: A socket that represents the server    
     """
     server = socket.socket()
     server.bind(('', port))
