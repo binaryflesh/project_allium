@@ -25,5 +25,4 @@ def make_server(port=9001):
     """
     server = socket.socket()
     server.bind(('', port))
-
     return server

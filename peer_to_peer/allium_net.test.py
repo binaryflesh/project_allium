@@ -21,7 +21,7 @@ class Test(unittest.TestCase):
         """This test checks that a server created returns an expecgted IP address """
         ip = "0.0.0.0"
         server = make_server()
-        self.assertEquals(ip,server.getsockname()[0])
+        self.assertEqual(ip,server.getsockname()[0])
         server.close()
 
     def test_ItReturnsTheExpectedPortAddress(self):
