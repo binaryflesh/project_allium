@@ -6,30 +6,27 @@ import socket
 
 
 class Test(unittest.TestCase):
-    def setUp(self): pass
+    port = 9001
 
-    def tearDown(self): pass
+    def setUp(self):
+        self.server = make_server(self.port)
+
+    def tearDown(self):
+        self.server.close()
 
 
     def test_ItCreatesAServer(self):
         """This test checks that a socket instance is createdIP"""
-        server = make_server()
-        self.assertIsInstance(server,socket.socket)
-        server.close()
+        self.assertIsInstance(self.server,socket.socket)
 
     def test_ItReturnsTheExpectedIPAddress(self):
         """This test checks that a server created returns an expecgted IP address """
         ip = "0.0.0.0"
-        server = make_server()
-        self.assertEqual(ip,server.getsockname()[0])
-        server.close()
+        self.assertEqual(ip, self.server.getsockname()[0])
 
     def test_ItReturnsTheExpectedPortAddress(self):
         """This test checks that a server created returns an expectged port """
-        port = 9001
-        server = make_server()
-        self.assertEqual(port,server.getsockname()[1])
-        server.close()
+        self.assertEqual(self.port, self.server.getsockname()[1])
 
 if __name__ == '__main__':
     unittest.main()

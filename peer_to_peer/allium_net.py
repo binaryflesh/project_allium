@@ -12,7 +12,7 @@ def get_ip():
     s.close()
     return ip
 
-def make_server(port=9001):
+def make_server(port):
     """
     Return a new socket using the given address family, socket type and protocol number. 
     The address family should be AF_INET (the default), AF_INET6 or AF_UNIX. 
