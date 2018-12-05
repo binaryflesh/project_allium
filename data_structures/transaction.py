@@ -1,4 +1,4 @@
-from block import hash_SHA, long_to_bytes, short_to_bytes
+import block
 import ecdsa
 from collections import deque
 
@@ -38,7 +38,7 @@ def _get_merkle_root(merkle_list):
         for i in range(int(sz/2)):
             p1 = merkle_list.popleft()
             p2 = merkle_list.popleft()
-            merkle_list.append(hash_SHA(p1 + p2))
+            merkle_list.append(block.hash_SHA(p1 + p2))
         return _get_merkle_root(merkle_list)
 
 def create_output(value, recipient):
@@ -49,7 +49,7 @@ def create_output(value, recipient):
     :param recipient: recipient of transaction
     :return: concatenation of the value converted to a long and the recipient 
     """
-    return long_to_bytes(value) + recipient
+    return block.long_to_bytes(value) + recipient
 
 def sign_transaction(private_key, prev_tx_hash, prev_tx_locking_script, new_tx_output):
     """
@@ -64,23 +64,8 @@ def sign_transaction(private_key, prev_tx_hash, prev_tx_locking_script, new_tx_o
     # concatenation of all keys except private key
     concat = prev_tx_hash + prev_tx_locking_script + new_tx_output
     # hashes the concatenated keys
-    unsigned_tx_hash = hash_SHA(concat)
+    unsigned_tx_hash = block.hash_SHA(concat)
     # creates signing key
     signing_key = ecdsa.SigningKey.from_string(private_key,curve=ecdsa.SECP256k1)
     # signs the hashed transaction
     return signing_key.sign(unsigned_tx_hash)
-
-
-def create_input(previous_tx_hash, index, signature, public_key):
-    """
-    Creates transation input
-
-    :param previous_tx_hash: hash of the previous transaction
-    :param index: Index of output
-    :param signature: signature of the transaction hash
-    :param public_key: users public key
-    :return: concatenation of parameters with the index changed to a short
-    """
-    unlocking_script = signature + public_key
-    index_short = short_to_bytes(index)
-    return previous_tx_hash + index_short + unlocking_script

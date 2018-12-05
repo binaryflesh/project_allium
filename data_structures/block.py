@@ -4,6 +4,8 @@ from binascii import hexlify, unhexlify
 from time import time
 from struct import pack, unpack
 import math
+import transaction
+from collections import deque
 
 # hash function
 # takes in a string
@@ -413,3 +415,15 @@ def is_valid_block(block, prev_block):
     if not (less_than_target(hash_SHA(block), 10**(bytes_to_short(block_info["target"])))):
         return False
     return True 
+
+def forge_block(transactions):
+    target=10**72
+    merkle_roots = transaction._get_merkle_root(deque(transactions))
+    block_header = mine(hash_SHA("0".encode()), merkle_roots, target)
+    num_tx = int_to_bytes(len(transactions))
+    all_transactions = b''
+    for trans in transactions:
+        all_transactions+=trans
+
+    return block_header + num_tx + all_transactions
+

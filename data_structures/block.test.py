@@ -339,5 +339,12 @@ class TestBlock(unittest.TestCase):
         #Tests if block is a valid block, it should be
         self.assertTrue(is_valid_block(candidate_block, prev_block))
 
+    def test_forge_block(self):
+        transactions = []
+        transactions.append(hash_SHA("merkle".encode()))
+        transactions.append(hash_SHA("root".encode()))
+        transactions.append(hash_SHA("testing".encode()))
+        f_block = forge_block(transactions)
+    
 if __name__ == '__main__':
     unittest.main()
