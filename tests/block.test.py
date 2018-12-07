@@ -1,5 +1,6 @@
 # imports
 import unittest
+import sys
 sys.path.append(sys.path[0] + "/../src/data_structures")
 from block import *
 import time
