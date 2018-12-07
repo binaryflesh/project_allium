@@ -1,4 +1,6 @@
 import unittest
+import sys
+sys.path.append(sys.path[0] + "/../src/data_structures")
 from keys import*
 
 class Test(unittest.TestCase):

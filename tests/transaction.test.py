@@ -1,4 +1,6 @@
 import unittest
+import sys
+sys.path.append('../src/data_structures')
 from transaction import *
 from block import long_to_bytes
 from keys import generate_key_set
