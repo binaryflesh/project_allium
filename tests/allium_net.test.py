@@ -1,4 +1,6 @@
 import unittest
+import sys
+sys.path.append(sys.path[0] + "/../src/peer_to_peer")
 from networks import *
 import time
 from allium_net import *
