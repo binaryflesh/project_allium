@@ -1,7 +1,8 @@
 import unittest
-from networks import *
+import sys
+sys.path.append(sys.path[0] + "/../src/peer_to_peer")
 import time
-from allium_net import *
+from allium_net import make_server
 import socket
 
 
@@ -13,7 +14,6 @@ class Test(unittest.TestCase):
 
     def tearDown(self):
         self.server.close()
-
 
     def test_ItCreatesAServer(self):
         """This test checks that a socket instance is createdIP"""

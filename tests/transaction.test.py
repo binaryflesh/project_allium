@@ -1,7 +1,10 @@
 import unittest
+import sys
+sys.path.append(sys.path[0] + '/../src/data_structures')
 from transaction import *
-from block import long_to_bytes
+from block import long_to_bytes, hash_SHA
 from keys import generate_key_set
+from collections import deque
 
 class Test(unittest.TestCase):
 
