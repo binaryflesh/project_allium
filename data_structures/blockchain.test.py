@@ -1,8 +1,6 @@
 # imports
 import unittest
 import os
-import sys
-sys.path.append(sys.path[0] + "/../src/data_structures")
 from blockchain import *
 from block import mine, hash_SHA, bytes_to_int
 
