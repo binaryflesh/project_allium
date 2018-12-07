@@ -1,4 +1,4 @@
-from block import hash_SHA, long_to_bytes, short_to_bytes
+from block import hash_SHA, long_to_bytes, short_to_bytes, bytes_to_short, bytes_to_long
 import ecdsa
 from collections import deque
 
@@ -9,7 +9,7 @@ def get_merkle_root(hashed_tx_list):
     of the hashed tx list is greater than 0.
 
     :param hashed_tx_list: a collections.deque object
-    containining SHA-256 hashed byte strings
+    containing SHA-256 hashed byte strings
     :return: a single SHA-256 hashed byte string 
     """
     if len(hashed_tx_list) < 1:
@@ -43,7 +43,7 @@ def _get_merkle_root(merkle_list):
 
 def create_output(value, recipient):
     """
-    Convert the value to a long and concatenate it with the recepiant
+    Convert the value to a long and concatenate it with the recipient
 
     :param value: value of transaction
     :param recipient: recipient of transaction
@@ -84,3 +84,35 @@ def create_input(previous_tx_hash, index, signature, public_key):
     unlocking_script = signature + public_key
     index_short = short_to_bytes(index)
     return previous_tx_hash + index_short + unlocking_script
+
+def parse_input(input):
+    """
+    Parses transaction input into dictionary
+
+    :param input: Transaction input
+    :return: dictionary containing transaction input parameters
+    """
+    # Create empty dictionary
+    parsed_input = {}
+    # Parse out sections of input into dictionary values
+    parsed_input["previous_tx_hash"] = input[0:32]
+    parsed_input["index"] = bytes_to_short(input[32:34])
+    parsed_input["signature"] = input[34:98]
+    parsed_input["public_key"] = input[98:162]
+    # Return the dictionary
+    return parsed_input
+
+def parse_output(output):
+    """
+    Parses transaction output into dictionary
+
+    :param output: Transaction output
+    :return: dictionary containing transaction output parameters
+    """
+    # Create empty dictionary
+    parsed_output = {}
+    # Parse out sections of output into dictionary values
+    parsed_output["value"] = bytes_to_long(output[0:4])
+    parsed_output["recipient"] = output[4:36]
+    # Return the dictionary
+    return parsed_output

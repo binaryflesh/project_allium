@@ -50,7 +50,7 @@ def extract(filename, index, num_bytes, offset=0):
   :param1 filename: String, path to a file containing bytes
   :param2 index: Integer, representing where bytes should begin to read from
   :param3 num_bytes: Integer, number of bytes to read in
-  :param4 offset: Integer, default 0. Paramter for .seek() that determines where the index is read from. 
+  :param4 offset: Integer, default 0. Parameter for .seek() that determines where the index is read from. 
     0: Start of File, 1: Current File Pointer, 2: End of File  
   :returns: Bytestring, representing bytes from index+offset to index+offset+num_bytes in filename
   """
