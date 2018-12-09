@@ -1,0 +1,14 @@
+Guide to approving pull requests
+
+Request changes at any step
+
+Check to see if...
+1. ...the PR is addressing more than one issue (it shouldn't)
+2. ...the request is merging a repository branch to dev.
+3. ...there are any merge conflicts detected (branch is possibly not up to date with dev)
+4. ...the appropriate files are being modified/added (no .pyc files or files unrelated to
+        the issue should be included in the request)
+5. ...all the tests in the test directory pass. (run master test file)
+6. ...the changes achieve what the corresponding issue is describing.
+7. ...all changes have documentation if needed (functions should be in Sphinx ReST format)
+8. ...all naming conventions (PEP8) have been followed.
