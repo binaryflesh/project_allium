@@ -1,0 +1,75 @@
+This is a tutorial for installing Ubuntu for network-related testing
+
+First download VirtualBox and install
+
+Copy and go to the link below:
+
+https://www.virtualbox.org/
+
+Click the large blue download box
+
+Select your OS under VirtualBox 5.2.22 Platform packages.
+
+Save the file and when the file is downloaded, double click the download to install
+
+During installation, all you have to do is click next and yes. If you are prompted to install new oracle software, click yes. Click finish when the application has finished installing.
+
+After installing VirtualBox, download Ubuntu
+
+Copy and go to the link below:
+
+https://www.ubuntu.com/download/desktop
+
+The page will list Download Ubuntu Desktop
+
+Click the green download button under Ubuntu 18.04.1 LTS
+
+Save the file to you machine and the download will begin
+
+The file is large (1.8 GB) and will take time to download
+
+When Ubuntu has been downloaded, open VirtualBox and navigate to new
+
+Name the virtual machine whatever you want, choose from the drop-down menu
+
+Linux for Type and Ubuntu (64-bit most likely)
+
+At this point you can continue to click next until you reach the Hard disk menu. The default option should be create a virtual disk now, which you should select and click create
+
+Chose VDI and click next
+
+Click next at storage on physical hard disk
+
+Click create in file location and size screen
+
+You will now be back at the virtual box home screen. Double click the
+name of the virtual machine you just created (Probably named Ubuntu)
+
+A screen that says 'Select start-up disk' will appear
+
+Then click start
+
+*Note, the download may need to be mounted or unzipped to access the ISO file
+
+This process may take some time - you should see activity in the blackbox that appears. If nothing happens after five minutes, close the window that popped up and try double-clicking the created virtual device again (follow steps from above)
+
+When prompted, click Install Ubuntu
+
+Click continue when language options appear
+
+Click continue at the screen 'Updates and other software'
+
+Click Install Now at the screen 'Installation Type'
+
+Click continue at the screen 'Write the changes to disks'
+
+Click continue at the screen 'Where are you?'
+
+At the 'Who are you screen', type in you name and other information as desired and click continue
+
+Click 'Restart Now' when the 'Installation Complete' window pops 
+You can now click continue until you are your screen is redirected to the VirtualBox sceen (will look like a desktop/laptop boot)
+
+Follow the on screen instructions (when in doubt, use the default option and keep clicking next)
+
+If successful, Ubuntu will begin installing and eventually you will arrive at the Ubuntu OS login screen (or home screen if auto login selected)
