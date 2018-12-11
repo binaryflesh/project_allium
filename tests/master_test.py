@@ -1,7 +1,6 @@
 import sys
 import os
-import subprocess
 
-filepath = sys.path[0] + "/../scripts/run_all_tests.sh"
-#subprocess.call([filepath])
-os.system(filepath)
+for filename in os.listdir(sys.path[0]):
+	if filename != "master_test.py" and filename.endswith(".py"):
+		os.system("python3 " + sys.path[0] + "/" + filename)
