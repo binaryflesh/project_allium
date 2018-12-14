@@ -25,9 +25,6 @@ class Gui(QMainWindow):
         gridLayout = QGridLayout()
         centralWidget.setLayout(gridLayout)
 
-        #add different widgets 
-        self.mineButton = QPushButton("Mine", self)
-        gridLayout.addWidget(self.mineButton, 0, 0)
 
     
 
