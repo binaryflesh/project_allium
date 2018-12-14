@@ -21,14 +21,15 @@ class Gui(QMainWindow):
         #we need the QWidget because you cannot set a QLayout directly on QMainWindow
         centralWidget = QWidget(self)
         self.setCentralWidget(centralWidget)
-        
-        #add different widgets 
-
-
         #set up a GridLayout
         gridLayout = QGridLayout()
         centralWidget.setLayout(gridLayout)
+
+        #add different widgets 
         self.mineButton = QPushButton("Mine", self)
+        gridLayout.addWidget(self.mineButton, 0, 0)
+
+    
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
