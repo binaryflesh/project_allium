@@ -112,7 +112,7 @@ def parse_output(output):
     # Create empty dictionary
     parsed_output = {}
     # Parse out sections of output into dictionary values
-    parsed_output["value"] = bytes_to_long(output[0:4])
-    parsed_output["recipient"] = output[4:36]
+    parsed_output["value"] = bytes_to_long(output[0:8])
+    parsed_output["recipient"] = output[8:40]
     # Return the dictionary
     return parsed_output

@@ -51,7 +51,7 @@ def long_to_bytes(val):
     :param val: long i 
     :return: long i in byte form as unsigned long.
     """
-    return pack('L', val)
+    return pack('Q', val)
 
 def time_now():
     """
@@ -96,7 +96,7 @@ def bytes_to_long(byte_string):
     :param1 byte_string: a byte string, assumed to be four bytes, holding an integer
     :returns: an unsigned long integer, drawn from byte_string
     """
-    return unpack('L', byte_string)[0]
+    return unpack('Q', byte_string)[0]
 
 
 def log_target_bytes(base10_number):
@@ -140,7 +140,7 @@ def slice_nonce(block_header):
     :param1 block_header: a 74 byte string containing the information of a block
     :returns: a 4 byte byte string containing the nonce of a block
     """
-    return block_header[70:74]
+    return block_header[70:78]
 
 def slice_data(block_header):
     """

@@ -53,10 +53,10 @@ class TestBlock(unittest.TestCase):
         self.assertEqual(unpack('L', byte1)[0], 1)
         #test out 0
         byte0 = long_to_bytes(0)
-        self.assertEqual(unpack('L', byte0)[0], 0)
+        self.assertEqual(unpack('Q', byte0)[0], 0)
         #test out max unsigned 32 bit int
         byte_max_long = long_to_bytes(2**32 -1)
-        self.assertEqual(unpack('L', byte_max_long)[0], 2**32 -1)
+        self.assertEqual(unpack('Q', byte_max_long)[0], 2**32 -1)
 
     # Tests time_now() by printing the current time, converting it
     # to an int manually, and comparing it to the output of time_now
@@ -90,7 +90,7 @@ class TestBlock(unittest.TestCase):
     # integer, compares this integer to the output of bytes_to_int()
     def test_bytes_to_long(self):
         convert = 40
-        byte_s = pack('L', convert)
+        byte_s = pack('Q', convert)
         self.assertEqual(convert, bytes_to_long(byte_s))
 
     # Gets the log of a given whole number of base 10 and converts it into bytes
@@ -109,7 +109,7 @@ class TestBlock(unittest.TestCase):
         self.assertEqual(32, len(data))
         #Creates a block header by mining with these strings and a target of 10^200
         bytestring = mine(prev_hash, data, 10**77)
-        self.assertEqual(74, len(bytestring))   #NOTE: This fails on Linux Mint
+        self.assertEqual(78, len(bytestring))   #NOTE: This fails on Linux Mint
         #Tests if result block header is less than target
         self.assertTrue(less_than_target(hash_SHA(bytestring), 10**77))
 
