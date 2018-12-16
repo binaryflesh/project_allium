@@ -49,8 +49,8 @@ class TestBlock(unittest.TestCase):
         Tests out values for the long_to_bytes function. Tests out max values as well
         """
         byte1 = long_to_bytes(1)
-        #if we unpack the bytes as a unsigned integer, we should get the same value
-        self.assertEqual(unpack('L', byte1)[0], 1)
+        #if we unpack the bytes as a unsigned long, we should get the same value
+        self.assertEqual(unpack('Q', byte1)[0], 1)
         #test out 0
         byte0 = long_to_bytes(0)
         self.assertEqual(unpack('Q', byte0)[0], 0)
