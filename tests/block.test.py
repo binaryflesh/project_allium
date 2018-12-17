@@ -108,8 +108,8 @@ class TestBlock(unittest.TestCase):
         data = hash_SHA("0".encode())
         self.assertEqual(32, len(data))
         #Creates a block header by mining with these strings and a target of 10^200
-        bytestring = mine(prev_hash, data, 10**77)
-        self.assertEqual(78, len(bytestring))   #NOTE: This fails on Linux Mint
+        bytestring = mine(0, prev_hash, data, 10**77)
+        self.assertEqual(82, len(bytestring))   #NOTE: This fails on Linux Mint
         #Tests if result block header is less than target
         self.assertTrue(less_than_target(hash_SHA(bytestring), 10**77))
 
@@ -119,7 +119,7 @@ class TestBlock(unittest.TestCase):
         # Creates an arbitrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
-        header = mine(prev_hash, data, 10**200)
+        header = mine(0, prev_hash, data, 10**200)
         # The nonce of mine() should be always zero, due to large target, output of slice_nonce() is zero
         self.assertEqual(0, bytes_to_long(slice_nonce(header)))
 
@@ -129,7 +129,7 @@ class TestBlock(unittest.TestCase):
         # Creates an arbitrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
-        header = mine(prev_hash, data, 10**100)
+        header = mine(0, prev_hash, data, 10**100)
         sliced_data = slice_data(header)
         # Tests the length of the data byte string, expecting 32
         self.assertEqual(32, len(sliced_data))
@@ -140,7 +140,7 @@ class TestBlock(unittest.TestCase):
         # Creates an arbitrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
-        header = mine(prev_hash, data, 10**200)
+        header = mine(0, prev_hash, data, 10**200)
         sliced_prev_hash = slice_prev_hash(header)
         # Tests the length of the data byte string, expecting 32
         self.assertEqual(32, len(sliced_prev_hash))
@@ -151,9 +151,9 @@ class TestBlock(unittest.TestCase):
         # Creates an arbitrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
-        header = mine(prev_hash, data, 10**200)
+        header = mine(0, prev_hash, data, 10**200)
         sliced_timestamp = slice_timestamp(header)
-        # Tests the length of the data byte string, expecting 32
+        # Tests the length of the timestamp byte string, expecting 4
         self.assertEqual(4, len(sliced_timestamp))
 
     def test_slice_target(self):
@@ -161,18 +161,30 @@ class TestBlock(unittest.TestCase):
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
         target = 10**200
-        header = mine(prev_hash, data, target)
+        header = mine(0, prev_hash, data, target)
         sliced_target = slice_target(header)
-        # Tests the length of the data byte string, expecting 32
+        # Tests the length of the target byte string, expecting 2
         self.assertEqual(2, len(sliced_target))
         self.assertEqual(log_target_bytes(target), sliced_target)
+
+    def test_slice_version(self):
+        # Creates an arbitrary 32 byte string and creates a block with it
+        prev_hash = hash_SHA("0123456789ABCDEF".encode())
+        data = hash_SHA("BeepBeepLettuce".encode())
+        target = 10**200
+        version = 0
+        header = mine(version, prev_hash, data, target)
+        sliced_version = slice_version(header)
+        # Tests the length of the version byte string, expecting 4
+        self.assertEqual(4, len(sliced_version))
+        self.assertEqual(int_to_bytes(version), sliced_version)        
 
     def test_parse_block(self):
        # Creates an arbitrary 32 byte string and creates a block with it
        prev_hash = hash_SHA("0123456789ABCDEF".encode())
        data = hash_SHA("0123456789ABCDEF".encode())
        target = 10**200
-       header = mine(prev_hash, data, target)
+       header = mine(0, prev_hash, data, target)
        parsed_block = parse_block(header)
        # Tests if the values that are in the dictionary are the same as the inputted values
        self.assertEqual(prev_hash, parsed_block["prev_hash"])
@@ -182,6 +194,7 @@ class TestBlock(unittest.TestCase):
        self.assertEqual(slice_nonce(header), parsed_block["nonce"])
        self.assertEqual(slice_timestamp(header), parsed_block["timestamp"])
        self.assertEqual(hash_SHA(header), parsed_block["block_hash"])
+       self.assertEqual(slice_version(header), parsed_block["version"])
       
     @unittest.skip(" ")
     # This test ensures that a block with a timestamp less than the timestamp of its previous block, will not be added to the blockchain
