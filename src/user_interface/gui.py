@@ -31,7 +31,7 @@ class Gui(QMainWindow):
 
     def setBackgroundImage(self):
         # Creates a QImage Object with the image file
-        oImage = QImage("qbertdark.png")
+        oImage = QImage(sys.path[0] + "/qbertdark.png")
         # Scales the image to the size of the window
         sImage = oImage.scaled(QtCore.QSize(self.width, self.height))
         # Creates a palette, sets the brush to a brush with the scaled image
