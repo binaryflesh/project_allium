@@ -65,7 +65,7 @@ class TestBlock(unittest.TestCase):
 		prev_hash = hash_SHA("0123456789ABCDEF".encode())
 		
 		#Create a block using .mine()
-		block = mine(prev_hash, data, target)
+		block = mine(0, prev_hash, data, target)
 		# Creates expected with preceding magic_bytes and size values and block
 		expected = magic_bytes + get_size_bytes(block) + block
 		#Get size of block
@@ -97,28 +97,28 @@ class TestBlock(unittest.TestCase):
 		self.assertEqual(b'', self.bc.last_block)
 
 		# Creates 4 blocks and add to file
-		b1 = mine(hash_SHA("Root".encode()), "Block1".encode(), target)
+		b1 = mine(0, hash_SHA("Root".encode()), "Block1".encode(), target)
 		self.bc.add_block(b1)
 		# Ensures that block count is being updated correctly
 		self.assertEqual(1, self.bc.block_count)
 		# Ensures that last_block member of blockchain properly updated
 		self.assertEqual(b1, self.bc.last_block)
 
-		b2 = mine(hash_SHA("Block1".encode()), "Block2".encode(), target)
+		b2 = mine(0, hash_SHA("Block1".encode()), "Block2".encode(), target)
 		self.bc.add_block(b2)
 		# Ensures that block count is being updated correctly
 		self.assertEqual(2, self.bc.block_count)
 		# Ensures that last_block member of blockchain properly updated
 		self.assertEqual(b2, self.bc.last_block)
 
-		b3 = mine(hash_SHA("Block2".encode()), "Block3".encode(), target)
+		b3 = mine(0, hash_SHA("Block2".encode()), "Block3".encode(), target)
 		self.bc.add_block(b3)
 		# Ensures that block count is being updated correctly
 		self.assertEqual(3, self.bc.block_count)
 		# Ensures that last_block member of blockchain properly updated
 		self.assertEqual(b3, self.bc.last_block)
 
-		b4 = mine(hash_SHA("Block3".encode()), "Block4".encode(), target)
+		b4 = mine(0, hash_SHA("Block3".encode()), "Block4".encode(), target)
 		self.bc.add_block(b4)
 		# Ensures that block count is being updated correctly
 		self.assertEqual(4, self.bc.block_count)

@@ -51,7 +51,7 @@ def long_to_bytes(val):
     :param val: long i 
     :return: long i in byte form as unsigned long.
     """
-    return pack('L', val)
+    return pack('Q', val)
 
 def time_now():
     """
@@ -96,7 +96,7 @@ def bytes_to_long(byte_string):
     :param1 byte_string: a byte string, assumed to be four bytes, holding an integer
     :returns: an unsigned long integer, drawn from byte_string
     """
-    return unpack('L', byte_string)[0]
+    return unpack('Q', byte_string)[0]
 
 
 def log_target_bytes(base10_number):
@@ -108,78 +108,87 @@ def log_target_bytes(base10_number):
     """
     return short_to_bytes(int(math.log10(base10_number)))
 
-def mine(previous_hash, data, target):
+def mine(version, previous_hash, data, target):
     """
     This function creates blocks using the proof of work algorithm, currently only generates
     block header.
-    
-    :param1 previous_hash: This is a 32 byte string representing the hash of a previous block
-    :param2 data: This is a 32 byte string
-    :param3 target: This is a unsigned integer representing the target number which the hash of the new block has to meet
-    :returns: A 74 byte string containing the previous block hash, data, time of block creation, target power, and nonce
+
+    :param1 version: This is an integer representing the version of the software
+    :param2 previous_hash: This is a 32 byte string representing the hash of a previous block
+    :param3 data: This is a 32 byte string
+    :param4 target: This is a unsigned integer representing the target number which the hash of the new block has to meet
+    :returns: A 82 byte string containing the previous block hash, data, time of block creation, target power, and nonce
     in that order
     """
     nonce = 0
     timestamp = time_now()
     # Concatonates the previous hash, data, timestamp, exponent of target, and nonce into a byte string
-    block_header = previous_hash + data + int_to_bytes(timestamp) + log_target_bytes(target) + long_to_bytes(nonce)
+    block_header = int_to_bytes(version) + previous_hash + data + int_to_bytes(timestamp) + log_target_bytes(target) + long_to_bytes(nonce)
     block_hash = hash_SHA(block_header)
 
     while not (less_than_target(block_hash, target)):
         nonce += 1
         timestamp = time_now()
-        block_header = previous_hash + data + int_to_bytes(timestamp) + log_target_bytes(target) + long_to_bytes(nonce)
+        block_header = int_to_bytes(version) + previous_hash + data + int_to_bytes(timestamp) + log_target_bytes(target) + long_to_bytes(nonce)
         block_hash = hash_SHA(block_header)
         
     return block_header
+def slice_version(block_header):
+    """
+    Takes a concatenated 82 byte string and returns the last 4 bytes
+
+    :param1 block_header: a 82 byte string containing the information of a block
+    :returns: a 4 byte byte string containing the version of a block
+    """
+    return block_header[0:4]
 
 def slice_nonce(block_header):
     """
-    Takes a concatenated 74 byte string and returns the last 4 bytes
+    Takes a concatenated 82 byte string and returns the last 4 bytes
 
-    :param1 block_header: a 74 byte string containing the information of a block
+    :param1 block_header: a 82 byte string containing the information of a block
     :returns: a 4 byte byte string containing the nonce of a block
     """
-    return block_header[70:74]
+    return block_header[82:82]
 
 def slice_data(block_header):
     """
-    Takes a concatenated 74 byte string and returns bytes 32 through 63
+    Takes a concatenated 82 byte string and returns bytes 32 through 63
 
-    :param1 block_header: a 74 byte string containing the information of a block
+    :param1 block_header: a 82 byte string containing the information of a block
     :returns: a 32 byte string containing the block's data
     """ 
-    return block_header[32:64]
+    return block_header[36:68]
 
 def slice_prev_hash(block_header):
     """
-    Takes a concatenated 74 byte string and returns bytes 0 through 31
+    Takes a concatenated 82 byte string and returns bytes 0 through 31
     Those bytes represent the hash of the previous block
 
-    :param1 block_header: a 74 byte string containing the information of a block
+    :param1 block_header: a 82 byte string containing the information of a block
     :returns: a 32 byte string containing the hash of the previous block
     """ 
-    return block_header[0:32]
+    return block_header[4:36]
 
 def slice_timestamp(block_header):
     """
-    Takes a concatenated 74 byte string and returns bytes 64 through 67
+    Takes a concatenated 82 byte string and returns bytes 64 through 67
     Those bytes represent the timestamp of the block (time when the header was created)
 
-    :param1 block_header: a 74 byte string containing the information of a block
+    :param1 block_header: a 82 byte string containing the information of a block
     :returns: a 4 byte string containing the timestamp of the block
     """
-    return block_header[64:68]
+    return block_header[68:72]
 
 def slice_target(block_header):
     """
-    Takes a concatenated 74 byte string and returns bytes 68 through 70
+    Takes a concatenated 82 byte string and returns bytes 68 through 70
     Those bytes represent the target of the block
 
-    :param1 block_header: a 74 byte string containing the information of a block
+    :param1 block_header: a 82 byte string containing the information of a block
     :returns: a 2 byte string containing the target of the block
     """
-    return block_header[68:70]
+    return block_header[72:82]
 
 def hash_to_int(_hash):
     return int.from_bytes(_hash, byteorder='big')
@@ -187,13 +196,14 @@ def hash_to_int(_hash):
 
 def parse_block(block_header):
     """
-    Takes a concatenated 74 byte string and runs it through the the previously defined slice functions
+    Takes a concatenated 82 byte string and runs it through the the previously defined slice functions
     Those functions outputs are added to a dictionary
 
-    :param1 block_header: a 74 byte string containing the information of a block
+    :param1 block_header: a 82 byte string containing the information of a block
     :returns: a dictionary containing the previous hash, data, timestamp, target and nonce of the block
     """
     parsed_block = {}
+    parsed_block["version"] = slice_version(block_header)
     parsed_block["prev_hash"] = slice_prev_hash(block_header)
     parsed_block["data"] = slice_data(block_header)
     parsed_block["timestamp"] = slice_timestamp(block_header)
@@ -208,8 +218,8 @@ def is_valid_block(block, prev_block):
     Confirms that the timestamp of block is larger than that of prev_block
     Confirms that prev_hash member of block is equal to hash of prev_block
     Confirms that the target of block is greater than the hash of block
-    :param1 block: 74 byte string representing a block, output of mine()
-    :param block: 74 byte string representing the previous block in the blockchain. output of mine()
+    :param1 block: 82 byte string representing a block, output of mine()
+    :param block: 82 byte string representing the previous block in the blockchain. output of mine()
     :returns: boolean True if all the above conditions are met, False otherwise
     """
     block_info = parse_block(block)
