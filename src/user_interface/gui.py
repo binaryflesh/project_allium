@@ -1,4 +1,5 @@
 import sys
+sys.path.append(sys.path[0] + "/../")
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QGridLayout, QPushButton, QAction
 from PyQt5.QtGui import QFont, QImage, QPalette, QBrush, QPixmap
 from PyQt5 import QtCore
@@ -28,6 +29,7 @@ class Gui(QMainWindow):
         centralWidget.setLayout(gridLayout)
         #Sets the background image of the page to qbetdark.png
         self.setBackgroundImage()
+        self.initFileBar()
 
     def setBackgroundImage(self):
         # Creates a QImage Object with the image file
@@ -39,6 +41,24 @@ class Gui(QMainWindow):
         palette.setBrush(10, QBrush(sImage))
         # Sets window palette to this palette
         self.setPalette(palette)
+
+    def initFileBar(self):
+    	# Creates a menubar
+        self.mainMenu = self.menuBar()
+        # Sets the background of filebar to grey and text to white
+        self.mainMenu.setStyleSheet("""
+                            QWidget{
+                                background-color: rgb(20, 20, 20);
+                                color: rgb(200, 200, 200)
+                            }""")
+        # FILE TAB ========================================================
+        self.fileMenu = self.mainMenu.addMenu('File')
+
+        # VIEW TAB ========================================================
+        self.viewMenu = self.mainMenu.addMenu('View')
+
+        # TOOLS TAB =======================================================
+        self.toolsMenu = self.mainMenu.addMenu('Settings')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
