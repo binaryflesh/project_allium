@@ -100,7 +100,7 @@ class TestBlock(unittest.TestCase):
         byte_form = log_target_bytes(convert)
         self.assertEqual(convert, pow(10,int.from_bytes(byte_form,byteorder = 'little')))
 
-    # Generates a block with predetermined values, checks the length of the output, expecting 74
+    # Generates a block with predetermined values, checks the length of the output, expecting 82
     def test_mine(self):
         # Creates 2 arbitrary 32 byte strings
         prev_hash = hash_SHA("0".encode())
