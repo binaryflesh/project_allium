@@ -147,9 +147,9 @@ def slice_nonce(block_header):
     Takes a concatenated 82 byte string and returns the last 4 bytes
 
     :param1 block_header: a 82 byte string containing the information of a block
-    :returns: a 4 byte byte string containing the nonce of a block
+    :returns: a 4 byte  string containing the nonce of a block
     """
-    return block_header[82:82]
+    return block_header[78:82]
 
 def slice_data(block_header):
     """

@@ -121,7 +121,7 @@ class TestBlock(unittest.TestCase):
         data = hash_SHA("BeepBeepLettuce".encode())
         header = mine(0, prev_hash, data, 10**200)
         # The nonce of mine() should be always zero, due to large target, output of slice_nonce() is zero
-        self.assertEqual(0, bytes_to_long(slice_nonce(header)))
+        self.assertEqual(0, bytes_to_int(slice_nonce(header)))
 
     # Generates a block based on a specific data and tests the results of
     # splice_data to the defined data
