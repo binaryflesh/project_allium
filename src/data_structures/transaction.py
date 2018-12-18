@@ -116,3 +116,12 @@ def parse_output(output):
     parsed_output["recipient"] = output[8:40]
     # Return the dictionary
     return parsed_output
+
+def cat_input_fields(prev_tx_hash, output_index, prev_recipient):
+    """
+    converts output_index to short in byte form and concatenates parameters in order
+
+    :params prev_tx_hash, output_index, prev_recipient
+    :return: concatentation of prev_tx_has, output_index (in byte form), prev_recipient
+    """
+    return prev_tx_hash + short_to_bytes(output_index) + prev_recipient
