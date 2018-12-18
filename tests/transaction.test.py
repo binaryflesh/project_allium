@@ -126,5 +126,15 @@ class Test(unittest.TestCase):
 		parsed_output = parse_output(create_output(value, recipient))
 		self.assertEqual(parsed_output["value"], value)
 		self.assertEqual(parsed_output["recipient"], recipient)
+
+	def test_cat_input_fields(self):
+		prev_hash = hash_SHA('previous'.encode())
+		output_index = 128 
+		prev_recipient = hash_SHA('recipient'.encode())
+
+		actualResults = cat_input_fields(prev_hash, output_index, prev_recipient)
+		expectedResults = prev_hash + short_to_bytes(output_index) + prev_recipient 
+		self.assertEqual(actualResults, expectedResults)
+
 if __name__ == '__main__':
-    unittest.main()
+	unittest.main()
