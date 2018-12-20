@@ -135,7 +135,7 @@ def mine(version, previous_hash, data, target):
     return block_header
 def slice_version(block_header):
     """
-    Takes a concatenated 82 byte string and returns the last 4 bytes
+    Takes a concatenated 82 byte string and returns the first 4 bytes
 
     :param1 block_header: a 82 byte string containing the information of a block
     :returns: a 4 byte byte string containing the version of a block
@@ -144,16 +144,16 @@ def slice_version(block_header):
 
 def slice_nonce(block_header):
     """
-    Takes a concatenated 82 byte string and returns the last 4 bytes
+    Takes a block header and returns the nonce
 
     :param1 block_header: a 82 byte string containing the information of a block
-    :returns: a 4 byte byte string containing the nonce of a block
+    :returns: a 8 byte string containing the nonce
     """
-    return block_header[82:82]
+    return block_header[74:82]
 
 def slice_data(block_header):
     """
-    Takes a concatenated 82 byte string and returns bytes 32 through 63
+    Takes a block_header and returns the data section from it
 
     :param1 block_header: a 82 byte string containing the information of a block
     :returns: a 32 byte string containing the block's data
@@ -162,8 +162,7 @@ def slice_data(block_header):
 
 def slice_prev_hash(block_header):
     """
-    Takes a concatenated 82 byte string and returns bytes 0 through 31
-    Those bytes represent the hash of the previous block
+    Takes a block_header that returns the prev_hash
 
     :param1 block_header: a 82 byte string containing the information of a block
     :returns: a 32 byte string containing the hash of the previous block
@@ -172,6 +171,7 @@ def slice_prev_hash(block_header):
 
 def slice_timestamp(block_header):
     """
+    Takes 
     Takes a concatenated 82 byte string and returns bytes 64 through 67
     Those bytes represent the timestamp of the block (time when the header was created)
 
@@ -182,13 +182,13 @@ def slice_timestamp(block_header):
 
 def slice_target(block_header):
     """
-    Takes a concatenated 82 byte string and returns bytes 68 through 70
+    Returns the target of 
     Those bytes represent the target of the block
 
     :param1 block_header: a 82 byte string containing the information of a block
     :returns: a 2 byte string containing the target of the block
     """
-    return block_header[72:82]
+    return block_header[72:74]
 
 def hash_to_int(_hash):
     return int.from_bytes(_hash, byteorder='big')
