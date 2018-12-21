@@ -70,7 +70,7 @@ def sign_transaction(private_key, prev_tx_hash, prev_tx_locking_script, new_tx_o
     # signs the hashed transaction
     return signing_key.sign(unsigned_tx_hash)
 
-
+@DeprecationWarning
 def create_input(previous_tx_hash, index, signature, public_key):
     """
     Creates transation input

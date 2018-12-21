@@ -78,6 +78,7 @@ class Test(unittest.TestCase):
 		# Verifying the verification key works
 		self.assertTrue(verifying_key.verify(signed_tx, unsigned_tx_hash))
 
+	@DeprecationWarning
 	def test_create_input(self):
 		# Create key set
 		key_dict = generate_key_set()
@@ -99,6 +100,7 @@ class Test(unittest.TestCase):
 		# Check if function equals the concatenation of the values
 		self.assertEqual(expected, actual)
 
+	@DeprecationWarning
 	def test_parse_input(self):
 		# Create key set
 		key_dict = generate_key_set()
