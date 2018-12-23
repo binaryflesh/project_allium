@@ -149,8 +149,8 @@ class Test(unittest.TestCase):
 		recipient = hash_SHA('2'.encode())
 		# Value of 100 for output
 		value = 100
-		# Input generated from above elements, with output_index of 1
-		input1 = cat_input_fields(prev_tx_hash, 1, prev_recipient)
+		# Input generated from above elements, with output_index of 0
+		input1 = cat_input_fields(prev_tx_hash, 0, prev_recipient)
 		# Output genereated from above elements
 		output1 = create_output(value, recipient)
 		# Input list
