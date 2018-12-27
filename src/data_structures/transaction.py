@@ -1,4 +1,5 @@
-from block import hash_SHA, long_to_bytes, short_to_bytes, bytes_to_short, bytes_to_long
+from block import hash_SHA, int_to_bytes, long_to_bytes, short_to_bytes, bytes_to_short, bytes_to_long
+from keys import generate_public_key
 import ecdsa
 from collections import deque
 
@@ -51,26 +52,22 @@ def create_output(value, recipient):
     """
     return long_to_bytes(value) + recipient
 
-def sign_transaction(private_key, prev_tx_hash, prev_tx_locking_script, new_tx_output):
+def sign_transaction(unsigned_tx, private_key):
     """
     Signs a transaction hash
 
+    :param unsigned_tx: an unsigned transaction
     :param private_key: users private key
-    :param prev_tx_hash: hash to the previous transaction
-    :param prev_tx_locking_script: locking script to the previous transaction
-    :param new_tx_hash: the hash of the current transaction
     :return: signature of the unsigned transaction hash
     """
-    # concatenation of all keys except private key
-    concat = prev_tx_hash + prev_tx_locking_script + new_tx_output
-    # hashes the concatenated keys
-    unsigned_tx_hash = hash_SHA(concat)
+    
+    unsigned_tx_hash = hash_SHA(unsigned_tx)
     # creates signing key
     signing_key = ecdsa.SigningKey.from_string(private_key,curve=ecdsa.SECP256k1)
     # signs the hashed transaction
     return signing_key.sign(unsigned_tx_hash)
 
-
+@DeprecationWarning
 def create_input(previous_tx_hash, index, signature, public_key):
     """
     Creates transation input
@@ -125,3 +122,30 @@ def cat_input_fields(prev_tx_hash, output_index, prev_recipient):
     :return: concatentation of prev_tx_has, output_index (in byte form), prev_recipient
     """
     return prev_tx_hash + short_to_bytes(output_index) + prev_recipient
+
+def cat_tx_fields(version, inputs, outputs):
+    """
+    takes in a version, a list of inputs, and a list of outputs 
+    convert the version to integer byte form, 
+    get the num_inputs and num_outputs from the len of the inputs and outputs` respectively convert these to shorts in byte form
+    concatenate the parameters in the following order: version number + # inputs + input 0...input n + # outputs + output 0... output n
+
+    :param1 version: integer representing the version of the software
+    :param2 inputs: a list of inputs
+    :param3 outputs: a list of outputs
+    :return: byte string, concatonation of version number + # inputs + input 0...input n + # outputs + output 0... output n
+    """
+    # Adds version number bytes to output byte string
+    return_bstr = int_to_bytes(version)
+    # Adds number of inputs in short byte form to output byte string
+    return_bstr +=  short_to_bytes(len(inputs))
+    # Adds each input to output byte string
+    for inp in inputs:
+        return_bstr += inp
+    # Adds number of outputs in short byte form to output byte string
+    return_bstr += short_to_bytes(len(outputs))
+    # Adds each output to output byte string
+    for out in outputs:
+        return_bstr += out
+    # Returns output byte string
+    return return_bstr

@@ -2,7 +2,7 @@ import unittest
 import sys
 sys.path.append(sys.path[0] + '/../src/data_structures')
 from transaction import *
-from block import long_to_bytes, hash_SHA
+from block import int_to_bytes, short_to_bytes, long_to_bytes, hash_SHA
 from keys import generate_key_set
 from collections import deque
 
@@ -64,9 +64,9 @@ class Test(unittest.TestCase):
 		prev_tx_locking_script = create_output(30000000,hash_SHA('recipient'.encode()))
 		new_tx_output = hash_SHA('new_output'.encode())
 		# concatenating above components
-		p1 = prev_hash + prev_tx_locking_script + new_tx_output
+		unsigned_tx = prev_hash + prev_tx_locking_script + new_tx_output
 		# creates made up unsigned transaction hash
-		unsigned_tx_hash = hash_SHA(p1)
+		unsigned_tx_hash = hash_SHA(unsigned_tx)
 		# getting a private and public key
 		key_dict = generate_key_set()
 		priv_key = key_dict["private_key"]
@@ -74,10 +74,11 @@ class Test(unittest.TestCase):
 		# creating a verification key
 		verifying_key = ecdsa.VerifyingKey.from_string(pub_key, ecdsa.SECP256k1)
 		# creating a signed transaction using the sign transaction function
-		signed_tx = sign_transaction(priv_key,prev_hash,prev_tx_locking_script,new_tx_output)
+		signed_tx = sign_transaction(unsigned_tx, priv_key)
 		# Verifying the verification key works
 		self.assertTrue(verifying_key.verify(signed_tx, unsigned_tx_hash))
 
+	@DeprecationWarning
 	def test_create_input(self):
 		# Create key set
 		key_dict = generate_key_set()
@@ -99,6 +100,7 @@ class Test(unittest.TestCase):
 		# Check if function equals the concatenation of the values
 		self.assertEqual(expected, actual)
 
+	@DeprecationWarning
 	def test_parse_input(self):
 		# Create key set
 		key_dict = generate_key_set()
@@ -136,5 +138,72 @@ class Test(unittest.TestCase):
 		expectedResults = prev_hash + short_to_bytes(output_index) + prev_recipient 
 		self.assertEqual(actualResults, expectedResults)
 
+	def test_cat_tx_fields_single(self):
+		# Version number
+		version = 1
+		# Arbitrary 32 byte previous transaction hash
+		prev_tx_hash = hash_SHA('0'.encode())
+		# Arbritrary 32 byte previous recipient
+		prev_recipient = hash_SHA('1'.encode())
+		# Arbritrary 32 byte recipient
+		recipient = hash_SHA('2'.encode())
+		# Value of 100 for output
+		value = 100
+		# Input generated from above elements, with output_index of 0
+		input1 = cat_input_fields(prev_tx_hash, 0, prev_recipient)
+		# Output genereated from above elements
+		output1 = create_output(value, recipient)
+		# Input list
+		inputs = [input1]
+		# Output list
+		outputs = [output1]
+
+		# Manually generates expected output from above elements
+		expected = int_to_bytes(version)
+		expected += short_to_bytes(len(inputs))
+		expected += input1
+		expected += short_to_bytes(len(outputs))
+		expected += output1
+
+		# Actual output generated from cat_tx_fields
+		actual = cat_tx_fields(version, inputs, outputs)
+		self.assertEqual(expected, actual)
+
+	def test_cat_tx_fields_double(self):
+		# Version number
+		version = 1
+		# Arbitrary 32 byte previous transaction hash
+		prev_tx_hash = hash_SHA('0'.encode())
+		# Arbritrary 32 byte previous recipient
+		prev_recipient = hash_SHA('1'.encode())
+		# Arbritrary 32 byte recipient
+		recipient = hash_SHA('2'.encode())
+		# Value of 100 for output
+		value1 = 100
+		value2 = 300
+		# Inputs generated from above elements, with output_index of 0, 1
+		input1 = cat_input_fields(prev_tx_hash, 0, prev_recipient)
+		input2 = cat_input_fields(prev_tx_hash, 1, prev_recipient)
+		# Output genereated from above elements
+		output1 = create_output(value1, recipient)
+		output2 = create_output(value2, recipient)
+		# Input list
+		inputs = [input1, input2]
+		# Output list
+		outputs = [output1, output2]
+
+		# Manually generates expected output from above elements
+		expected = int_to_bytes(version)
+		expected += short_to_bytes(len(inputs))
+		expected += input1
+		expected += input2
+		expected += short_to_bytes(len(outputs))
+		expected += output1
+		expected += output2
+
+		# Actual output generated from cat_tx_fields
+		actual = cat_tx_fields(version, inputs, outputs)
+		self.assertEqual(expected, actual)
+		
 if __name__ == '__main__':
 	unittest.main()
