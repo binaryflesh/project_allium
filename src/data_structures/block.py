@@ -234,3 +234,42 @@ def is_valid_block(block, prev_block):
     if not (less_than_target(hash_SHA(block), 10**(bytes_to_short(block_info["target"])))):
         return False
     return True 
+
+
+def get_merkle_root(hashed_tx_list):
+    """
+    Calls the recursive helper function if the length
+    of the hashed tx list is greater than 0.
+
+    :param hashed_tx_list: a collections.deque object
+    containing SHA-256 hashed byte strings
+    :return: a single SHA-256 hashed byte string 
+    """
+    if len(hashed_tx_list) < 1:
+        return None
+    else:
+        return _get_merkle_root(hashed_tx_list)
+
+def _get_merkle_root(merkle_list):
+    """
+    Recursive helper function that pairs up
+    adjacent elements and hashes them, then repeats
+    until a single hash is left.
+
+    :param merkle_list: a collections.deque object
+    containing SHA-256 hashed byte strings
+    :return: base case is a single hash otherwise
+    a deque containing an even length deque
+    of hashed byte strings
+    """
+    if len(merkle_list) == 1:
+        return merkle_list.pop()
+    else:
+        if len(merkle_list) % 2 != 0:
+            merkle_list.append(merkle_list[-1])
+        sz = len(merkle_list)
+        for i in range(int(sz/2)):
+            p1 = merkle_list.popleft()
+            p2 = merkle_list.popleft()
+            merkle_list.append(hash_SHA(p1 + p2))
+        return _get_merkle_root(merkle_list)
