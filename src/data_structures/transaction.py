@@ -149,3 +149,31 @@ def cat_tx_fields(version, inputs, outputs):
         return_bstr += out
     # Returns output byte string
     return return_bstr
+
+def create_tx(version, unsigned_inputs, outputs, private_key):
+    """
+    Creates an transaction using a version number, list of unsigned inputs, outputs, and a private key.
+    This generates an unsigned transaction, signature and public key. It then uses these to populate a 
+    list of signed transactions.
+    
+    :param1 version: integer representing version number of software
+    :param2 unsigned_inputs: list of unsigned inputs, list of byte strings generated from create_input
+    :param3 outputs: list of output byte strings generated from create_output
+    :param4 private_key: byte string representing private key, generated from generate_private_key
+    :returns: byte string, concatonation of version, list of signed inputs and outputs
+    """
+    # get the unsigned_tx by passing the all parameters except private_key to cat_tx_fields
+    unsigned_tx = cat_tx_fields(version, unsigned_inputs, outputs)
+    # get the signature by passing unsigned_tx to sign_transaction
+    signature = sign_transaction(unsigned_tx, private_key)
+    # generate the public_key
+    public_key = generate_public_key(private_key)
+
+    # for each input in unsigned_inputs, sign each input with new signature
+    signed_inputs = []
+    for unsigned in unsigned_inputs:
+        previous_tx_hash = unsigned[0:32]
+        index = bytes_to_short(unsigned[32:34])
+        signed_inputs.append(cat_input_fields(previous_tx_hash, index, signature + public_key))
+    # returns cat_tx_fields with signed inputs
+    return cat_tx_fields(version, signed_inputs, outputs)
