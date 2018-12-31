@@ -81,8 +81,8 @@ class Gui(QMainWindow):
                                 color: rgb(200, 200, 200)
                             }""")
         #self.mineButton.clicked.connect("""MINE FUNCTION""")
-        self.mineButton.setMinimumWidth(200)
-        self.mineButton.setMinimumHeight(50)
+        self.mineButton.setFixedWidth(200)
+        self.mineButton.setFixedHeight(50)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
