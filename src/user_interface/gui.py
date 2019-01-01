@@ -1,6 +1,6 @@
 import sys
 sys.path.append(sys.path[0] + "/../")
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QGridLayout, QPushButton, QAction
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QGridLayout, QPushButton, QAction, QLabel, QHBoxLayout, QFrame
 from PyQt5.QtGui import QFont, QImage, QPalette, QBrush, QPixmap
 from PyQt5 import QtCore
 
@@ -31,11 +31,16 @@ class Gui(QMainWindow):
         self.initFileBar()
         # Initializes the mine button
         self.initMineButton()
+        # Initializes the transaction button
+        self.initTxButton()
 
         #set up a GridLayout
         gridLayout = QGridLayout()
+        #gridlayout.addWidget(widget, startRow, endRow, startCol, endCol)
         # Places the Mine Button in the top left corner of the screen
         gridLayout.addWidget(self.mineButton, 0, 0)
+        # Places the Transaction Button in the top left corner of the screen
+        gridLayout.addWidget(self.txButton, 0, 2)
 
         #create a QWidget and set it as a central widget
         #we need the QWidget because you cannot set a QLayout directly on QMainWindow
@@ -73,6 +78,7 @@ class Gui(QMainWindow):
         self.toolsMenu = self.mainMenu.addMenu('Settings')
 
     def initMineButton(self):
+        # Creates a mine button, sets its text, font and style
         self.mineButton = QPushButton("Mine", self)
         self.mineButton.setFont(self.bigFont)
         self.mineButton.setStyleSheet("""
@@ -81,8 +87,23 @@ class Gui(QMainWindow):
                                 color: rgb(200, 200, 200)
                             }""")
         #self.mineButton.clicked.connect("""MINE FUNCTION""")
+        # Sets fixed size for mine button
         self.mineButton.setFixedWidth(200)
         self.mineButton.setFixedHeight(50)
+
+    def initTxButton(self):
+        # Creates a transaction button, sets its text, font and style
+        self.txButton = QPushButton("Transaction", self)
+        self.txButton.setFont(self.bigFont)
+        self.txButton.setStyleSheet("""
+                            QWidget{
+                                background-color: rgb(20, 20, 20);
+                                color: rgb(200, 200, 200)
+                            }""")
+        #self.txButton.clicked.connect("""OPEN TX WINDOW""")
+        # Sets fixed size for transaction button
+        self.txButton.setFixedWidth(200)
+        self.txButton.setFixedHeight(50)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
