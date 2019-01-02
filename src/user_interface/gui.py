@@ -33,6 +33,8 @@ class Gui(QMainWindow):
         self.initMineButton()
         # Initializes the transaction button
         self.initTxButton()
+        # Initializes the wallet label
+        self.initWalletFrame()
 
         #set up a GridLayout
         gridLayout = QGridLayout()
@@ -41,6 +43,8 @@ class Gui(QMainWindow):
         gridLayout.addWidget(self.mineButton, 0, 0)
         # Places the Transaction Button in the top left corner of the screen
         gridLayout.addWidget(self.txButton, 0, 2)
+        # Places Wallet label between mine and transaction button
+        gridLayout.addWidget(self.walletFrame, 0, 1)
 
         #create a QWidget and set it as a central widget
         #we need the QWidget because you cannot set a QLayout directly on QMainWindow
@@ -104,6 +108,23 @@ class Gui(QMainWindow):
         # Sets fixed size for transaction button
         self.txButton.setFixedWidth(200)
         self.txButton.setFixedHeight(50)
+
+    def initWalletFrame(self):
+        self.walletContent = QLabel('₩ 0.00', self)
+        self.walletContent.setAlignment(QtCore.Qt.AlignCenter)
+        self.walletContent.setFont(self.bigFont)
+        walletLayout = QHBoxLayout()
+        walletLayout.addWidget(self.walletContent)
+        self.walletFrame = QFrame(self)
+        #Set up the style of the main Label
+        self.walletFrame.setStyleSheet("""
+                          QFrame {
+                                background-color: rgb(20, 20, 20);
+                                color: rgb(200, 200, 200);
+                                border-radius: 12px;
+                                padding: 6px
+                        }""")
+        self.walletFrame.setLayout(walletLayout)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
