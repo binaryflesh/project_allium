@@ -35,6 +35,8 @@ class Gui(QMainWindow):
         self.initTxButton()
         # Initializes the wallet label
         self.initWalletFrame()
+        # Initializes the IP label
+        self.initIPFrame()
 
         #set up a GridLayout
         gridLayout = QGridLayout()
@@ -45,6 +47,8 @@ class Gui(QMainWindow):
         gridLayout.addWidget(self.txButton, 0, 2)
         # Places Wallet label between mine and transaction button
         gridLayout.addWidget(self.walletFrame, 0, 1)
+        # Places the IP label below the mine label
+        gridLayout.addWidget(self.IPFrame, 1, 0)
 
         #create a QWidget and set it as a central widget
         #we need the QWidget because you cannot set a QLayout directly on QMainWindow
@@ -125,6 +129,25 @@ class Gui(QMainWindow):
                                 padding: 6px
                         }""")
         self.walletFrame.setLayout(walletLayout)
+
+    def initIPFrame(self):
+        self.IPAddress = QLabel("Offline", self)
+        self.IPAddress.setAlignment(QtCore.Qt.AlignCenter)
+        self.IPAddress.setFont(self.bigFont)
+        IPLayout = QHBoxLayout()
+        IPLayout.addWidget(self.IPAddress)
+        self.IPFrame = QFrame(self)
+        #Set up the style of the main Label
+        self.IPFrame.setStyleSheet("""
+                          QFrame {
+                                background-color: rgb(20, 20, 20);
+                                color: rgb(200, 200, 200);
+                                border-radius: 12px;
+                                padding: 6px
+                        }""")
+        self.IPFrame.setLayout(IPLayout)
+        self.IPFrame.setFixedWidth(200)
+        self.IPFrame.setFixedHeight(60)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
