@@ -309,5 +309,22 @@ class TestBlock(unittest.TestCase):
         actual = get_merkle_root(deque([s1, s2, s3]))
         self.assertEqual(expected, actual)
 
+    def test_forge_block(self):
+        # Inputs
+        transactions = [hash_SHA("onion".encode()),
+            hash_SHA("money".encode()), hash_SHA("block".encode())]
+        version = 1
+        target = 10**75
+
+        # Manually creates expected output
+        expected_merk = get_merkle_root(deque(transactions))
+        expected_block_header = mine(version, hash_SHA("0".encode()), expected_merk, target)
+        expected = expected_block_header + int_to_bytes(3) + hash_SHA("onion".encode())\
+            + hash_SHA("money".encode()) + hash_SHA("block".encode())
+        # Actual output
+        actual = forge_block(version, transactions, target)
+        # Confirms equality of expected and actual outputs
+        self.assertEqual(actual, expected)
+
 if __name__ == '__main__':
     unittest.main()
