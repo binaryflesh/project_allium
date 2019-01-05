@@ -322,7 +322,7 @@ class TestBlock(unittest.TestCase):
         expected = expected_block_header + int_to_bytes(3) + hash_SHA("onion".encode())\
             + hash_SHA("money".encode()) + hash_SHA("block".encode())
         # Actual output
-        actual = forge_block(version, transactions, target)
+        actual = forge_block(version, hash_SHA("0".encode()), transactions, target)
         # Confirms equality of expected and actual outputs
         self.assertEqual(actual, expected)
 
