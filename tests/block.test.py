@@ -5,94 +5,9 @@ sys.path.append(sys.path[0] + "/../src/data_structures")
 from block import *
 import time
 from struct import unpack
-
-# unit test class
-
+from collections import deque
 
 class TestBlock(unittest.TestCase):
-
-    # test hash function
-
-    def testHashSHA(self):
-        # testHashSHA part 1:
-        # take two different strings
-        # check to see if hashes are different
-        a = "apple"
-        b = "orange"
-        hashA = hashSHA(a)
-        hashB = hashSHA(b)
-        self.assertNotEqual(hashA, hashB)
-
-        # testHashSHA part 2:
-        # take two long strings with a single letter changed
-        # check to see if hashes are different
-        s1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-        s2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minin veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-        hashS1 = hashSHA(s1)
-        hashS2 = hashSHA(s2)
-        self.assertNotEqual(hashS1, hashS2)
-
-        # testHashSHA part 3:
-        # take two of the same strings
-        # hash them separately
-        # check to see if the hashes are equivalent
-        c = "melon"
-        d = "melon"
-        hashC = hashSHA(c)
-        hashD = hashSHA(d)
-        self.assertEqual(hashC, hashD)
-
-    # test is valid
-    # check to see if a block points backwards to a previous block
-    def testIsValid(self):
-        blockA = createBlock('this is block a', '000')
-        blockB = createBlock('this is block b', blockA['blockHash'])
-        self.assertTrue(isValid(blockA, blockB))
-
-    # test add block
-    # check to see if when adding a block it is contained in the chain
-    def testAddBlock(self):
-        bc = Blockchain()
-        testBlock = createBlock('this is a test', '123456789')
-        bc.addBlock(testBlock)
-        self.assertEqual(bc.chain[0], testBlock)
-
-    # test top
-    # check to see if calling top returns the last block in the chain
-
-    def testTop(self):
-        bc = Blockchain()
-        testBlock = createBlock('this is a test', '123456789')
-        bc.addBlock(testBlock)
-        self.assertEqual(bc.top(), testBlock)
-
-    # test height
-    # check to see if height returns the length of the chain
-    def testHeight(self):
-        bc = Blockchain()
-        testBlock = createBlock('this is a test', '123456789')
-        bc.addBlock(testBlock)
-        bc.addBlock(testBlock)
-        bc.addBlock(testBlock)
-        bc.addBlock(testBlock)
-        self.assertEqual(4, bc.height())
-
-    # test proof of work
-    # check to see if a proof of work mined block
-    # contains a hash that's less than the target
-    # check also how much time it takes to mine a block
-    def testPoW(self):
-        data = 'testPoW'
-        prevHash = '000000'
-        # play around with this exponent (stick to the 60-100 range)
-        target = 10**75
-        # print("Mining...")
-        a = int(time.time())
-        b = createBlockPoW(data, prevHash, target)
-        # print("Block found!")
-        c = int(time.time())
-        # print("Time it took: {} seconds".format((c-a)))
-        self.assertLessEqual(toInt(b['blockHash']), target)
 
     def test_Hash_SHA(self):
         data = "SIG Blockchain"
@@ -135,14 +50,14 @@ class TestBlock(unittest.TestCase):
         Tests out values for the long_to_bytes function. Tests out max values as well
         """
         byte1 = long_to_bytes(1)
-        #if we unpack the bytes as a unsigned integer, we should get the same value
-        self.assertEqual(unpack('L', byte1)[0], 1)
+        #if we unpack the bytes as a unsigned long, we should get the same value
+        self.assertEqual(unpack('Q', byte1)[0], 1)
         #test out 0
         byte0 = long_to_bytes(0)
-        self.assertEqual(unpack('L', byte0)[0], 0)
+        self.assertEqual(unpack('Q', byte0)[0], 0)
         #test out max unsigned 32 bit int
         byte_max_long = long_to_bytes(2**32 -1)
-        self.assertEqual(unpack('L', byte_max_long)[0], 2**32 -1)
+        self.assertEqual(unpack('Q', byte_max_long)[0], 2**32 -1)
 
     # Tests time_now() by printing the current time, converting it
     # to an int manually, and comparing it to the output of time_now
@@ -176,7 +91,7 @@ class TestBlock(unittest.TestCase):
     # integer, compares this integer to the output of bytes_to_int()
     def test_bytes_to_long(self):
         convert = 40
-        byte_s = pack('L', convert)
+        byte_s = pack('Q', convert)
         self.assertEqual(convert, bytes_to_long(byte_s))
 
     # Gets the log of a given whole number of base 10 and converts it into bytes
@@ -186,7 +101,7 @@ class TestBlock(unittest.TestCase):
         byte_form = log_target_bytes(convert)
         self.assertEqual(convert, pow(10,int.from_bytes(byte_form,byteorder = 'little')))
 
-    # Generates a block with predetermined values, checks the length of the output, expecting 74
+    # Generates a block with predetermined values, checks the length of the output, expecting 82
     def test_mine(self):
         # Creates 2 arbitrary 32 byte strings
         prev_hash = hash_SHA("0".encode())
@@ -194,8 +109,8 @@ class TestBlock(unittest.TestCase):
         data = hash_SHA("0".encode())
         self.assertEqual(32, len(data))
         #Creates a block header by mining with these strings and a target of 10^200
-        bytestring = mine(prev_hash, data, 10**77)
-        self.assertEqual(74, len(bytestring))   #NOTE: This fails on Linux Mint
+        bytestring = mine(0, prev_hash, data, 10**77)
+        self.assertEqual(82, len(bytestring))   #NOTE: This fails on Linux Mint
         #Tests if result block header is less than target
         self.assertTrue(less_than_target(hash_SHA(bytestring), 10**77))
 
@@ -205,7 +120,7 @@ class TestBlock(unittest.TestCase):
         # Creates an arbitrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
-        header = mine(prev_hash, data, 10**200)
+        header = mine(0, prev_hash, data, 10**200)
         # The nonce of mine() should be always zero, due to large target, output of slice_nonce() is zero
         self.assertEqual(0, bytes_to_long(slice_nonce(header)))
 
@@ -215,7 +130,7 @@ class TestBlock(unittest.TestCase):
         # Creates an arbitrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
-        header = mine(prev_hash, data, 10**100)
+        header = mine(0, prev_hash, data, 10**100)
         sliced_data = slice_data(header)
         # Tests the length of the data byte string, expecting 32
         self.assertEqual(32, len(sliced_data))
@@ -226,7 +141,7 @@ class TestBlock(unittest.TestCase):
         # Creates an arbitrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
-        header = mine(prev_hash, data, 10**200)
+        header = mine(0, prev_hash, data, 10**200)
         sliced_prev_hash = slice_prev_hash(header)
         # Tests the length of the data byte string, expecting 32
         self.assertEqual(32, len(sliced_prev_hash))
@@ -237,9 +152,9 @@ class TestBlock(unittest.TestCase):
         # Creates an arbitrary 32 byte string and creates a block with it
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
-        header = mine(prev_hash, data, 10**200)
+        header = mine(0, prev_hash, data, 10**200)
         sliced_timestamp = slice_timestamp(header)
-        # Tests the length of the data byte string, expecting 32
+        # Tests the length of the timestamp byte string, expecting 4
         self.assertEqual(4, len(sliced_timestamp))
 
     def test_slice_target(self):
@@ -247,18 +162,30 @@ class TestBlock(unittest.TestCase):
         prev_hash = hash_SHA("0123456789ABCDEF".encode())
         data = hash_SHA("BeepBeepLettuce".encode())
         target = 10**200
-        header = mine(prev_hash, data, target)
+        header = mine(0, prev_hash, data, target)
         sliced_target = slice_target(header)
-        # Tests the length of the data byte string, expecting 32
+        # Tests the length of the target byte string, expecting 2
         self.assertEqual(2, len(sliced_target))
         self.assertEqual(log_target_bytes(target), sliced_target)
+
+    def test_slice_version(self):
+        # Creates an arbitrary 32 byte string and creates a block with it
+        prev_hash = hash_SHA("0123456789ABCDEF".encode())
+        data = hash_SHA("BeepBeepLettuce".encode())
+        target = 10**200
+        version = 0
+        header = mine(version, prev_hash, data, target)
+        sliced_version = slice_version(header)
+        # Tests the length of the version byte string, expecting 4
+        self.assertEqual(4, len(sliced_version))
+        self.assertEqual(int_to_bytes(version), sliced_version)        
 
     def test_parse_block(self):
        # Creates an arbitrary 32 byte string and creates a block with it
        prev_hash = hash_SHA("0123456789ABCDEF".encode())
        data = hash_SHA("0123456789ABCDEF".encode())
        target = 10**200
-       header = mine(prev_hash, data, target)
+       header = mine(0, prev_hash, data, target)
        parsed_block = parse_block(header)
        # Tests if the values that are in the dictionary are the same as the inputted values
        self.assertEqual(prev_hash, parsed_block["prev_hash"])
@@ -268,6 +195,7 @@ class TestBlock(unittest.TestCase):
        self.assertEqual(slice_nonce(header), parsed_block["nonce"])
        self.assertEqual(slice_timestamp(header), parsed_block["timestamp"])
        self.assertEqual(hash_SHA(header), parsed_block["block_hash"])
+       self.assertEqual(slice_version(header), parsed_block["version"])
       
     @unittest.skip(" ")
     # This test ensures that a block with a timestamp less than the timestamp of its previous block, will not be added to the blockchain
@@ -340,6 +268,46 @@ class TestBlock(unittest.TestCase):
 
         #Tests if block is a valid block, it should be
         self.assertTrue(is_valid_block(candidate_block, prev_block))
+        
+    # Case 1: empty collection
+    def test_merkle_empty(self):
+        actual = get_merkle_root(deque())
+        # should return None
+        self.assertEqual(None, actual)
+
+    # Case 2: singleton
+    def test_merkle_single(self):
+        expected = hash_SHA('allium'.encode())
+        actual = get_merkle_root([hash_SHA('allium'.encode())])
+        # should trigger base case of recursive helper only
+        self.assertEqual(expected, actual)
+
+    # Case 3: even number (x > 0) number of elements
+    def test_merkle_even_gt_zero(self):
+        s1 = hash_SHA('allium'.encode())
+        s2 = hash_SHA('onion'.encode())
+        expected = hash_SHA(s1 + s2)
+        actual = get_merkle_root(deque([s1, s2]))
+        # should pair up elements and hash them
+        self.assertEqual(expected, actual)
+
+    # Case 4: odd number (x > 1) number of elements
+    def test_merkle_odd_gt_one(self):
+        s1 = hash_SHA('allium'.encode())
+        s2 = hash_SHA('onion'.encode())
+        s3 = hash_SHA('lettuce'.encode())
+
+        # should create a copy of last element and
+        # append it to the deque, creating an even
+        # length collection to hash
+        expected = deque([hash_SHA(s1 + s2), hash_SHA(s3 + s3)])
+        p1 = expected.popleft()
+        p2 = expected.popleft()
+        expected = hash_SHA(p1 + p2)
+            
+        # now should pair up elements and hash them
+        actual = get_merkle_root(deque([s1, s2, s3]))
+        self.assertEqual(expected, actual)
 
 if __name__ == '__main__':
     unittest.main()

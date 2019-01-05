@@ -1,8 +1,11 @@
 import unittest
 import sys
+import os
+import json
 sys.path.append(sys.path[0] + "/../src/peer_to_peer")
 import time
 from allium_net import make_server
+from allium_net import get_peer_tracker
 import socket
 
 
@@ -27,6 +30,27 @@ class Test(unittest.TestCase):
     def test_ItReturnsTheExpectedPortAddress(self):
         """This test checks that a server created returns an expectged port """
         self.assertEqual(self.port, self.server.getsockname()[1])
+
+    def test_ItReturnsTheJSONFile(self):
+        """This test checks that the function 'get_peer_tracker'
+        returns the contents of a JSON file
+        """
+
+        test = open("test.json", "w")
+
+        test_content_dict = {
+          "add"   : "user",
+          "get"   : "peer",
+          "clear" : "everything"
+        }
+
+        test.write(json.dumps(test_content_dict))
+
+        test.close()
+
+        self.assertEqual(test_content_dict, get_peer_tracker('test.json'))
+
+        os.remove('test.json')
 
 if __name__ == '__main__':
     unittest.main()
