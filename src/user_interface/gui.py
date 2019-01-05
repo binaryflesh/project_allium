@@ -1,6 +1,6 @@
 import sys
 sys.path.append(sys.path[0] + "/../")
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QGridLayout, QPushButton, QAction, QLabel, QHBoxLayout, QFrame
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QGridLayout, QPushButton, QAction, QLabel, QHBoxLayout, QFrame, QDialog
 from PyQt5.QtGui import QFont, QImage, QPalette, QBrush, QPixmap
 from PyQt5 import QtCore
 
@@ -37,6 +37,8 @@ class Gui(QMainWindow):
         self.initWalletFrame()
         # Initializes the IP label
         self.initIPFrame()
+        # Initializes the transaction dialog
+        self.initTxDialog()
 
         #set up a GridLayout
         gridLayout = QGridLayout()
@@ -108,7 +110,7 @@ class Gui(QMainWindow):
                                 background-color: rgb(20, 20, 20);
                                 color: rgb(200, 200, 200)
                             }""")
-        #self.txButton.clicked.connect("""OPEN TX WINDOW""")
+        self.txButton.clicked.connect(self.showTxDialog)
         # Sets fixed size for transaction button
         self.txButton.setFixedWidth(200)
         self.txButton.setFixedHeight(50)
@@ -149,7 +151,26 @@ class Gui(QMainWindow):
         self.IPFrame.setFixedWidth(200)
         self.IPFrame.setFixedHeight(60)
 
+    def initTxDialog(self):
+        self.txDialog = QDialog()
+        self.txDialog.setWindowTitle("Transaction")
+        self.txDialog.setFixedSize(600, 250)
+        # Creates a QImage Object with the image file
+        oImage = QImage(sys.path[0] + "/qbertdark.png")
+        # Creates a palette, sets the brush to a brush with the original image
+        palette = QPalette()
+        palette.setBrush(10, QBrush(oImage))
+        # Sets window palette to this palette
+        self.txDialog.setPalette(palette)
+
+#    def resetTxDialog(self):
+        # This should reset all text boxes, buttons, and labels in this window
+
+    def showTxDialog(self):
+        self.txDialog.exec()
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = Gui() 
     sys.exit(app.exec_())
+
