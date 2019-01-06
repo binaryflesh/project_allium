@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  allium_node:
+    build: .
+    networks:
+      - allium_net
+    deploy:
+      replicas: 2
+networks:
+  allium_net:
