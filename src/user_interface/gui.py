@@ -1,6 +1,6 @@
 import sys
 sys.path.append(sys.path[0] + "/../")
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QGridLayout, QPushButton, QAction, QLabel, QHBoxLayout, QFrame, QDialog
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QGridLayout, QPushButton, QAction, QLabel, QHBoxLayout, QFrame, QDialog, QLineEdit
 from PyQt5.QtGui import QFont, QImage, QPalette, QBrush, QPixmap
 from PyQt5 import QtCore
 
@@ -154,7 +154,7 @@ class Gui(QMainWindow):
     def initTxDialog(self):
         self.txDialog = QDialog()
         self.txDialog.setWindowTitle("Transaction")
-        self.txDialog.setFixedSize(600, 250)
+        self.txDialog.setFixedSize(700, 250)
         # Creates a QImage Object with the image file
         oImage = QImage(sys.path[0] + "/qbertdark.png")
         # Creates a palette, sets the brush to a brush with the original image
@@ -162,11 +162,63 @@ class Gui(QMainWindow):
         palette.setBrush(10, QBrush(oImage))
         # Sets window palette to this palette
         self.txDialog.setPalette(palette)
+        self.initTxInputs()
 
-#    def resetTxDialog(self):
+    def initTxInputs(self):
+        # Initializes input lines and titles
+        recTitle = QLabel("Send To:", self.txDialog)
+        recTitle.setFont(self.normalFont)
+        valTitle = QLabel("Value:", self.txDialog)
+        valTitle.setFont(self.normalFont)
+        self.recInput = QLineEdit(self.txDialog)
+        self.recInput.setStyleSheet("""
+                        QLineEdit {
+                                color: rgb(200, 200, 200);
+                                border: 1px solid gray;
+                                border-radius: 5px;
+                                padding: 0 4px;
+                                background: rgb(17, 17, 17);
+                                selection-background-color: darkgray;
+                        }""")
+        self.recInput.resize(1000, 30)
+        self.valInput = QLineEdit(self.txDialog)
+        self.valInput.setStyleSheet("""
+                        QLineEdit {
+                                color: rgb(200, 200, 200);
+                                border: 1px solid gray;
+                                border-radius: 5px;
+                                padding: 0 8px;
+                                background: rgb(17, 17, 17);
+                                selection-background-color: darkgray;
+                        }""")
+        # Set up a GridLayout 
+        txGridLayout = QGridLayout()
+        txGridLayout.addWidget(recTitle, 0 , 0)
+        txGridLayout.addWidget(self.recInput, 0 , 1)
+        txGridLayout.addWidget(valTitle, 1, 0)
+        txGridLayout.addWidget(self.valInput, 1 , 1)
+
+        # Sets the grid layout to a frame
+        self.txInputFrame = QFrame(self.txDialog)
+        self.txInputFrame.setLayout(txGridLayout)
+        self.txInputFrame.setStyleSheet("""
+                          QFrame {
+                                background-color: rgb(20, 20, 20);
+                                color: rgb(200, 200, 200);
+                                border-radius: 12px;
+                                padding: 6px
+                        }""")
+        # Places the frame on the dialog
+        self.txInputFrame.move(15, 15)
+        self.txInputFrame.resize(350, 85)
+
+    def resetTxDialog(self):
         # This should reset all text boxes, buttons, and labels in this window
+        self.recInput.setText("")
+        self.valInput.setText("")
 
     def showTxDialog(self):
+        self.resetTxDialog()
         self.txDialog.exec()
 
 if __name__ == '__main__':
