@@ -154,7 +154,7 @@ class Gui(QMainWindow):
     def initTxDialog(self):
         self.txDialog = QDialog()
         self.txDialog.setWindowTitle("Transaction")
-        self.txDialog.setFixedSize(800, 150)
+        self.txDialog.setFixedSize(735, 170)
         # Creates a QImage Object with the image file
         oImage = QImage(sys.path[0] + "/qbertdark.png")
         # Creates a palette, sets the brush to a brush with the original image
@@ -164,6 +164,7 @@ class Gui(QMainWindow):
         self.txDialog.setPalette(palette)
         self.initTxInputs()
         self.initContactList()
+        self.initTxSummary()
 
     def initTxInputs(self):
         # Initializes input lines and titles
@@ -261,6 +262,37 @@ class Gui(QMainWindow):
         # Places the frame on the dialog
         self.contactFrame.move(380, 15)
         self.contactFrame.resize(200, 100)
+
+    def initTxSummary(self):
+        # Creates labels containing current wallet value, transaction value, and resulting value
+        self.walletValLabel = QLabel("0.00", self.txDialog)
+        self.txValLabel = QLabel("0.00", self.txDialog)
+        self.resultValLabel = QLabel("0.00", self.txDialog)
+        # Creates labels containing a dash and dividing line
+        dashLabel = QLabel("-", self.txDialog)
+        lineLabel = QLabel("_______________________________________________________", self.txDialog)
+
+        # Creates a grid layout and adds the labels to it
+        summGridLayout = QGridLayout()
+        summGridLayout.addWidget(self.walletValLabel, 0, 1)
+        summGridLayout.addWidget(dashLabel, 1, 0)
+        summGridLayout.addWidget(self.txValLabel, 1, 1)
+        summGridLayout.addWidget(lineLabel, 2, 0, 1, 2)
+        summGridLayout.addWidget(self.resultValLabel, 3, 1)
+
+        # Sets the grid layout to a frame
+        self.summFrame = QFrame(self.txDialog)
+        self.summFrame.setLayout(summGridLayout)
+        self.summFrame.setStyleSheet("""
+                          QFrame {
+                                background-color: rgb(20, 20, 20);
+                                color: rgb(200, 200, 200);
+                                border-radius: 12px;
+                        }""")
+
+        # Places the frame on the dialog
+        self.summFrame.move(595, 15)
+        self.summFrame.resize(125, 100)
 
     def resetTxDialog(self):
         # This should reset all text boxes, buttons, and labels in this window
