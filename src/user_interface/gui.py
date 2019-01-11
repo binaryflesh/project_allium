@@ -211,7 +211,7 @@ class Gui(QMainWindow):
                         }""")
         # Places the frame on the dialog
         self.txInputFrame.move(15, 15)
-        self.txInputFrame.resize(350, 85)
+        self.txInputFrame.resize(350, 100)
 
     def initContactList(self):
         # Creates a drop down box
@@ -240,7 +240,7 @@ class Gui(QMainWindow):
 
         # Creates a Title Label
         contactTitle = QLabel("Contact List", self.txDialog)
-        contactTitle.setFont(self.bigFont)
+        contactTitle.setFont(self.normalFont)
         contactTitle.setAlignment(QtCore.Qt.AlignCenter)
 
         # Set up a GridLayout 
@@ -260,7 +260,7 @@ class Gui(QMainWindow):
                         }""")
         # Places the frame on the dialog
         self.contactFrame.move(380, 15)
-        self.contactFrame.resize(200, 120)
+        self.contactFrame.resize(200, 100)
 
     def resetTxDialog(self):
         # This should reset all text boxes, buttons, and labels in this window
