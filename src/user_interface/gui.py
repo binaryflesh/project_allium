@@ -42,7 +42,7 @@ class Gui(QMainWindow):
 
         #set up a GridLayout
         gridLayout = QGridLayout()
-        #gridlayout.addWidget(widget, startRow, endRow, startCol, endCol)
+        #gridlayout.addWidget(widget, startRow, startCol, #rows, #cols)
         # Places the Mine Button in the top left corner of the screen
         gridLayout.addWidget(self.mineButton, 0, 0)
         # Places the Transaction Button in the top left corner of the screen
@@ -58,6 +58,8 @@ class Gui(QMainWindow):
         self.setCentralWidget(centralWidget)
         centralWidget.setLayout(gridLayout)
 
+#===MAIN DIALOG=======================================================
+#=====================================================================
     def setBackgroundImage(self):
         # Creates a QImage Object with the image file
         oImage = QImage(sys.path[0] + "/qbertdark.png")
@@ -94,7 +96,8 @@ class Gui(QMainWindow):
         self.mineButton.setStyleSheet("""
                             QWidget{
                                 background-color: rgb(20, 20, 20);
-                                color: rgb(200, 200, 200)
+                                color: rgb(200, 200, 200);
+                                selection-background-color: rgb(130, 130, 130);
                             }""")
         #self.mineButton.clicked.connect("""MINE FUNCTION""")
         # Sets fixed size for mine button
@@ -108,7 +111,8 @@ class Gui(QMainWindow):
         self.txButton.setStyleSheet("""
                             QWidget{
                                 background-color: rgb(20, 20, 20);
-                                color: rgb(200, 200, 200)
+                                color: rgb(200, 200, 200);
+                                selection-background-color: rgb(130, 130, 130);
                             }""")
         self.txButton.clicked.connect(self.showTxDialog)
         # Sets fixed size for transaction button
@@ -151,6 +155,8 @@ class Gui(QMainWindow):
         self.IPFrame.setFixedWidth(200)
         self.IPFrame.setFixedHeight(60)
 
+#===TRANSACTION DIALOG================================================
+#=====================================================================
     def initTxDialog(self):
         self.txDialog = QDialog()
         self.txDialog.setWindowTitle("Transaction")
@@ -162,9 +168,12 @@ class Gui(QMainWindow):
         palette.setBrush(10, QBrush(oImage))
         # Sets window palette to this palette
         self.txDialog.setPalette(palette)
+
+        # Initializes all elements on this dialog
         self.initTxInputs()
-        self.initContactList()
+        self.initTxContactList()
         self.initTxSummary()
+        self.initTxOKButton()
 
     def initTxInputs(self):
         # Initializes input lines and titles
@@ -180,7 +189,7 @@ class Gui(QMainWindow):
                                 border-radius: 5px;
                                 padding: 0 8px;
                                 background: rgb(17, 17, 17);
-                                selection-background-color: darkgray;
+                                selection-background-color: rgb(130, 130, 130);
                         }""")
         self.recInput.resize(1000, 30)
         self.valInput = QLineEdit(self.txDialog)
@@ -191,7 +200,7 @@ class Gui(QMainWindow):
                                 border-radius: 5px;
                                 padding: 0 8px;
                                 background: rgb(17, 17, 17);
-                                selection-background-color: darkgray;
+                                selection-background-color: rgb(130, 130, 130);
                         }""")
         # Set up a GridLayout 
         txGridLayout = QGridLayout()
@@ -214,29 +223,29 @@ class Gui(QMainWindow):
         self.txInputFrame.move(15, 15)
         self.txInputFrame.resize(350, 100)
 
-    def initContactList(self):
+    def initTxContactList(self):
         # Creates a drop down box
-        self.contactList = QComboBox(self.txDialog)
+        self.txContactList = QComboBox(self.txDialog)
         # Centers the text in the combo box
-        self.contactList.setEditable(True)
-        self.ledit = self.contactList.lineEdit()
+        self.txContactList.setEditable(True)
+        self.ledit = self.txContactList.lineEdit()
         self.ledit.setAlignment(QtCore.Qt.AlignCenter)
         # Sets the editable portion of the combo box to read only
         self.ledit.setReadOnly(True)
-        self.contactList.addItem("Example")
-        self.contactList.setStyleSheet("""
+        self.txContactList.addItem("Example")
+        self.txContactList.setStyleSheet("""
                             QComboBox {
                                 background-color: rgb(20, 20, 20);
                                 color: rgb(200, 200, 200);
                                 padding: 6px;
                                 border: 1px solid gray;
                                 border-radius: 5px;
-                                selection-background-color: rgb(20, 20, 20);
+                                selection-background-color: rgb(130, 130, 130);
                                     }
                             QComboBox QAbstractItemView {
                                 background-color: rgb(17, 17, 17);
                                 color: rgb(200, 200, 200);
-                                selection-background-color: rgb(20, 20, 20);
+                                selection-background-color: rgb(30, 30, 30);
                                     }""")
 
         # Creates a Title Label
@@ -247,7 +256,7 @@ class Gui(QMainWindow):
         # Set up a GridLayout 
         contactGridLayout = QGridLayout()
         contactGridLayout.addWidget(contactTitle, 0, 0)
-        contactGridLayout.addWidget(self.contactList, 1, 0)
+        contactGridLayout.addWidget(self.txContactList, 1, 0)
 
         # Sets the grid layout to a frame
         self.contactFrame = QFrame(self.txDialog)
@@ -270,7 +279,7 @@ class Gui(QMainWindow):
         self.resultValLabel = QLabel("0.00", self.txDialog)
         # Creates labels containing a dash and dividing line
         dashLabel = QLabel("-", self.txDialog)
-        lineLabel = QLabel("_______________________________________________________", self.txDialog)
+        lineLabel = QLabel("____________________", self.txDialog)
 
         # Creates a grid layout and adds the labels to it
         summGridLayout = QGridLayout()
@@ -294,10 +303,30 @@ class Gui(QMainWindow):
         self.summFrame.move(595, 15)
         self.summFrame.resize(125, 100)
 
+    def initTxOKButton(self):
+        # Initialize OK Button, and set style
+        self.txOKButton = QPushButton("OK", self.txDialog)
+        self.txOKButton.setFont(self.normalFont)
+        self.txOKButton.setStyleSheet("""
+                            QWidget{
+                                background-color: rgb(20, 20, 20);
+                                color: rgb(200, 200, 200);
+                                selection-background-color: rgb(130, 130, 130);
+                            }""")
+
+        # Connects button to function
+        #self.txOKButton.clicked.connect("""START TRANSACTION FUNCTION""")
+
+        # Correctly sizes and moves button. Starts disabled.
+        self.txOKButton.resize(100, 30)
+        self.txOKButton.move(15, 128)
+        self.txOKButton.setEnabled(False)
+
     def resetTxDialog(self):
         # This should reset all text boxes, buttons, and labels in this window
         self.recInput.setText("")
         self.valInput.setText("")
+        self.txOKButton.setEnabled(False)
 
     def showTxDialog(self):
         self.resetTxDialog()
