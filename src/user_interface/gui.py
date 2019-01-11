@@ -1,6 +1,6 @@
 import sys
 sys.path.append(sys.path[0] + "/../")
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QGridLayout, QPushButton, QAction, QLabel, QHBoxLayout, QFrame, QDialog, QLineEdit
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QGridLayout, QPushButton, QAction, QLabel, QHBoxLayout, QFrame, QDialog, QLineEdit, QComboBox
 from PyQt5.QtGui import QFont, QImage, QPalette, QBrush, QPixmap
 from PyQt5 import QtCore
 
@@ -154,7 +154,7 @@ class Gui(QMainWindow):
     def initTxDialog(self):
         self.txDialog = QDialog()
         self.txDialog.setWindowTitle("Transaction")
-        self.txDialog.setFixedSize(700, 250)
+        self.txDialog.setFixedSize(800, 150)
         # Creates a QImage Object with the image file
         oImage = QImage(sys.path[0] + "/qbertdark.png")
         # Creates a palette, sets the brush to a brush with the original image
@@ -163,6 +163,7 @@ class Gui(QMainWindow):
         # Sets window palette to this palette
         self.txDialog.setPalette(palette)
         self.initTxInputs()
+        self.initContactList()
 
     def initTxInputs(self):
         # Initializes input lines and titles
@@ -176,7 +177,7 @@ class Gui(QMainWindow):
                                 color: rgb(200, 200, 200);
                                 border: 1px solid gray;
                                 border-radius: 5px;
-                                padding: 0 4px;
+                                padding: 0 8px;
                                 background: rgb(17, 17, 17);
                                 selection-background-color: darkgray;
                         }""")
@@ -210,7 +211,56 @@ class Gui(QMainWindow):
                         }""")
         # Places the frame on the dialog
         self.txInputFrame.move(15, 15)
-        self.txInputFrame.resize(350, 85)
+        self.txInputFrame.resize(350, 100)
+
+    def initContactList(self):
+        # Creates a drop down box
+        self.contactList = QComboBox(self.txDialog)
+        # Centers the text in the combo box
+        self.contactList.setEditable(True)
+        self.ledit = self.contactList.lineEdit()
+        self.ledit.setAlignment(QtCore.Qt.AlignCenter)
+        # Sets the editable portion of the combo box to read only
+        self.ledit.setReadOnly(True)
+        self.contactList.addItem("Example")
+        self.contactList.setStyleSheet("""
+                            QComboBox {
+                                background-color: rgb(20, 20, 20);
+                                color: rgb(200, 200, 200);
+                                padding: 6px;
+                                border: 1px solid gray;
+                                border-radius: 5px;
+                                selection-background-color: rgb(20, 20, 20);
+                                    }
+                            QComboBox QAbstractItemView {
+                                background-color: rgb(17, 17, 17);
+                                color: rgb(200, 200, 200);
+                                selection-background-color: rgb(20, 20, 20);
+                                    }""")
+
+        # Creates a Title Label
+        contactTitle = QLabel("Contact List", self.txDialog)
+        contactTitle.setFont(self.normalFont)
+        contactTitle.setAlignment(QtCore.Qt.AlignCenter)
+
+        # Set up a GridLayout 
+        contactGridLayout = QGridLayout()
+        contactGridLayout.addWidget(contactTitle, 0, 0)
+        contactGridLayout.addWidget(self.contactList, 1, 0)
+
+        # Sets the grid layout to a frame
+        self.contactFrame = QFrame(self.txDialog)
+        self.contactFrame.setLayout(contactGridLayout)
+        self.contactFrame.setStyleSheet("""
+                          QFrame {
+                                background-color: rgb(20, 20, 20);
+                                color: rgb(200, 200, 200);
+                                border-radius: 12px;
+                                padding: 6px
+                        }""")
+        # Places the frame on the dialog
+        self.contactFrame.move(380, 15)
+        self.contactFrame.resize(200, 100)
 
     def resetTxDialog(self):
         # This should reset all text boxes, buttons, and labels in this window
