@@ -38,49 +38,6 @@ class Test(unittest.TestCase):
 		# Verifying the verification key works
 		self.assertTrue(verifying_key.verify(signed_tx, unsigned_tx_hash))
 
-	@DeprecationWarning
-	def test_create_input(self):
-		# Create key set
-		key_dict = generate_key_set()
-		priv_key = key_dict["private_key"]
-		public_key = key_dict["public_key"]
-		# Create transaction signature
-		previous_tx_hash = hash_SHA('previous'.encode())
-		prev_tx_locking_script = create_output(30000000, hash_SHA('recipient'.encode()))
-		new_tx_output = hash_SHA('new_output'.encode())
-		signature = sign_transaction(priv_key, previous_tx_hash, prev_tx_locking_script, new_tx_output)
-		# Create index value
-		index = 2
-		# Concatenate values together
-		unlocking_script = signature + public_key
-		index_short = short_to_bytes(index)
-		expected = previous_tx_hash + index_short + unlocking_script
-		# Run same values through function
-		actual = create_input(previous_tx_hash, index, signature, public_key)
-		# Check if function equals the concatenation of the values
-		self.assertEqual(expected, actual)
-
-	@DeprecationWarning
-	def test_parse_input(self):
-		# Create key set
-		key_dict = generate_key_set()
-		priv_key = key_dict["private_key"]
-		public_key = key_dict["public_key"]
-		# Create transaction signature
-		previous_tx_hash = hash_SHA('previous'.encode())
-		prev_tx_locking_script = create_output(30000000, hash_SHA('recipient'.encode()))
-		new_tx_output = hash_SHA('new_output'.encode())
-		signature = sign_transaction(priv_key, previous_tx_hash, prev_tx_locking_script, new_tx_output)
-		# Create index value
-		index = 2
-		# Create input and parse
-		parsed_input = parse_input(create_input(previous_tx_hash, index, signature, public_key))
-
-		self.assertEqual(parsed_input["previous_tx_hash"], previous_tx_hash)
-		self.assertEqual(parsed_input["index"], index)
-		self.assertEqual(parsed_input["signature"], signature)
-		self.assertEqual(parsed_input["public_key"], public_key)
-
 	def test_parse_output(self):
 		value = 50000000
 		recipient = hash_SHA('recipient'.encode())
@@ -91,11 +48,11 @@ class Test(unittest.TestCase):
 
 	def test_cat_input_fields(self):
 		prev_hash = hash_SHA('previous'.encode())
-		output_index = 128 
+		output_index = 128
 		prev_recipient = hash_SHA('recipient'.encode())
 
 		actualResults = cat_input_fields(prev_hash, output_index, prev_recipient)
-		expectedResults = prev_hash + short_to_bytes(output_index) + prev_recipient 
+		expectedResults = prev_hash + short_to_bytes(output_index) + prev_recipient
 		self.assertEqual(actualResults, expectedResults)
 
 	def test_cat_tx_fields_single(self):
@@ -185,17 +142,17 @@ class Test(unittest.TestCase):
 		# Output list
 		outputs = [output1]
 		key_set1 = generate_key_set()
-		
+
 		private_key = key_set1["private_key"]
 		public_key = key_set1["public_key"]
 		unsigned_tx = cat_tx_fields(version, unsigned_inputs, outputs)
 		signature = sign_transaction(unsigned_tx, private_key)
 		signed_input = cat_input_fields(prev_tx_hash, 0, signature + public_key)
 		signed_inputs = [signed_input]
-		
+
 		# creating a verification key
 		verifying_key = ecdsa.VerifyingKey.from_string(public_key, ecdsa.SECP256k1)
-		
+
 		actual = create_tx(version, unsigned_inputs, outputs, private_key)
 
 		#Checks if version number is correct
@@ -210,12 +167,12 @@ class Test(unittest.TestCase):
 		self.assertEqual(actual[38:40], short_to_bytes(0))
 		#Checks if signature of input1 is valid
 		self.assertTrue(verifying_key.verify(actual[40:104], hash_SHA(unsigned_tx)))
-		
+
 		#Checks ouptut info
 		#Checks if the number of outputs is correct
 		self.assertEqual(actual[6 + len(signed_input):6 + len(signed_input) + 2], short_to_bytes(1))
 		#Checks if output1 is correct
 		self.assertEqual(actual[6 + len(signed_input) + 2:6 + len(signed_input) + 2 + len(output1)], output1)
-		
+
 if __name__ == '__main__':
 	unittest.main()
