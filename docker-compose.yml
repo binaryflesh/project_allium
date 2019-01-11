@@ -1,11 +1,22 @@
 version: '3'
 
 services:
-  allium_node:
+  allium_node1:
+    build: .
+    networks:
+      - allium_net   
+    command: >
+      bash -c "cd scripts && 
+              dos2unix node_test.sh && 
+              ./node_test.sh"
+  allium_node2:
     build: .
     networks:
       - allium_net
-    deploy:
-      replicas: 2
+    command: >
+      bash -c "cd scripts && 
+              dos2unix node_test.sh && 
+              ./node_test.sh"
+      
 networks:
   allium_net:

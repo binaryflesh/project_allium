@@ -6,6 +6,7 @@ RUN apk update && \
     apk add python3 && \
     apk add curl && \
     apk add --update bash && \
+    apk add dos2unix && \
     apk add py-pip && \
     pip3 install --upgrade pip && \
     pip3 install -r requirements.txt
