@@ -174,6 +174,7 @@ class Gui(QMainWindow):
         self.initTxContactList()
         self.initTxSummary()
         self.initTxOKButton()
+        self.initTxCancelButton()
 
     def initTxInputs(self):
         # Initializes input lines and titles
@@ -321,6 +322,24 @@ class Gui(QMainWindow):
         self.txOKButton.resize(100, 30)
         self.txOKButton.move(15, 128)
         self.txOKButton.setEnabled(False)
+
+    def initTxCancelButton(self):
+        # Initialize Cancel Button, and set style
+        self.txCancelButton = QPushButton("Cancel", self.txDialog)
+        self.txCancelButton.setFont(self.normalFont)
+        self.txCancelButton.setStyleSheet("""
+                            QWidget{
+                                background-color: rgb(20, 20, 20);
+                                color: rgb(200, 200, 200);
+                                selection-background-color: rgb(130, 130, 130);
+                            }""")
+
+        # Connects button to close window
+        self.txCancelButton.clicked.connect(self.txDialog.reject)
+
+        # Correctly sizes and moves button.
+        self.txCancelButton.resize(100, 30)
+        self.txCancelButton.move(130, 128)
 
     def resetTxDialog(self):
         # This should reset all text boxes, buttons, and labels in this window
