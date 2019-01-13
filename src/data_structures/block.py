@@ -4,6 +4,7 @@ from binascii import hexlify, unhexlify
 from time import time
 from struct import pack, unpack
 import math
+from collections import deque
 
 def hash_SHA(byte_string):
     """
@@ -273,3 +274,21 @@ def _get_merkle_root(merkle_list):
             p2 = merkle_list.popleft()
             merkle_list.append(hash_SHA(p1 + p2))
         return _get_merkle_root(merkle_list)
+
+def forge_block(version, prev_hash, transactions, target):
+    """
+    This function combines the block header with a list of transactoins
+    :param1 version: integer representing version of software
+    :param2 transactions: A list of transactions, list of byte strings
+    :param3 target: integer, very large number used for target in mine function
+
+    :return: concatentation of header and body of block
+    """
+    # Generates the merkle root from the list of transactions, converted to deque
+    merkle_root = get_merkle_root(deque(transactions))
+    # Generates block header from parameters and merkle_root
+    block_header = mine(version, prev_hash, merkle_root, target)
+    num_tx = int_to_bytes(len(transactions))
+
+    # Returns block_header + num_tx + [concatenation all transactions]
+    return  block_header + num_tx + b''.join(transactions)

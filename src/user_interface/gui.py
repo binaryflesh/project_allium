@@ -354,7 +354,7 @@ class Gui(QMainWindow):
                             }""")
 
         # Connects button to close window
-        self.txCancelButton.clicked.connect(self.txDialog.close)
+        self.txCancelButton.clicked.connect(self.txDialog.reject)
 
         # Correctly sizes and moves button.
         self.txCancelButton.resize(100, 30)
