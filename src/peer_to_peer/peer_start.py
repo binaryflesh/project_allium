@@ -6,6 +6,7 @@ import json
 import requests
 import threading
 import getopt
+from random import randint
 FORMAT = "%(levelname)s %(asctime)s - %(message)s"
 logging.basicConfig(level=logging.DEBUG, format=FORMAT)
 logger = logging.getLogger()
@@ -178,7 +179,7 @@ if __name__ == '__main__':
             with lock:
                 if len(connections) > 0:
                     break
-            time.sleep(5)
+            time.sleep(randint(3, 5))
             peers = requests.get(url=links['get']).json()
             conn_thread = threading.Thread(
                 target=connect_to_peers,
