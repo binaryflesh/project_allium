@@ -34,7 +34,7 @@ def check_connectivity():
             continue
 
 
-def connect_to_peers(peers, connections):
+def connect_to_peers(peers, connections, addresses):
     """
     Given a list of peers, attempts to connect to each one.
 
@@ -42,6 +42,9 @@ def connect_to_peers(peers, connections):
     :param connections: a list of sockets
     """
     for p in peers:
+        with lock:
+            if p in addresses:
+                continue
         if not p['ip'] == HOST:
             try:
                 logger.debug("Attempting connection to {}:{}...".format(
@@ -51,6 +54,7 @@ def connect_to_peers(peers, connections):
                 )
                 with lock:
                     connections.append(sock)
+                    addresses.append(p)
                 logger.debug("Successfuly connected to {}:{}.".format(
                     p['ip'], p['port']))
             except ConnectionRefusedError:
@@ -58,7 +62,7 @@ def connect_to_peers(peers, connections):
                     p['ip'], p['port']))
 
 
-def accept_connections(server, connections, MAX_CONNS):
+def accept_connections(server, connections, addresses, MAX_CONNS):
     """
     Accepts incoming connections.
     Will continue to accept connections until reaching a maximum count.
@@ -67,10 +71,17 @@ def accept_connections(server, connections, MAX_CONNS):
     :param connections: list of sockets this node is connected to
     :param MAX_CONNS: maximum number of connections
     """
-    while len(connections) < MAX_CONNS:
+    while True:
+        with lock:
+            if len(connections) >= MAX_CONNS:
+                return
         conn, addr = server.accept()
         with lock:
             connections.append(conn)
+            addresses.append({
+                'ip': addr[0],
+                'port': addr[1]
+            })
         logger.debug("{} has connected.".format(addr))
 
 
@@ -132,10 +143,11 @@ if __name__ == '__main__':
     peers = requests.get(url=links['get']).json()
 
     connections = []
+    addresses = []
 
     conn_thread = threading.Thread(
         target=connect_to_peers,
-        args=(peers, connections),
+        args=(peers, connections, addresses),
         name="Outgoing Connections",
         daemon=True
     )
@@ -145,9 +157,7 @@ if __name__ == '__main__':
 
     logger.debug("Number of active peers found: {}.".format(len(connections)))
 
-    with lock:
-        if len(connections) >= MAX_CONNS:
-            sys.exit()
+    if len(connections) >= MAX_CONNS: sys.exit()
 
     """
     Stage 3: Accept connections
@@ -160,7 +170,7 @@ if __name__ == '__main__':
 
     ac_thread = threading.Thread(
         target=accept_connections,
-        args=(server, connections, MAX_CONNS),
+        args=(server, connections, addresses, MAX_CONNS),
         name="Accept Connections",
         daemon=True
     )

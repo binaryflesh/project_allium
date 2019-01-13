@@ -17,6 +17,5 @@ services:
       bash -c "cd scripts && 
               dos2unix node_test.sh && 
               ./node_test.sh"
-      
 networks:
   allium_net:
