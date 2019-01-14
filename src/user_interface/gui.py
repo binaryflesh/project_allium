@@ -1,6 +1,6 @@
 import sys
 sys.path.append(sys.path[0] + "/../")
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QGridLayout, QPushButton, QAction, QLabel, QHBoxLayout, QFrame, QDialog, QLineEdit, QComboBox
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QGridLayout, QPushButton, QAction, QLabel, QHBoxLayout, QFrame, QDialog, QLineEdit, QComboBox, QTabWidget
 from PyQt5.QtGui import QFont, QImage, QPalette, QBrush, QPixmap
 from PyQt5 import QtCore
 
@@ -39,6 +39,7 @@ class Gui(QMainWindow):
         self.initIPFrame()
         # Initializes Copy Wallet Button
         self.initCopyWalletButton()
+        
         # Initializes the transaction dialog
         self.initTxDialog()
 
@@ -46,16 +47,16 @@ class Gui(QMainWindow):
         gridLayout = QGridLayout()
         #gridlayout.addWidget(widget, startRow, startCol, #rows, #cols)
         # Places the Mine Button in the top left corner of the screen, 1st column and 1st row
-        gridLayout.addWidget(self.mineButton, 0, 0)
+        gridLayout.addWidget(self.mineButton, 0, 0, 1, 2)
         # Places the Transaction Button in the top left corner of the screen, 3rd column and 1st row
-        gridLayout.addWidget(self.txButton, 0, 2)
+        gridLayout.addWidget(self.txButton, 0, 6, 1, 2)
         # Places Wallet label between mine and transaction button, 2nd column and 1st row
-        gridLayout.addWidget(self.walletFrame, 0, 1)
+        gridLayout.addWidget(self.walletFrame, 0, 2, 1, 4)
         # Places the IP label below the mine label, 1st column and 2nd row
-        gridLayout.addWidget(self.IPFrame, 1, 0)
+        gridLayout.addWidget(self.IPFrame, 2, 0, 1, 2)
         # Places Copy Wallet button in 1st column and 5th row
-        gridLayout.addWidget(self.copyWallButton, 4, 0)
-
+        gridLayout.addWidget(self.copyWallButton, 3, 0, 1, 2)
+        
         #create a QWidget and set it as a central widget
         #we need the QWidget because you cannot set a QLayout directly on QMainWindow
         centralWidget = QWidget(self)
@@ -152,8 +153,7 @@ class Gui(QMainWindow):
                           QFrame {
                                 background-color: rgb(20, 20, 20);
                                 color: rgb(200, 200, 200);
-                                border-radius: 12px;
-                                padding: 6px
+                                border-radius: 12px
                         }""")
         self.IPFrame.setLayout(IPLayout)
         self.IPFrame.setFixedWidth(200)
