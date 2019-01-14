@@ -16,7 +16,8 @@ setup(
     long_description=long_description,
     install_requires=[
         'requests',
-        'ecdsa'
+        'ecdsa',
+        'pyqt5'
     ],
     packages=find_packages(),
     classifiers=[
