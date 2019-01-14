@@ -37,20 +37,24 @@ class Gui(QMainWindow):
         self.initWalletFrame()
         # Initializes the IP label
         self.initIPFrame()
+        # Initializes Copy Wallet Button
+        self.initCopyWalletButton()
         # Initializes the transaction dialog
         self.initTxDialog()
 
         #set up a GridLayout
         gridLayout = QGridLayout()
         #gridlayout.addWidget(widget, startRow, startCol, #rows, #cols)
-        # Places the Mine Button in the top left corner of the screen
+        # Places the Mine Button in the top left corner of the screen, 1st column and 1st row
         gridLayout.addWidget(self.mineButton, 0, 0)
-        # Places the Transaction Button in the top left corner of the screen
+        # Places the Transaction Button in the top left corner of the screen, 3rd column and 1st row
         gridLayout.addWidget(self.txButton, 0, 2)
-        # Places Wallet label between mine and transaction button
+        # Places Wallet label between mine and transaction button, 2nd column and 1st row
         gridLayout.addWidget(self.walletFrame, 0, 1)
-        # Places the IP label below the mine label
+        # Places the IP label below the mine label, 1st column and 2nd row
         gridLayout.addWidget(self.IPFrame, 1, 0)
+        # Places Copy Wallet button in 1st column and 5th row
+        gridLayout.addWidget(self.copyWallButton, 4, 0)
 
         #create a QWidget and set it as a central widget
         #we need the QWidget because you cannot set a QLayout directly on QMainWindow
@@ -72,7 +76,7 @@ class Gui(QMainWindow):
         self.setPalette(palette)
 
     def initFileBar(self):
-    	# Creates a menubar
+        # Creates a menubar
         self.mainMenu = self.menuBar()
         # Sets the background of filebar to grey and text to white
         self.mainMenu.setStyleSheet("""
@@ -155,6 +159,21 @@ class Gui(QMainWindow):
         self.IPFrame.setFixedWidth(200)
         self.IPFrame.setFixedHeight(60)
 
+    def initCopyWalletButton(self):
+        # Creates copy wallet address button, sets its text, font and style
+        self.copyWallButton = QPushButton("Copy My Wallet", self)
+        self.copyWallButton.setFont(self.bigFont)
+        self.copyWallButton.setStyleSheet("""
+                            QWidget{
+                                background-color: rgb(20, 20, 20);
+                                color: rgb(200, 200, 200);
+                                selection-background-color: rgb(130, 130, 130);
+                            }""")
+        #self.copyWallButton.clicked.connect("""COPY WALLET ADDRESS FUNCTION""")
+        # Sets fixed size for copy wallet address button
+        self.copyWallButton.setFixedWidth(200)
+        self.copyWallButton.setFixedHeight(50)
+
 #===TRANSACTION DIALOG================================================
 #=====================================================================
     def initTxDialog(self):
@@ -174,6 +193,7 @@ class Gui(QMainWindow):
         self.initTxContactList()
         self.initTxSummary()
         self.initTxOKButton()
+        self.initTxCancelButton()
 
     def initTxInputs(self):
         # Initializes input lines and titles
@@ -321,6 +341,24 @@ class Gui(QMainWindow):
         self.txOKButton.resize(100, 30)
         self.txOKButton.move(15, 128)
         self.txOKButton.setEnabled(False)
+
+    def initTxCancelButton(self):
+        # Initialize Cancel Button, and set style
+        self.txCancelButton = QPushButton("Cancel", self.txDialog)
+        self.txCancelButton.setFont(self.normalFont)
+        self.txCancelButton.setStyleSheet("""
+                            QWidget{
+                                background-color: rgb(20, 20, 20);
+                                color: rgb(200, 200, 200);
+                                selection-background-color: rgb(130, 130, 130);
+                            }""")
+
+        # Connects button to close window
+        self.txCancelButton.clicked.connect(self.txDialog.reject)
+
+        # Correctly sizes and moves button.
+        self.txCancelButton.resize(100, 30)
+        self.txCancelButton.move(130, 128)
 
     def resetTxDialog(self):
         # This should reset all text boxes, buttons, and labels in this window
