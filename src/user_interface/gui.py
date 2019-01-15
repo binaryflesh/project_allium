@@ -1,6 +1,6 @@
 import sys
 sys.path.append(sys.path[0] + "/../")
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QGridLayout, QPushButton, QAction, QLabel, QHBoxLayout, QFrame, QDialog, QLineEdit, QComboBox
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QGridLayout, QPushButton, QAction, QLabel, QHBoxLayout, QFrame, QDialog, QLineEdit, QComboBox, QTabWidget
 from PyQt5.QtGui import QFont, QImage, QPalette, QBrush, QPixmap
 from PyQt5 import QtCore
 
@@ -22,7 +22,8 @@ class Gui(QMainWindow):
         self.setFixedSize(self.width, self.height)
 
         #set up fonts to be used
-        self.bigFont = QFont("Arial", 16,QFont.Bold)
+        self.bigFont = QFont("Arial", 15,QFont.Bold)
+        self.vbigFont = QFont("Arial", 18,QFont.Bold)
         self.normalFont = QFont("Arial", 12)
 
         # Sets the background image of the page to qbetdark.png
@@ -37,20 +38,25 @@ class Gui(QMainWindow):
         self.initWalletFrame()
         # Initializes the IP label
         self.initIPFrame()
+        # Initializes Copy Wallet Button
+        self.initCopyWalletButton()
+        
         # Initializes the transaction dialog
         self.initTxDialog()
 
         #set up a GridLayout
         gridLayout = QGridLayout()
         #gridlayout.addWidget(widget, startRow, startCol, #rows, #cols)
-        # Places the Mine Button in the top left corner of the screen
-        gridLayout.addWidget(self.mineButton, 0, 0)
-        # Places the Transaction Button in the top left corner of the screen
-        gridLayout.addWidget(self.txButton, 0, 2)
-        # Places Wallet label between mine and transaction button
-        gridLayout.addWidget(self.walletFrame, 0, 1)
-        # Places the IP label below the mine label
-        gridLayout.addWidget(self.IPFrame, 1, 0)
+        # Places the Mine Button in the top left corner of the screen, 1st column and 1st row
+        gridLayout.addWidget(self.mineButton, 0, 0, 1, 2)
+        # Places the Transaction Button in the top left corner of the screen, 3rd column and 1st row
+        gridLayout.addWidget(self.txButton, 0, 6, 1, 2)
+        # Places Wallet label between mine and transaction button, 2nd column and 1st row
+        gridLayout.addWidget(self.walletFrame, 0, 2, 1, 4)
+        # Places the IP label below the mine label, 1st column and 2nd row
+        gridLayout.addWidget(self.IPFrame, 2, 0, 1, 2)
+        # Places Copy Wallet button in 1st column and 5th row
+        gridLayout.addWidget(self.copyWallButton, 3, 0, 1, 2)
 
         #create a QWidget and set it as a central widget
         #we need the QWidget because you cannot set a QLayout directly on QMainWindow
@@ -72,7 +78,7 @@ class Gui(QMainWindow):
         self.setPalette(palette)
 
     def initFileBar(self):
-    	# Creates a menubar
+        # Creates a menubar
         self.mainMenu = self.menuBar()
         # Sets the background of filebar to grey and text to white
         self.mainMenu.setStyleSheet("""
@@ -122,7 +128,7 @@ class Gui(QMainWindow):
     def initWalletFrame(self):
         self.walletContent = QLabel('₩ 0.00', self)
         self.walletContent.setAlignment(QtCore.Qt.AlignCenter)
-        self.walletContent.setFont(self.bigFont)
+        self.walletContent.setFont(self.vbigFont)
         walletLayout = QHBoxLayout()
         walletLayout.addWidget(self.walletContent)
         self.walletFrame = QFrame(self)
@@ -148,12 +154,26 @@ class Gui(QMainWindow):
                           QFrame {
                                 background-color: rgb(20, 20, 20);
                                 color: rgb(200, 200, 200);
-                                border-radius: 12px;
-                                padding: 6px
+                                border-radius: 12px
                         }""")
         self.IPFrame.setLayout(IPLayout)
         self.IPFrame.setFixedWidth(200)
         self.IPFrame.setFixedHeight(60)
+
+    def initCopyWalletButton(self):
+        # Creates copy wallet address button, sets its text, font and style
+        self.copyWallButton = QPushButton("Copy My Wallet", self)
+        self.copyWallButton.setFont(self.bigFont)
+        self.copyWallButton.setStyleSheet("""
+                            QWidget{
+                                background-color: rgb(20, 20, 20);
+                                color: rgb(200, 200, 200);
+                                selection-background-color: rgb(130, 130, 130);
+                            }""")
+        #self.copyWallButton.clicked.connect("""COPY WALLET ADDRESS FUNCTION""")
+        # Sets fixed size for copy wallet address button
+        self.copyWallButton.setFixedWidth(200)
+        self.copyWallButton.setFixedHeight(50)
 
 #===TRANSACTION DIALOG================================================
 #=====================================================================
