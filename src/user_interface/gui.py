@@ -22,7 +22,8 @@ class Gui(QMainWindow):
         self.setFixedSize(self.width, self.height)
 
         #set up fonts to be used
-        self.bigFont = QFont("Arial", 16,QFont.Bold)
+        self.bigFont = QFont("Arial", 15,QFont.Bold)
+        self.vbigFont = QFont("Arial", 18,QFont.Bold)
         self.normalFont = QFont("Arial", 12)
 
         # Sets the background image of the page to qbetdark.png
@@ -56,7 +57,7 @@ class Gui(QMainWindow):
         gridLayout.addWidget(self.IPFrame, 2, 0, 1, 2)
         # Places Copy Wallet button in 1st column and 5th row
         gridLayout.addWidget(self.copyWallButton, 3, 0, 1, 2)
-        
+
         #create a QWidget and set it as a central widget
         #we need the QWidget because you cannot set a QLayout directly on QMainWindow
         centralWidget = QWidget(self)
@@ -127,7 +128,7 @@ class Gui(QMainWindow):
     def initWalletFrame(self):
         self.walletContent = QLabel('₩ 0.00', self)
         self.walletContent.setAlignment(QtCore.Qt.AlignCenter)
-        self.walletContent.setFont(self.bigFont)
+        self.walletContent.setFont(self.vbigFont)
         walletLayout = QHBoxLayout()
         walletLayout.addWidget(self.walletContent)
         self.walletFrame = QFrame(self)
