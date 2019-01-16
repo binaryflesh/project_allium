@@ -1,6 +1,6 @@
 # Project Allium
 
-SIG Blockchain Fall 2018 Project
+ACM SIG Blockchain Cryptocurrency
 
 Requirements: Python 3.x
 
