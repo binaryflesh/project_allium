@@ -35,15 +35,13 @@ def parse_input(input):
     :param input: Transaction input
     :return: dictionary containing transaction input parameters
     """
-    # Create empty dictionary
-    parsed_input = {}
-    # Parse out sections of input into dictionary values
-    parsed_input["previous_tx_hash"] = input[0:32]
-    parsed_input["index"] = bytes_to_short(input[32:34])
-    parsed_input["signature"] = input[34:98]
-    parsed_input["public_key"] = input[98:162]
-    # Return the dictionary
-    return parsed_input
+    # Return a dictionary from parsed input
+    return {
+        "previous_tx_hash" : input[0:32],
+        "index"            : bytes_to_short(input[32:34]),
+        "signature"        : input[34:98],
+        "public_key"       : input[98:162]
+    }
 
 def parse_output(output):
     """
