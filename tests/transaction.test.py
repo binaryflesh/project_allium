@@ -38,6 +38,50 @@ class Test(unittest.TestCase):
 		# Verifying the verification key works
 		self.assertTrue(verifying_key.verify(signed_tx, unsigned_tx_hash))
 
+	def test_parse_input(self):
+		# The parse_input function is tested to check that the returned
+    	# dictioanry contains the expected key-value pairs. The length
+    	# of two different inputs are also checked for consistency
+    	# Note - length test may not belong in this sextion
+
+		# manually created components of unsigned transaction hash
+		prev_hash = hash_SHA('previous'.encode())
+		prev_hash_1 = hash_SHA('previous'.encode())
+		prev_tx_locking_script = create_output(30000000,hash_SHA('recipient'.encode()))
+		prev_tx_locking_script_1 = create_output(30000000,hash_SHA('recipient'.encode()))
+		new_tx_output = hash_SHA('new_output'.encode())
+		new_tx_output_1 = hash_SHA('new_output'.encode())
+		# concatenating above components
+		unsigned_tx = prev_hash + prev_tx_locking_script + new_tx_output
+		unsigned_tx_1 = prev_hash_1 + prev_tx_locking_script_1 + new_tx_output_1
+		# creates made up unsigned transaction hash
+		unsigned_tx_hash = hash_SHA(unsigned_tx)
+		unsigned_tx_hash_1 = hash_SHA(unsigned_tx)
+		# getting a private and public key
+		key_dict = generate_key_set()
+		key_dict_1 = generate_key_set()
+		priv_key = key_dict["private_key"]
+		priv_key_1 = key_dict_1["private_key"]
+		pub_key = key_dict["public_key"]
+		pub_key_1 = key_dict_1["public_key"]
+		# creating a signed transaction using the sign transaction function
+		signature = sign_transaction(unsigned_tx, priv_key)
+		signature_1 = sign_transaction(unsigned_tx_1, priv_key_1)
+		# create index value
+		index = 2
+		index_1 = 3
+		# create and parse input
+		input = prev_hash + short_to_bytes(index) + signature + pub_key
+		input_1 = prev_hash_1 + short_to_bytes(index_1) + signature_1 + pub_key_1
+		parsed_input = parse_input(input)
+
+		self.assertEqual(len(input), len(input_1))
+		self.assertEqual(parsed_input["previous_tx_hash"], prev_hash)
+		self.assertEqual(parsed_input["index"], index)
+		self.assertEqual(parsed_input["signature"], signature)
+		self.assertEqual(parsed_input["public_key"], pub_key)
+
+
 	def test_parse_output(self):
 		value = 50000000
 		recipient = hash_SHA('recipient'.encode())
