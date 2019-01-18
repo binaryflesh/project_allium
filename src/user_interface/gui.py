@@ -44,6 +44,7 @@ class Gui(QMainWindow):
         self.initTxPages()
         self.initScrollButtons()
 
+
         # Initializes the transaction dialog
         self.initTxDialog()
 
@@ -63,8 +64,8 @@ class Gui(QMainWindow):
         # Places Transaction Pages into the grid layout in the middle of the screen
         gridLayout.addWidget(self.txPages, 1, 2, 3, 4)
         # Places Scroll Buttons in correct places
-        gridLayout.addWidget(self.upButton, 1, 6)
-        gridLayout.addWidget(self.downButton, 2, 6)
+        gridLayout.addWidget(self.upButton, 2, 6)
+        gridLayout.addWidget(self.downButton, 3, 6)
 
         #create a QWidget and set it as a central widget
         #we need the QWidget because you cannot set a QLayout directly on QMainWindow
@@ -246,7 +247,7 @@ class Gui(QMainWindow):
                                 border-top: 2px rgb(200, 200, 200);
                                 border-radius: 10px;
                                 background-color: rgb(20, 20, 20);
-                                padding: 20px
+                                padding: 10px
                             }
 
                             QTabWidget:tab-bar {
@@ -262,13 +263,13 @@ class Gui(QMainWindow):
                                 border-top-left-radius: 4px;
                                 border-top-right-radius: 4px;
                                 margin-left: 2px;
-                                margin-right: 2px;
+                                margin-right: 15px;
                                 padding: 5px;
                             }
 
                             QTabBar:tab:!selected {
                                 background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(25, 25, 25));
+                                                        stop: 0 rgb(20, 20, 20), stop: 1 rgb(15, 15, 15));
                             }
                             """)
 
@@ -303,16 +304,16 @@ class Gui(QMainWindow):
         toLabel.setFont(self.bigFont)
         toLabel.setAlignment(QtCore.Qt.AlignRight)
 
-        layout = QGridLayout()
-        layout.addWidget(self.sDateLabel, 0, 1)
-        layout.addWidget(self.sValueLabel, 1, 1)
-        layout.addWidget(self.sToLabel, 2, 1)
-        layout.addWidget(dateLabel, 0, 0)
-        layout.addWidget(amtLabel, 1, 0)
-        layout.addWidget(toLabel, 2, 0)
+        slayout = QGridLayout()
+        slayout.addWidget(self.sDateLabel, 0, 1)
+        slayout.addWidget(self.sValueLabel, 1, 1)
+        slayout.addWidget(self.sToLabel, 2, 1)
+        slayout.addWidget(dateLabel, 0, 0)
+        slayout.addWidget(amtLabel, 1, 0)
+        slayout.addWidget(toLabel, 2, 0)
 
         self.sentPage = QFrame(self)
-        self.sentPage.setLayout(layout)
+        self.sentPage.setLayout(slayout)
         self.sentPage.setStyleSheet("""
                           QFrame {
                                 background-color: rgb(20, 20, 20);
@@ -321,17 +322,17 @@ class Gui(QMainWindow):
                         }""")
 
     def initRecPage(self):
-        self.recDate = "1/14/19"
+        self.recDate = "1/1/19"
         self.recValue = "75.53"
         self.recFor = "987437643864592"
 
-        self.rDateLabel = QLabel(self.sentDate, self)
+        self.rDateLabel = QLabel(self.recDate, self)
         self.rDateLabel.setFont(self.bigFont)
         self.rDateLabel.setAlignment(QtCore.Qt.AlignRight)
-        self.rValueLabel = QLabel(self.sentValue, self)
+        self.rValueLabel = QLabel(self.recValue, self)
         self.rValueLabel.setFont(self.bigFont)
         self.rValueLabel.setAlignment(QtCore.Qt.AlignRight)
-        self.rForLabel = QLabel(self.sentTo, self)
+        self.rForLabel = QLabel(self.recFor, self)
         self.rForLabel.setFont(self.bigFont)
         self.rForLabel.setAlignment(QtCore.Qt.AlignRight)
 
@@ -345,16 +346,16 @@ class Gui(QMainWindow):
         forLabel.setFont(self.bigFont)
         forLabel.setAlignment(QtCore.Qt.AlignRight)
 
-        layout = QGridLayout()
-        layout.addWidget(self.rDateLabel, 0, 1)
-        layout.addWidget(self.rValueLabel, 1, 1)
-        layout.addWidget(self.rForLabel, 2, 1)
-        layout.addWidget(dateLabel, 0, 0)
-        layout.addWidget(amtLabel, 1, 0)
-        layout.addWidget(forLabel, 2, 0)
+        rlayout = QGridLayout()
+        rlayout.addWidget(self.rDateLabel, 0, 1)
+        rlayout.addWidget(self.rValueLabel, 1, 1)
+        rlayout.addWidget(self.rForLabel, 2, 1)
+        rlayout.addWidget(dateLabel, 0, 0)
+        rlayout.addWidget(amtLabel, 1, 0)
+        rlayout.addWidget(forLabel, 2, 0)
 
         self.recPage = QFrame(self)
-        self.recPage.setLayout(layout)
+        self.recPage.setLayout(rlayout)
         self.recPage.setStyleSheet("""
                           QFrame {
                                 background-color: rgb(20, 20, 20);
@@ -657,4 +658,3 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = Gui() 
     sys.exit(app.exec_())
-
