@@ -43,7 +43,9 @@ class Gui(QMainWindow):
         # Initialize Transaction Pages
         self.initTxPages()
         self.initScrollButtons()
-
+        # Initialize Copy and Send Buttons
+        self.initCopyButton()
+        self.initSendButton()
 
         # Initializes the transaction dialog
         self.initTxDialog()
@@ -66,6 +68,9 @@ class Gui(QMainWindow):
         # Places Scroll Buttons in correct places
         gridLayout.addWidget(self.upButton, 4, 12)
         gridLayout.addWidget(self.downButton, 5, 12)
+        # Places Copy and Send buttons on the GUI
+        gridLayout.addWidget(self.copyButton, 6, 12, 2, 1)
+        gridLayout.addWidget(self.sendButton, 6, 14, 2, 1)
 
         #create a QWidget and set it as a central widget
         #we need the QWidget because you cannot set a QLayout directly on QMainWindow
@@ -251,7 +256,7 @@ class Gui(QMainWindow):
                             }
 
                             QTabWidget:tab-bar {
-                                left: 93px;
+                                left: 80px;
                             }
 
                             QTabBar:tab {
@@ -282,7 +287,7 @@ class Gui(QMainWindow):
     def initSentPage(self):
         self.sentDate = "1/14/19"
         self.sentValue = "50.00"
-        self.sentTo = "430928709843276"
+        self.sentTo = "   430928709843276"
 
         self.sDateLabel = QLabel(self.sentDate, self)
         self.sDateLabel.setFont(self.bigFont)
@@ -324,7 +329,7 @@ class Gui(QMainWindow):
     def initRecPage(self):
         self.recDate = "1/1/19"
         self.recValue = "75.53"
-        self.recFor = "987437643864592"
+        self.recFor = "   987437643864592"
 
         self.rDateLabel = QLabel(self.recDate, self)
         self.rDateLabel.setFont(self.bigFont)
@@ -422,6 +427,71 @@ class Gui(QMainWindow):
                                 color: rgb(150, 150, 150);
                                     }""")
 
+    def initCopyButton(self):
+        # Creates a copy button, sets its text, font and style
+        self.copyButton = QPushButton("Copy", self)
+        self.copyButton.setFont(self.bigFont)
+        self.copyButton.setStyleSheet("""
+                            QPushButton{
+                                border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));;
+                                border-radius: 6px;
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));
+                                color: rgb(200, 200, 200);
+                            }
+
+                            QPushButton:pressed {
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(45, 45, 45), stop: 1 rgb(30, 30, 30));
+                                color: rgb(250, 250, 250);
+                            }
+
+                            QPushButton:!enabled {
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border-radius: 6px;
+                                color: rgb(150, 150, 150);
+                                    }""")
+        #self.copyButton.clicked.connect("""COPY FUNCTION""")
+        # Sets fixed size for copy button
+        self.copyButton.setFixedWidth(100)
+        self.copyButton.setFixedHeight(50)
+
+    def initSendButton(self):
+        # Creates a send button, sets its text, font and style
+        self.sendButton = QPushButton("Send", self)
+        self.sendButton.setFont(self.bigFont)
+        self.sendButton.setStyleSheet("""
+                            QPushButton{
+                                border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));;
+                                border-radius: 6px;
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));
+                                color: rgb(200, 200, 200);
+                            }
+
+                            QPushButton:pressed {
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(45, 45, 45), stop: 1 rgb(30, 30, 30));
+                                color: rgb(250, 250, 250);
+                            }
+
+                            QPushButton:!enabled {
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border-radius: 6px;
+                                color: rgb(150, 150, 150);
+                                    }""")
+        #self.sendButton.clicked.connect("""SEND TRANSACTION FUNCTION""")
+        # Sets fixed size for send button
+        self.sendButton.setFixedWidth(100)
+        self.sendButton.setFixedHeight(50)
 #===TRANSACTION DIALOG================================================
 #=====================================================================
     def initTxDialog(self):
