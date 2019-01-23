@@ -251,7 +251,7 @@ class Gui(QMainWindow):
                             }
 
                             QTabWidget:tab-bar {
-                                left: 50px;
+                                left: 93px;
                             }
 
                             QTabBar:tab {
