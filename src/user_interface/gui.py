@@ -1,6 +1,6 @@
 import sys
 sys.path.append(sys.path[0] + "/../")
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QGridLayout, QPushButton, QAction, QLabel, QHBoxLayout, QFrame, QDialog, QLineEdit, QComboBox, QTabWidget
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QGridLayout, QPushButton, QAction, QLabel, QHBoxLayout, QVBoxLayout, QFrame, QDialog, QLineEdit, QComboBox, QTabWidget
 from PyQt5.QtGui import QFont, QImage, QPalette, QBrush, QPixmap
 from PyQt5 import QtCore
 
@@ -40,6 +40,9 @@ class Gui(QMainWindow):
         self.initIPFrame()
         # Initializes Copy Wallet Button
         self.initCopyWalletButton()
+        # Initialize Transaction Pages
+        self.initTxPages()
+        self.initScrollButtons()
 
 
         # Initializes the transaction dialog
@@ -49,16 +52,20 @@ class Gui(QMainWindow):
         gridLayout = QGridLayout()
         #gridlayout.addWidget(widget, startRow, startCol, #rows, #cols)
         # Places the Mine Button in the top left corner of the screen, 1st column and 1st row
-        gridLayout.addWidget(self.mineButton, 0, 0, 1, 2)
+        gridLayout.addWidget(self.mineButton, 0, 0, 2, 4)
         # Places the Transaction Button in the top left corner of the screen, 3rd column and 1st row
-        gridLayout.addWidget(self.txButton, 0, 6, 1, 2)
+        gridLayout.addWidget(self.txButton, 0, 12, 2, 4)
         # Places Wallet label between mine and transaction button, 2nd column and 1st row
-        gridLayout.addWidget(self.walletFrame, 0, 2, 1, 4)
+        gridLayout.addWidget(self.walletFrame, 0, 4, 2, 8)
         # Places the IP label below the mine label, 1st column and 2nd row
-        gridLayout.addWidget(self.IPFrame, 2, 0, 1, 2)
+        gridLayout.addWidget(self.IPFrame, 4, 0, 2, 4)
         # Places Copy Wallet button in 1st column and 5th row
-        gridLayout.addWidget(self.copyWallButton, 3, 0, 1, 2)
-
+        gridLayout.addWidget(self.copyWallButton, 6, 0, 2, 4)
+        # Places Transaction Pages into the grid layout in the middle of the screen
+        gridLayout.addWidget(self.txPages, 2, 4, 6, 8)
+        # Places Scroll Buttons in correct places
+        gridLayout.addWidget(self.upButton, 4, 12)
+        gridLayout.addWidget(self.downButton, 5, 12)
 
         #create a QWidget and set it as a central widget
         #we need the QWidget because you cannot set a QLayout directly on QMainWindow
@@ -104,16 +111,26 @@ class Gui(QMainWindow):
         self.mineButton.setStyleSheet("""
                             QPushButton{
                                 border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                                        stop: 0 rgb(25, 25, 25), stop: 1 rgb(20, 20, 20));;
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));;
                                 border-radius: 6px;
                                 background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                                        stop: 0 rgb(25, 25, 25), stop: 1 rgb(20, 20, 20));
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));
                                 color: rgb(200, 200, 200);
                             }
 
                             QPushButton:pressed {
                                 background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(25, 25, 25));
+                                                        stop: 0 rgb(45, 45, 45), stop: 1 rgb(30, 30, 30));
+                                color: rgb(250, 250, 250);
+                            }
+
+                            QPushButton:!enabled {
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border-radius: 6px;
+                                color: rgb(150, 150, 150);
                                     }""")
         #self.mineButton.clicked.connect("""MINE FUNCTION""")
         # Sets fixed size for mine button
@@ -127,16 +144,26 @@ class Gui(QMainWindow):
         self.txButton.setStyleSheet("""
                             QPushButton{
                                 border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                                        stop: 0 rgb(25, 25, 25), stop: 1 rgb(20, 20, 20));;
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));;
                                 border-radius: 6px;
                                 background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                                        stop: 0 rgb(25, 25, 25), stop: 1 rgb(20, 20, 20));
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));
                                 color: rgb(200, 200, 200);
                             }
 
                             QPushButton:pressed {
                                 background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(25, 25, 25));
+                                                        stop: 0 rgb(45, 45, 45), stop: 1 rgb(30, 30, 30));
+                                color: rgb(250, 250, 250);
+                            }
+
+                            QPushButton:!enabled {
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border-radius: 6px;
+                                color: rgb(150, 150, 150);
                                     }""")
         self.txButton.clicked.connect(self.showTxDialog)
         # Sets fixed size for transaction button
@@ -185,22 +212,215 @@ class Gui(QMainWindow):
         self.copyWallButton.setStyleSheet("""
                             QPushButton{
                                 border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                                        stop: 0 rgb(25, 25, 25), stop: 1 rgb(20, 20, 20));;
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));;
                                 border-radius: 6px;
                                 background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                                        stop: 0 rgb(25, 25, 25), stop: 1 rgb(20, 20, 20));
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));
                                 color: rgb(200, 200, 200);
                             }
 
                             QPushButton:pressed {
                                 background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(25, 25, 25));
+                                                        stop: 0 rgb(45, 45, 45), stop: 1 rgb(30, 30, 30));
+                                color: rgb(250, 250, 250);
+                            }
+
+                            QPushButton:!enabled {
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border-radius: 6px;
+                                color: rgb(150, 150, 150);
                                     }""")
         #self.copyWallButton.clicked.connect("""COPY WALLET ADDRESS FUNCTION""")
         # Sets fixed size for copy wallet address button
         self.copyWallButton.setFixedWidth(200)
         self.copyWallButton.setFixedHeight(50)
 
+    def initTxPages(self):
+        # Creates a tab widget on the main window
+        self.txPages = QTabWidget(self)
+        self.txPages.setFont(self.bigFont)
+        self.txPages.setStyleSheet("""
+                            QTabWidget:pane {
+                                border-top: 2px rgb(200, 200, 200);
+                                border-radius: 10px;
+                                background-color: rgb(20, 20, 20);
+                                padding: 10px
+                            }
+
+                            QTabWidget:tab-bar {
+                                left: 93px;
+                            }
+
+                            QTabBar:tab {
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(25, 25, 25), stop: 1 rgb(20, 20, 20));
+                                color: rgb(200, 200, 200);
+                                border: 1px solid rgb(20, 20, 20);
+                                border-bottom-color: rgb(20, 20, 20);
+                                border-top-left-radius: 4px;
+                                border-top-right-radius: 4px;
+                                margin-left: 2px;
+                                margin-right: 15px;
+                                padding: 5px;
+                            }
+
+                            QTabBar:tab:!selected {
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(20, 20, 20), stop: 1 rgb(15, 15, 15));
+                            }
+                            """)
+
+        self.initSentPage()
+        self.initRecPage()
+
+        self.txPages.addTab(self.sentPage, "Sent")
+        self.txPages.addTab(self.recPage, "Recieved")
+
+    def initSentPage(self):
+        self.sentDate = "1/14/19"
+        self.sentValue = "50.00"
+        self.sentTo = "430928709843276"
+
+        self.sDateLabel = QLabel(self.sentDate, self)
+        self.sDateLabel.setFont(self.bigFont)
+        self.sDateLabel.setAlignment(QtCore.Qt.AlignRight)
+        self.sValueLabel = QLabel(self.sentValue, self)
+        self.sValueLabel.setFont(self.bigFont)
+        self.sValueLabel.setAlignment(QtCore.Qt.AlignRight)
+        self.sToLabel = QLabel(self.sentTo, self)
+        self.sToLabel.setFont(self.bigFont)
+        self.sToLabel.setAlignment(QtCore.Qt.AlignRight)
+
+        dateLabel = QLabel("Date:          ", self)
+        dateLabel.setFont(self.bigFont)
+        dateLabel.setAlignment(QtCore.Qt.AlignRight)
+        amtLabel = QLabel("Amount:          ", self)
+        amtLabel.setFont(self.bigFont)
+        amtLabel.setAlignment(QtCore.Qt.AlignRight)
+        toLabel = QLabel("Recipient:          ", self)
+        toLabel.setFont(self.bigFont)
+        toLabel.setAlignment(QtCore.Qt.AlignRight)
+
+        slayout = QGridLayout()
+        slayout.addWidget(self.sDateLabel, 0, 1)
+        slayout.addWidget(self.sValueLabel, 1, 1)
+        slayout.addWidget(self.sToLabel, 2, 1)
+        slayout.addWidget(dateLabel, 0, 0)
+        slayout.addWidget(amtLabel, 1, 0)
+        slayout.addWidget(toLabel, 2, 0)
+
+        self.sentPage = QFrame(self)
+        self.sentPage.setLayout(slayout)
+        self.sentPage.setStyleSheet("""
+                          QFrame {
+                                background-color: rgb(20, 20, 20);
+                                color: rgb(200, 200, 200);
+                                border-radius: 12px;
+                        }""")
+
+    def initRecPage(self):
+        self.recDate = "1/1/19"
+        self.recValue = "75.53"
+        self.recFor = "987437643864592"
+
+        self.rDateLabel = QLabel(self.recDate, self)
+        self.rDateLabel.setFont(self.bigFont)
+        self.rDateLabel.setAlignment(QtCore.Qt.AlignRight)
+        self.rValueLabel = QLabel(self.recValue, self)
+        self.rValueLabel.setFont(self.bigFont)
+        self.rValueLabel.setAlignment(QtCore.Qt.AlignRight)
+        self.rForLabel = QLabel(self.recFor, self)
+        self.rForLabel.setFont(self.bigFont)
+        self.rForLabel.setAlignment(QtCore.Qt.AlignRight)
+
+        dateLabel = QLabel("Date:          ", self)
+        dateLabel.setFont(self.bigFont)
+        dateLabel.setAlignment(QtCore.Qt.AlignRight)
+        amtLabel = QLabel("Amount:          ", self)
+        amtLabel.setFont(self.bigFont)
+        amtLabel.setAlignment(QtCore.Qt.AlignRight)
+        forLabel = QLabel("Sender:          ", self)
+        forLabel.setFont(self.bigFont)
+        forLabel.setAlignment(QtCore.Qt.AlignRight)
+
+        rlayout = QGridLayout()
+        rlayout.addWidget(self.rDateLabel, 0, 1)
+        rlayout.addWidget(self.rValueLabel, 1, 1)
+        rlayout.addWidget(self.rForLabel, 2, 1)
+        rlayout.addWidget(dateLabel, 0, 0)
+        rlayout.addWidget(amtLabel, 1, 0)
+        rlayout.addWidget(forLabel, 2, 0)
+
+        self.recPage = QFrame(self)
+        self.recPage.setLayout(rlayout)
+        self.recPage.setStyleSheet("""
+                          QFrame {
+                                background-color: rgb(20, 20, 20);
+                                color: rgb(200, 200, 200);
+                                border-radius: 12px;
+                        }""")
+
+    def initScrollButtons(self):
+        self.upButton = QPushButton("▲", self)
+        self.upButton.setFont(self.bigFont)
+        self.upButton.setMaximumWidth(30)
+        self.upButton.setMaximumHeight(60)
+        self.upButton.setStyleSheet("""
+                            QPushButton{
+                                border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));;
+                                border-radius: 6px;
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));
+                                color: rgb(200, 200, 200);
+                            }
+
+                            QPushButton:pressed {
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(45, 45, 45), stop: 1 rgb(30, 30, 30));
+                                color: rgb(250, 250, 250);
+                            }
+
+                            QPushButton:!enabled {
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border-radius: 6px;
+                                color: rgb(150, 150, 150);
+                                    }""")
+
+        self.downButton = QPushButton("▼", self)
+        self.downButton.setFont(self.bigFont)
+        self.downButton.setMaximumWidth(30)
+        self.downButton.setMaximumHeight(60)
+        self.downButton.setStyleSheet("""
+                            QPushButton{
+                                border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));;
+                                border-radius: 6px;
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));
+                                color: rgb(200, 200, 200);
+                            }
+
+                            QPushButton:pressed {
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(45, 45, 45), stop: 1 rgb(30, 30, 30));
+                                color: rgb(250, 250, 250);
+                            }
+
+                            QPushButton:!enabled {
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border-radius: 6px;
+                                color: rgb(150, 150, 150);
+                                    }""")
 
 #===TRANSACTION DIALOG================================================
 #=====================================================================
@@ -358,16 +578,26 @@ class Gui(QMainWindow):
         self.txOKButton.setStyleSheet("""
                             QPushButton{
                                 border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                                        stop: 0 rgb(25, 25, 25), stop: 1 rgb(20, 20, 20));;
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));;
                                 border-radius: 6px;
                                 background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                                        stop: 0 rgb(25, 25, 25), stop: 1 rgb(20, 20, 20));
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));
                                 color: rgb(200, 200, 200);
                             }
 
                             QPushButton:pressed {
                                 background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(25, 25, 25));
+                                                        stop: 0 rgb(45, 45, 45), stop: 1 rgb(30, 30, 30));
+                                color: rgb(250, 250, 250);
+                            }
+
+                            QPushButton:!enabled {
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border-radius: 6px;
+                                color: rgb(150, 150, 150);
                                     }""")
 
         # Connects button to function
@@ -385,16 +615,26 @@ class Gui(QMainWindow):
         self.txCancelButton.setStyleSheet("""
                             QPushButton{
                                 border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                                        stop: 0 rgb(25, 25, 25), stop: 1 rgb(20, 20, 20));;
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));;
                                 border-radius: 6px;
                                 background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                                        stop: 0 rgb(25, 25, 25), stop: 1 rgb(20, 20, 20));
+                                                        stop: 0 rgb(35, 35, 35), stop: 1 rgb(20, 20, 20));
                                 color: rgb(200, 200, 200);
                             }
 
                             QPushButton:pressed {
                                 background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(25, 25, 25));
+                                                        stop: 0 rgb(45, 45, 45), stop: 1 rgb(30, 30, 30));
+                                color: rgb(250, 250, 250);
+                            }
+
+                            QPushButton:!enabled {
+                                background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                                        stop: 0 rgb(30, 30, 30), stop: 1 rgb(15, 15, 15));
+                                border-radius: 6px;
+                                color: rgb(150, 150, 150);
                                     }""")
 
         # Connects button to close window
@@ -418,4 +658,3 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = Gui() 
     sys.exit(app.exec_())
-
