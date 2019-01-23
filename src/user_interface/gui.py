@@ -52,20 +52,20 @@ class Gui(QMainWindow):
         gridLayout = QGridLayout()
         #gridlayout.addWidget(widget, startRow, startCol, #rows, #cols)
         # Places the Mine Button in the top left corner of the screen, 1st column and 1st row
-        gridLayout.addWidget(self.mineButton, 0, 0, 1, 2)
+        gridLayout.addWidget(self.mineButton, 0, 0, 2, 4)
         # Places the Transaction Button in the top left corner of the screen, 3rd column and 1st row
-        gridLayout.addWidget(self.txButton, 0, 6, 1, 2)
+        gridLayout.addWidget(self.txButton, 0, 12, 2, 4)
         # Places Wallet label between mine and transaction button, 2nd column and 1st row
-        gridLayout.addWidget(self.walletFrame, 0, 2, 1, 4)
+        gridLayout.addWidget(self.walletFrame, 0, 4, 2, 8)
         # Places the IP label below the mine label, 1st column and 2nd row
-        gridLayout.addWidget(self.IPFrame, 2, 0, 1, 2)
+        gridLayout.addWidget(self.IPFrame, 4, 0, 2, 4)
         # Places Copy Wallet button in 1st column and 5th row
-        gridLayout.addWidget(self.copyWallButton, 3, 0, 1, 2)
+        gridLayout.addWidget(self.copyWallButton, 6, 0, 2, 4)
         # Places Transaction Pages into the grid layout in the middle of the screen
-        gridLayout.addWidget(self.txPages, 1, 2, 3, 4)
+        gridLayout.addWidget(self.txPages, 2, 4, 6, 8)
         # Places Scroll Buttons in correct places
-        gridLayout.addWidget(self.upButton, 2, 6)
-        gridLayout.addWidget(self.downButton, 3, 6)
+        gridLayout.addWidget(self.upButton, 4, 12)
+        gridLayout.addWidget(self.downButton, 5, 12)
 
         #create a QWidget and set it as a central widget
         #we need the QWidget because you cannot set a QLayout directly on QMainWindow
@@ -251,7 +251,7 @@ class Gui(QMainWindow):
                             }
 
                             QTabWidget:tab-bar {
-                                left: 10px;
+                                left: 50px;
                             }
 
                             QTabBar:tab {
