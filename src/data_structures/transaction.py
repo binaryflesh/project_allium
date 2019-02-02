@@ -1,4 +1,4 @@
-from block import hash_SHA, int_to_bytes, long_to_bytes, short_to_bytes, bytes_to_short, bytes_to_long
+from block import hash_SHA, int_to_bytes, long_to_bytes, short_to_bytes, bytes_to_short, bytes_to_long, bytes_to_int
 from keys import generate_public_key
 import ecdsa
 from collections import deque
@@ -57,6 +57,39 @@ def parse_output(output):
     parsed_output["recipient"] = output[8:40]
     # Return the dictionary
     return parsed_output
+
+def parse_transaction(transaction):
+    """
+    Parses transaction into dictionary
+
+    :param output: Transaction
+    :return: dictionary containing transaction parameters
+    """
+
+    # Create empty dictionary
+    parsed_transaction = {}
+
+    parsed_transaction["version"] = bytes_to_int(transaction[0:4])
+    parsed_transaction["number of inputs"] = bytes_to_short(transaction[4:6])
+    parsed_transaction["inputs"] = []
+
+    x = 6
+
+    for i in range(parsed_transaction["number of inputs"]):
+        parsed_transaction["inputs"].append(parse_input(transaction[x:x+161]))
+        x += 161
+
+    parsed_transaction["number of outputs"] = bytes_to_short(transaction[x:x+2])
+    parsed_transaction["outputs"] = []
+
+    x += 2
+
+    for i in range(parsed_transaction["number of inputs"]):
+        parsed_transaction["outputs"].append(parse_output(transaction[x:x+39]))
+        x += 39
+    
+
+    return parsed_transaction
 
 def cat_input_fields(prev_tx_hash, output_index, prev_recipient):
     """

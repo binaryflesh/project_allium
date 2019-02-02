@@ -90,6 +90,47 @@ class Test(unittest.TestCase):
 		self.assertEqual(parsed_output["value"], value)
 		self.assertEqual(parsed_output["recipient"], recipient)
 
+	def test_parse_transaction(self):
+		# Version number
+		version = 1
+		# Arbitrary 32 byte previous transaction hash
+		prev_tx_hash = hash_SHA('0'.encode())
+		# Arbritrary 32 byte previous recipient
+		prev_recipient = hash_SHA('1'.encode())
+		# Arbritrary 32 byte recipient
+		recipient = hash_SHA('2'.encode())
+		# Value of 100 for output
+		value = 100
+		# Input generated from above elements, with output_index of 0
+		input1 = cat_input_fields(prev_tx_hash, 0, prev_recipient)
+		# Output genereated from above elements
+		output1 = create_output(value, recipient)
+		# Input list
+		unsigned_inputs = [input1]
+		# Output list
+		outputs = [output1]
+		key_set1 = generate_key_set()
+
+		private_key = key_set1["private_key"]
+
+		trasnaction = create_tx(version, unsigned_inputs, outputs, private_key)
+		parsed_transaction = parse_transaction(trasnaction)
+
+		#Checks if version number is correct
+		self.assertEqual(parsed_transaction["version"], version)
+
+		#Checks if number of inputs is correct
+		self.assertEqual(parsed_transaction["number of inputs"], 1)
+
+		#Checks if input is correct
+		self.assertEqual(parsed_transaction["inputs"], unsigned_inputs)
+
+		#Checks if number of outputs is correct
+		self.assertEqual(parsed_transaction["number of outputs"], 1)
+
+		#Checks if outputs is correct
+		self.assertEqual(parsed_transaction["outputs"], outputs)
+
 	def test_cat_input_fields(self):
 		prev_hash = hash_SHA('previous'.encode())
 		output_index = 128
