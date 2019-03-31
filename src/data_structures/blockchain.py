@@ -44,19 +44,19 @@ def get_size_bytes(byte_string):
     return pack('I', len(byte_string))
 
 def extract(filename, index, num_bytes, offset=0):
-  """
-  Opens file at filename, moves file pointer to correct position by using
-  adding index and offset, reads num_bytes bytes and returns them.
-  :param1 filename: String, path to a file containing bytes
-  :param2 index: Integer, representing where bytes should begin to read from
-  :param3 num_bytes: Integer, number of bytes to read in
-  :param4 offset: Integer, default 0. Parameter for .seek() that determines where the index is read from. 
-    0: Start of File, 1: Current File Pointer, 2: End of File  
-  :returns: Bytestring, representing bytes from index+offset to index+offset+num_bytes in filename
-  """
-  # Opens file for reading bytes
-  with open(filename, 'rb') as file:
-      # Moves file pointer to correct position at index + offset
-      file.seek(index, offset)
-      # Reads num_bytes after file pointer
-      return file.read(num_bytes)
+    """
+    Opens file at filename, moves file pointer to correct position by using
+    adding index and offset, reads num_bytes bytes and returns them.
+    :param1 filename: String, path to a file containing bytes
+    :param2 index: Integer, representing where bytes should begin to read from
+    :param3 num_bytes: Integer, number of bytes to read in
+    :param4 offset: Integer, default 0. Parameter for .seek() that determines where the index is read from. 
+      0: Start of File, 1: Current File Pointer, 2: End of File  
+    :returns: Bytestring, representing bytes from index+offset to index+offset+num_bytes in filename
+    """
+    # Opens file for reading bytes
+    with open(filename, 'rb') as file:
+        # Moves file pointer to correct position at index + offset
+        file.seek(index, offset)
+        # Reads num_bytes after file pointer
+        return file.read(num_bytes)
