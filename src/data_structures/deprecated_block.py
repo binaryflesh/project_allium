@@ -36,11 +36,11 @@ def createBlock(data, prevHash):
     """
 
     blockHash = hashSHA(prevHash + data)
-    return {
+    return dict(
         'prevHash': prevHash,
         'data': data,
         'blockHash': blockHash
-    }
+    )
 
 # is valid
 # takes in two blocks
@@ -81,6 +81,8 @@ class Blockchain:
         # add block
     # takes in a block
     # adds it to the end of the chain
+    
+    
     def addBlock(self, block):
         """
         Adds a block to the top of the chain
@@ -94,6 +96,8 @@ class Blockchain:
 
     # top
     # returns the last block in the chain
+    
+    
     def top(self):
         """
         Gets the top block from the chain
@@ -106,6 +110,8 @@ class Blockchain:
 
     # height
     # returns the height (length) of the chain
+    
+    
     def height(self):
         """
         Gives the total size of the blockchain
@@ -180,11 +186,11 @@ def createBlockPoW(data, prevHash, target):
         timestamp = int(time())
         blockHash = hashSHA(prevHash + data + str(timestamp) +
                             str(target) + str(nonce))
-    return {
+    return dict(
         'prevHash': prevHash,
         'data': data,
         'timestamp': timestamp,
         'target': target,
         'nonce': nonce,
         'blockHash': blockHash
-    }
+    )
