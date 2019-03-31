@@ -1,4 +1,8 @@
-import os, ecdsa, hashlib, json, binascii
+import os
+import ecdsa
+import hashlib
+import json
+import binascii
 
 from block import hash_SHA
 
