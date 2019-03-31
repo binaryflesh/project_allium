@@ -3,11 +3,12 @@ import ecdsa
 import hashlib
 import json
 import binascii
+import typing
 
 from block import hash_SHA
 
 
-def generate_private_key():
+def generate_private_key() -> bytes:
     """
     Creates a random 32 byte string used as a private key
 
@@ -16,7 +17,7 @@ def generate_private_key():
     """
     return os.urandom(32)
 
-def generate_public_key(private_key):
+def generate_public_key(private_key) -> str:
     """
     Takes private key and puts it through the elliptical curve for public key encryption
     
@@ -27,7 +28,7 @@ def generate_public_key(private_key):
     verifying_key = signing_key.get_verifying_key()
     return verifying_key.to_string()
 
-def generate_pk_hash(public_key):
+def generate_pk_hash(public_key) -> object:
     """
     Takes public key
     
@@ -39,7 +40,7 @@ def generate_pk_hash(public_key):
     ripemd160_obj.update(sha_public_key.digest())
     return ripemd160_obj.digest()
 
-def generate_key_set():
+def generate_key_set() -> dict:
     """
     Generates all 3 keys and stores them in a dictionary
     
@@ -52,7 +53,7 @@ def generate_key_set():
     key_set["pk_hash"] = generate_pk_hash(key_set["public_key"])
     return key_set 
 
-def key_set_to_json_format(key_set):
+def key_set_to_json_format(key_set) -> dict:
     """
     Given a key_set, it returns a equivalent set, one that can be stored in a json file
 
@@ -66,7 +67,7 @@ def key_set_to_json_format(key_set):
     encoded_set["pk_hash"] = binascii.hexlify(key_set["pk_hash"]).decode()
     return encoded_set 
 
-def json_format_to_key_set(key_set):
+def json_format_to_key_set(key_set) -> dict:
     """
     Given a key straight from a json file, converts it to a normal key_set
     
@@ -79,7 +80,7 @@ def json_format_to_key_set(key_set):
     decoded_set["pk_hash"] = binascii.unhexlify(key_set["pk_hash"].encode())
     return decoded_set     
 
-def store_keys():
+def store_keys() -> typing.NoReturn:
     """
     This is a one-time use function. Generates keys and then stores it on a local file keys.json 
 
@@ -90,9 +91,9 @@ def store_keys():
     #encode the key_set
     encoded_keys = key_set_to_json_format(key_set)
     with open('keys.json', 'w+') as output_file:
-             json.dump(encoded_keys, output_file)
+        json.dump(encoded_keys, output_file)
             
-def load_keys():
+def load_keys() -> list:
     """
     Loads keys from a json file.
 
